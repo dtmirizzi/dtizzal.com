@@ -303,3 +303,40 @@ nav#tf-footer {
 	color: #f1f1f1;
 }
 
+
+a.btn.btn-primary.my-btn-git {
+    background: #2F937B;
+	border-color: transparent;
+	border-radius: 0px;
+	border-width: 2px;
+	padding: 6px 30px;
+	text-transform: uppercase;
+	font-size: 12px;
+	letter-spacing: 1px;
+	font-weight: 600;
+    font-style: "display:inline;"
+}
+
+.header-text.btn {
+    border: 1px solid #ffffff;
+	border-radius: 3;
+	padding: 10px 30px;
+	height: 100px;
+}
+
+.header-text.btn:hover {
+    color: inherit;
+}
+
+.header-text.btn:focus, 
+.header-text.btn:active:focus, 
+.header-text.btn.active:focus, 
+.header-text.btn.focus, 
+.header-text.btn:active.focus, 
+.header-text.btn.active.focus {
+	outline: thin dotted transparent;
+	outline: none;
+	outline-offset: -2px;
+}
+
+
