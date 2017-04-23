@@ -1,15 +1,12 @@
 @media only screen and (max-width: 608px){
 .header-text.btn {
-height: 20;
+height: 25;
 white-space: inherit;
 }
 
 }
 
 @media only screen and (max-width: 460px){
-.header-text.btn {
-height: auto;
-white-space: inherit;
-}
+
 }
 
