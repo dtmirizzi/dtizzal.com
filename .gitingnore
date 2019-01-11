@@ -1,0 +1,27 @@
+.idea/
+.vscode/
+.DS_Store
+
+config/config-consul.toml
+config/config-vault.toml
+config/local.toml
+
+vendor/
+build/
+coverage/
+.testCoverage.txt
+
+
+# Local
+local.*
+local-*
+*.local
+*-local
+*.local.*
+*-local-*
+local
+
+# Dev
+.dev/data
+.data
+.env
