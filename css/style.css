@@ -319,9 +319,11 @@ a.btn.btn-primary.my-btn-git {
 
 .header-text.btn {
     border: 1px solid #ffffff;
-	border-radius: 3;
+	border-radius: 1;
 	padding: 10px 30px;
 	height: 100px;
+	text-align: center;
+	vertical-align: middle;
 }
 
 .header-text.btn:hover {
