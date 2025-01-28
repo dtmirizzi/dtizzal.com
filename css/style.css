@@ -7,7 +7,7 @@ body {
 
 h1 {
 	font-size: 3em;
-	margin-top: 25vh; /* Reduced margin for the list */
+	margin-top: 35vh; /* Reduced margin for the list */
 }
 
 ul {
@@ -31,38 +31,36 @@ a:hover {
 	color: rgba(255, 255, 255, 0.567); /* Change color to cyan on hover */
 }
 
+
 .about {
+    display: flex; /* Enable flexbox layout */
+    flex-direction: column; /* Align items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center the text content */
+    margin-top: 5vh;
+}
 
-    align-items:center;
-    justify-content: center;
-	text-align: center;
-	margin-top: 15vh;
-
+p {
+	max-width: 800px;
 }
 
 .roundrect {
 	border-radius: 25px;
 }
 
-.typewriter h1 {
-	overflow: hidden; /* Ensures the content is not revealed until the animation */
-	border-right: .15em solid orange; /* The typwriter cursor */
-	white-space: nowrap; /* Keeps the content on a single line */
-	margin: 0 auto; /* Gives that scrolling effect as the typing happens */
-	letter-spacing: .15em; /* Adjust as needed */
-	animation: 
-	  typing 3.5s steps(40, end),
-	  blink-caret .75s step-end infinite;
-  }
-  
-  /* The typing effect */
-  @keyframes typing {
-	from { width: 0 }
-	to { width: 100% }
-  }
-  
-  /* The typewriter cursor effect */
-  @keyframes blink-caret {
-	from, to { border-color: transparent }
-	50% { border-color: orange; }
-  }
+
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+	min-width: 100%;
+  	min-height: 100%;
+	width: auto;
+	height: auto;
+	align-items:center;
+    justify-content: center;
+    z-index: -1; /* Place the video behind other elements */
+	object-fit: cover;
+  	object-position: center;
+	opacity: 0.6;
+}
