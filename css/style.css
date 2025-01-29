@@ -7,7 +7,7 @@ body {
 
 h1 {
 	font-size: 3em;
-	margin-top: 35vh; /* Reduced margin for the list */
+	margin-top: 25vh; /* Reduced margin for the list */
 }
 
 ul {
@@ -18,8 +18,11 @@ ul {
 }
 
 li {
-	display: inline; /* Make list items display horizontally */
-	margin: 0 10px; /* Add space between list items */
+	margin: 0 5px; /* Add space between list items */
+}
+
+.inline {
+	display: inline; 
 }
 
 a {
@@ -38,6 +41,20 @@ a:hover {
     align-items: center; /* Center items horizontally */
     text-align: center; /* Center the text content */
     margin-top: 5vh;
+	background-color: rgba(0, 0, 0, 0.79);
+	border-radius: 2px;
+	box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
+}
+
+.talks {
+    display: flex; /* Enable flexbox layout */
+    flex-direction: column; /* Align items vertically */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center the text content */
+    margin-top: 5vh;
+	background-color: rgba(0, 0, 0, 0.79);
+	border-radius: 2px;
+	box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
 }
 
 p {
@@ -63,4 +80,12 @@ video {
 	object-fit: cover;
   	object-position: center;
 	opacity: 0.6;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 4
 }
