@@ -51,7 +51,7 @@ a:hover {
     flex-direction: column; /* Align items vertically */
     align-items: center; /* Center items horizontally */
     text-align: center; /* Center the text content */
-    margin-top: 5vh;
+    margin-top: 20vh;
 	background-color: rgba(0, 0, 0, 0.79);
 	border-radius: 2px;
 	box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
