@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Value Calculator Section</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <h2>Interactive Job Value Calculator</h2>
+<div id="article-content"> <hr style="margin-top: 40px; margin-bottom: 40px; border-color: #444;">
+    
+    <div id="jobValueCalculatorContainer">
+        <p style="color: #dddddd; font-size: 0.9em;">Use the calculator below to apply the refined (normalized) equations from the article. Adjust the sliders and input your values to see how different factors influence your decision.</p>
+
+        <div class="calculator-section">
+            <h3>Step 1: Define Your Compensation Range (for Normalization)</h3>
+            <div class="calculator-input-group">
+                <label for="calc_cMin">Min. Acceptable Salary (<em>C<sub>min</sub></em>): $</label>
+                <input type="number" id="calc_cMin" value="70000" step="1000" placeholder="e.g., 70000">
+            </div>
+            <div class="calculator-input-group">
+                <label>Max. Salary for Normalization (<em>C<sub>max</sub></em>):</label>
+                <div class="cmax-info">
+                    <em>C<sub>max</sub></em> is automatically set to the higher of the 'New Opportunity Salary' and 'Current Salary' (or <em>C<sub>min</sub></em> if both are lower).
+                    Current calculated <em>C<sub>max</sub></em>: <span id="calc_cMaxValueDisplay" style="font-weight:bold; color: #87cefa;">---</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <h3>Step 2: Set Your Personal Value Constants (<em>V</em>-values, 0 to 1)</h3>
+            <div class="calculator-input-group">
+                <label for="calc_vc">Value of Compensation (<em>V<sub>c</sub></em>):</label>
+                <input type="range" id="calc_vc" min="0" max="1" value="0.5" step="0.05">
+                <span class="slider-value-display" id="calc_vcValue">0.50</span>
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_vr">Value of Role/Growth (<em>V<sub>r</sub></em>):</label>
+                <input type="range" id="calc_vr" min="0" max="1" value="0.5" step="0.05">
+                <span class="slider-value-display" id="calc_vrValue">0.50</span>
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_va">Value of Alignment (<em>V<sub>a</sub></em>):</label>
+                <input type="range" id="calc_va" min="0" max="1" value="0.5" step="0.05">
+                <span class="slider-value-display" id="calc_vaValue">0.50</span>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <h3>Step 3: Evaluate the New Opportunity</h3>
+            <div class="calculator-input-group">
+                <label for="calc_cActualNew">Actual Offered Salary (<em>C<sub>actual</sub></em>): $</label>
+                <input type="number" id="calc_cActualNew" value="100000" step="1000" placeholder="e.g., 100000">
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_deltaRRawNew">Role Impact/Growth (<em>&Delta;R</em> Raw Score 0-10):</label>
+                <input type="range" id="calc_deltaRRawNew" min="0" max="10" value="5" step="0.5">
+                <span class="slider-value-display" id="calc_deltaRRawNewValue">5.0</span>
+                <div class="notched-slider-description">
+                    <ul>
+                        <li>0-1: Significant Down-level / Regression</li>
+                        <li>2-4: Slight Down-level / Stagnation</li>
+                        <li>5: Lateral / Maintains Status Quo</li>
+                        <li>6-8: Good Growth / Up-level Potential</li>
+                        <li>9-10: Excellent Growth / Significant Up-level</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_aRawNew">Alignment (<em>A</em> Raw Score 0-10):</label>
+                <input type="range" id="calc_aRawNew" min="0" max="10" value="5" step="0.5">
+                <span class="slider-value-display" id="calc_aRawNewValue">5.0</span>
+                <small>(0 = Totally Misaligns, 5 = Neutral/Okay, 10 = Perfectly Aligns)</small>
+            </div>
+        </div>
+
+        <div class="calculator-section">
+            <h3>Step 4: Evaluate Your Current Role</h3>
+            <div class="calculator-input-group">
+                <label for="calc_cActualCurrent">Current Salary (<em>C<sub>cur_actual</sub></em>): $</label>
+                <input type="number" id="calc_cActualCurrent" value="90000" step="1000" placeholder="e.g., 90000">
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_deltaRRawCurrent">Current Role Impact/Growth (<em>&Delta;R<sub>cur</sub></em> Raw Score 0-10):</label>
+                <input type="range" id="calc_deltaRRawCurrent" min="0" max="10" value="4" step="0.5">
+                 <span class="slider-value-display" id="calc_deltaRRawCurrentValue">4.0</span>
+                 <small>(Use same 0-10 scale as New Opportunity's Role/Growth)</small>
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_aRawCurrent">Current Alignment (<em>A<sub>cur</sub></em> Raw Score 0-10):</label>
+                <input type="range" id="calc_aRawCurrent" min="0" max="10" value="6" step="0.5">
+                <span class="slider-value-display" id="calc_aRawCurrentValue">6.0</span>
+                <small>(Use same 0-10 scale as New Opportunity's Alignment)</small>
+            </div>
+            <div class="calculator-input-group">
+                <label for="calc_burnoutB">Burnout Factor (<em>B</em> - 0.001=Low, 1=High):</label>
+                <input type="range" id="calc_burnoutB" min="0.001" max="1" value="0.3" step="0.001">
+                <span class="slider-value-display" id="calc_burnoutBValue">0.300</span>
+            </div>
+        </div>
+
+        <div class="calculator-results-area">
+            <h3>Step 5: Results</h3>
+            <p>New Opportunity Value (<em>V<sub>o</sub></em>): <span class="result-value" id="calc_voResult">---</span></p>
+            <p>Current Role Value (<em>V<sub>cur</sub></em>): <span class="result-value" id="calc_vcurResult">---</span></p>
+            <p><strong>Comparison: <span id="comparisonResultText" class="neutral">---</span></strong></p>
+        </div>
+
+        <div class="calculator-visualization-area">
+            <h3>Visual Breakdown</h3>
+            <div style="position: relative; height:350px; width:100%; background-color: rgba(40,40,40,0.5); border-radius: 5px; padding:10px; box-sizing: border-box;">
+                <canvas id="jobValueChart"></canvas>
+            </div>
+        </div>
+
+    </div> </div> <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cMinInput = document.getElementById('calc_cMin');
+        const vcInput = document.getElementById('calc_vc');
+        const vrInput = document.getElementById('calc_vr');
+        const vaInput = document.getElementById('calc_va');
+        const vcValueSpan = document.getElementById('calc_vcValue');
+        const vrValueSpan = document.getElementById('calc_vrValue');
+        const vaValueSpan = document.getElementById('calc_vaValue');
+        const cActualNewInput = document.getElementById('calc_cActualNew');
+        const deltaRRawNewInput = document.getElementById('calc_deltaRRawNew');
+        const aRawNewInput = document.getElementById('calc_aRawNew');
+        const deltaRRawNewValueSpan = document.getElementById('calc_deltaRRawNewValue');
+        const aRawNewValueSpan = document.getElementById('calc_aRawNewValue');
+        const cActualCurrentInput = document.getElementById('calc_cActualCurrent');
+        const deltaRRawCurrentInput = document.getElementById('calc_deltaRRawCurrent');
+        const aRawCurrentInput = document.getElementById('calc_aRawCurrent');
+        const deltaRRawCurrentValueSpan = document.getElementById('calc_deltaRRawCurrentValue');
+        const aRawCurrentValueSpan = document.getElementById('calc_aRawCurrentValue');
+        const burnoutBInput = document.getElementById('calc_burnoutB');
+        const burnoutBValueSpan = document.getElementById('calc_burnoutBValue');
+        const voResultSpan = document.getElementById('calc_voResult');
+        const vcurResultSpan = document.getElementById('calc_vcurResult');
+        const comparisonResultSpan = document.getElementById('comparisonResultText');
+        const cMaxValueDisplaySpan = document.getElementById('calc_cMaxValueDisplay');
+        const chartCanvas = document.getElementById('jobValueChart');
+        let jobValueChartInstance = null; // To hold the chart instance
+
+        const allCalculatorInputs = [
+            cMinInput, vcInput, vrInput, vaInput,
+            cActualNewInput, deltaRRawNewInput, aRawNewInput,
+            cActualCurrentInput, deltaRRawCurrentInput, aRawCurrentInput, burnoutBInput
+        ];
+
+        function normalizeCompensation(actual, min, max) {
+            if (max === min) return actual >= max ? 1 : 0;
+            if (max < min) return 0.5; // Fallback for invalid range, should be rare with dynamic Cmax
+            if (actual <= min) return 0;
+            if (actual >= max) return 1;
+            return (parseFloat(actual) - parseFloat(min)) / (parseFloat(max) - parseFloat(min));
+        }
+
+        function normalizeRawScoreToUnit(rawScore) {
+            const score = parseFloat(rawScore);
+            if (score < 0) return 0;
+            if (score > 10) return 1;
+            return score / 10;
+        }
+        
+        function updateOrCreateChart(voComponents, vcurComponents) {
+            const chartData = {
+                labels: ['New Opportunity (Vo)', 'Current Role (Vcur)'],
+                datasets: [
+                    {
+                        label: 'Compensation',
+                        data: [voComponents.comp, vcurComponents.comp],
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)', // Reddish
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Role/Growth',
+                        data: [voComponents.role, vcurComponents.role],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)', // Bluish
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Alignment',
+                        data: [voComponents.align, vcurComponents.align],
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)', // Greenish
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+
+            if (jobValueChartInstance) {
+                jobValueChartInstance.data = chartData;
+                jobValueChartInstance.update();
+            } else {
+                const ctx = chartCanvas.getContext('2d');
+                jobValueChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Opportunity Value Components',
+                                color: '#dddddd',
+                                font: { size: 16, family: 'Courier Prime' }
+                            },
+                            legend: {
+                                labels: { color: '#cccccc', font: { family: 'Courier Prime'} }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                titleFont: { family: 'Courier Prime' },
+                                bodyFont: { family: 'Courier Prime' },
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y.toFixed(3);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: { color: '#cccccc', font: { family: 'Courier Prime'} },
+                                grid: { color: 'rgba(200, 200, 200, 0.2)'}
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Component Value Contribution',
+                                    color: '#cccccc',
+                                    font: { size: 14, family: 'Courier Prime' }
+                                },
+                                ticks: { color: '#cccccc', font: { family: 'Courier Prime'} },
+                                grid: { color: 'rgba(200, 200, 200, 0.2)' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function performCalculations() {
+            try {
+                const cMin = parseFloat(cMinInput.value) || 0;
+                const actualNewSalary = parseFloat(cActualNewInput.value) || 0;
+                const actualCurrentSalary = parseFloat(cActualCurrentInput.value) || 0;
+                const cMax = Math.max(cMin, actualNewSalary, actualCurrentSalary);
+                cMaxValueDisplaySpan.textContent = `$${cMax.toLocaleString()}`;
+
+                const vc = parseFloat(vcInput.value);
+                const vr = parseFloat(vrInput.value);
+                const va = parseFloat(vaInput.value);
+
+                vcValueSpan.textContent = vc.toFixed(2);
+                vrValueSpan.textContent = vr.toFixed(2);
+                vaValueSpan.textContent = va.toFixed(2);
+                deltaRRawNewValueSpan.textContent = parseFloat(deltaRRawNewInput.value).toFixed(1);
+                aRawNewValueSpan.textContent = parseFloat(aRawNewInput.value).toFixed(1);
+                deltaRRawCurrentValueSpan.textContent = parseFloat(deltaRRawCurrentInput.value).toFixed(1);
+                aRawCurrentValueSpan.textContent = parseFloat(aRawCurrentInput.value).toFixed(1);
+                burnoutBValueSpan.textContent = parseFloat(burnoutBInput.value).toFixed(3);
+
+                const deltaRRawNew = parseFloat(deltaRRawNewInput.value);
+                const aRawNew = parseFloat(aRawNewInput.value);
+                const cNormNew = normalizeCompensation(actualNewSalary, cMin, cMax);
+                const deltaRNormNew = normalizeRawScoreToUnit(deltaRRawNew);
+                const aNormNew = normalizeRawScoreToUnit(aRawNew);
+                
+                const compVo = vc * cNormNew;
+                const roleVo = vr * deltaRNormNew;
+                const alignVo = va * aNormNew;
+                const vo = compVo + roleVo + alignVo;
+                voResultSpan.textContent = vo.toFixed(3);
+
+                const deltaRRawCurrent = parseFloat(deltaRRawCurrentInput.value);
+                const aRawCurrent = parseFloat(aRawCurrentInput.value);
+                let b = parseFloat(burnoutBInput.value);
+                if (b === 0) b = 0.001; 
+
+                const cNormCurrent = normalizeCompensation(actualCurrentSalary, cMin, cMax);
+                const deltaRNormCurrent = normalizeRawScoreToUnit(deltaRRawCurrent);
+                const aNormCurrent = normalizeRawScoreToUnit(aRawCurrent);
+
+                const compVcur = vc * cNormCurrent;
+                const roleVcur = vr * deltaRNormCurrent;
+                const alignVcur = (va * aNormCurrent) / b;
+                const vcur = compVcur + roleVcur + alignVcur;
+                vcurResultSpan.textContent = vcur.toFixed(3);
+
+                comparisonResultSpan.classList.remove('positive', 'negative', 'neutral');
+                if (vo > vcur) {
+                    comparisonResultSpan.textContent = "The New Opportunity looks more promising!";
+                    comparisonResultSpan.classList.add('positive');
+                } else if (vcur > vo) {
+                    comparisonResultSpan.textContent = "Your Current Role seems better based on these values.";
+                    comparisonResultSpan.classList.add('negative');
+                } else if (vo.toFixed(3) === "0.000" && vcur.toFixed(3) === "0.000" && cMin === 0 && actualNewSalary === 0 && actualCurrentSalary === 0 ) { 
+                    comparisonResultSpan.textContent = "Enter values to see comparison.";
+                    comparisonResultSpan.classList.add('neutral');
+                } else {
+                    comparisonResultSpan.textContent = "Both options are very close. Dig deeper!";
+                    comparisonResultSpan.classList.add('neutral');
+                }
+
+                // Update or create chart
+                updateOrCreateChart(
+                    { comp: compVo, role: roleVo, align: alignVo },
+                    { comp: compVcur, role: roleVcur, align: alignVcur }
+                );
+
+            } catch (error) {
+                console.error("Error in calculation:", error);
+                voResultSpan.textContent = "Error";
+                vcurResultSpan.textContent = "Error";
+                comparisonResultSpan.textContent = "Error in calculation. Check inputs.";
+                comparisonResultSpan.classList.remove('positive', 'negative');
+                comparisonResultSpan.classList.add('negative');
+                if(cMaxValueDisplaySpan) cMaxValueDisplaySpan.textContent = "Error";
+                 if (jobValueChartInstance) { // Attempt to clear or show error on chart
+                    jobValueChartInstance.clear(); // Or update with error message
+                 }
+            }
+        }
+
+        allCalculatorInputs.forEach(input => {
+            input.addEventListener('input', performCalculations);
+        });
+        performCalculations(); // Initial calculation & chart draw
+    });
+</script>
+
+</body>
+</html>
