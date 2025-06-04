@@ -108,10 +108,7 @@
                 </li>
             </ul>
 
-            <h2>Making an Initial Comparison</h2>
-            <p>Once you've calculated <em>V<sub>o</sub></em> (new opportunity) and <em>V<sub>cur</sub></em> (current role) using your scores and value constants, you can compare them. A higher score suggests a better fit based on your inputs. However, there's a crucial refinement to make this comparison more accurate.</p>
-
-            <h2>Important Refinement: Normalizing Factors for True Balance</h2>
+            <h2>Important Refinement: Normalizing Factors</h2>
             <p>Using the equation with raw salary figures (<em>C</em>) and 0-10 scores for <em>&Delta;R</em> and <em>A</em> can sometimes lead to misleading results. Why? Because a large salary number (e.g., $100,000+) can numerically dominate the other scores (e.g., 0-10), even if you set a low <em>V<sub>c</sub></em>. This means salary might inadvertently have a much bigger impact on the final score than you intended.</p>
             <p>To fix this and ensure your <em>V<sub>c</sub>, V<sub>r</sub>,</em> and <em>V<sub>a</sub></em> constants truly reflect the *intended* weightings, we need to **normalize** the main factors (C, &Delta;R, A) to a common scale, typically 0 to 1, *before* plugging them into the equation.</p>
 
@@ -128,27 +125,10 @@
                         <li><em>Example: Range $90k-$150k. Offer $120k gives C<sub>norm</sub> = 0.5.</em></li>
                     </ol>
                 </li>
-                <li>
-                    <strong><em>&Delta;R<sub>norm</sub></em>: Normalized Role Impact/Growth (New Scale: 0 to 1)</strong>
-                    <p>Convert your 0-10 score for &Delta;R to a 0-1 scale. Simply divide your score by 10.</p>
-                    <p class="equation"><em>&Delta;R<sub>norm</sub></em> = Your 0-10 &Delta;R Score / 10</p>
-                    <p><em>Example: A &Delta;R score of 7/10 becomes &Delta;R<sub>norm</sub> = 0.7.</em></p>
-                </li>
-                <li>
-                    <strong><em>A<sub>norm</sub></em>: Normalized Alignment (New Scale: 0 to 1)</strong>
-                    <p>Convert your 0-10 score for A to a 0-1 scale. Simply divide your score by 10.</p>
-                    <p class="equation"><em>A<sub>norm</sub></em> = Your 0-10 A Score / 10</p>
-                    <p><em>Example: An A score of 9/10 becomes A<sub>norm</sub> = 0.9.</em></p>
-                </li>
             </ul>
 
-            <h3>The Refined Equations with Normalized Values:</h3>
-            <p>For the most accurate comparison, use these normalized factors in the equations:</p>
-            <p><strong>Refined Opportunity Value:</strong></p>
-            <p class="equation"><em>V<sub>o</sub></em> = <em>V<sub>c</sub></em> &middot; <em>C<sub>norm</sub></em> + <em>V<sub>r</sub></em> &middot; <em>&Delta;R<sub>norm</sub></em> + <em>V<sub>a</sub></em> &middot; <em>A<sub>norm</sub></em></p>
-            <p><strong>Refined Current Role Value:</strong></p>
-            <p class="equation"><em>V<sub>cur</sub></em> = <em>V<sub>c</sub></em> &middot; <em>C<sub>cur_norm</sub></em> + <em>V<sub>r</sub></em> &middot; <em>&Delta;R<sub>cur_norm</sub></em> + (<em>V<sub>a</sub></em> &middot; <em>A<sub>cur_norm</sub></em> / <em>B</em>)</p>
-            <p>(Remember to normalize <em>C<sub>cur</sub></em>, <em>&Delta;R<sub>cur</sub></em>, and <em>A<sub>cur</sub></em> for your current role using the same 0-1 scaling methods.)</p>
+            <h2>Making the Comparison</h2>
+            <p>Once you've calculated <em>V<sub>o-norm</sub></em> (new opportunity) and <em>V<sub>cur-norm</sub></em> (current role) using your scores and value constants, you can compare them. A higher score suggests a better fit based on your inputs.</p>
 
             <h2>Making the Most Informed Decision</h2>
             <p>By taking the extra step to normalize your scores, your personal value constants (<em>V<sub>c</sub>, V<sub>r</sub>, V<sub>a</sub></em>) will more accurately reflect the true importance of each factor in your decision. Re-calculate <em>V<sub>o</sub></em> and <em>V<sub>cur</sub></em> using these normalized values for a more balanced and insightful comparison.</p>
