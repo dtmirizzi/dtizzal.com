@@ -451,3 +451,31 @@ input[type="checkbox"]:checked::after {
 label {
     color: #EEE; /* Light text for labels */
 }
+
+
+/* Styling for the reference buttons */
+.reference-button {
+	display: block; /* Makes the link behave like a block-level element */
+	background-color: #5252527b; /* A darker blue-grey, fitting the dark theme */
+	color: #ECEFF4; /* Light text color for contrast */
+	padding: 2px 2px;
+	margin-bottom: 2px; /* Space between buttons */
+	border-radius: 2px;
+	text-decoration: none; /* Remove default underline */
+	font-family: 'Courier Prime', monospace; /* Match article font */
+	font-size: 0.9em;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.reference-button:hover {
+	background-color: #5E6778; /* Slightly lighter on hover */
+	transform: translateY(-2px); /* Slight lift effect */
+	box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Ensure footnote links in the main text are styled appropriately */
+sup a {
+	text-decoration: none;
+	color: inherit; /* Inherit text color from parent paragraph */
+}
