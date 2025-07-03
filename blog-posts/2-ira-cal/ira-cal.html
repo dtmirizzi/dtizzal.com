@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DT Mirizzi - Job Selection Equation</title>
+
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <link href="/css/style.css" rel="stylesheet">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-Z4WRP0KWGX');
+    </script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+    <a href="/blog.html">⟵ back</a>
+
+    <div class="job-helper">
+        <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+            <source src="/img/Background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div id="article-content">
+            <h1>Roth IRA Contribution Limits</h1>
+            <h2>The Future You: Why Retirement Savings Can't Wait</h2>
+            <p>
+                In today's ever-changing financial landscape, securing your future is more critical than ever. While it might seem distant, retirement will arrive, and preparing for it today is the most powerful gift you can give your future self. The good news? The U.S. government offers powerful tools to help you save efficiently: tax-advantaged retirement accounts like Traditional and Roth IRAs. These aren't just savings accounts; they're strategic vehicles designed to supercharge your wealth accumulation by minimizing your tax burden.
+            </p>
+            <p>
+                The primary benefit of these accounts lies in their "tax-advantaged" nature. With a **Traditional IRA**, your contributions may be tax-deductible in the present, leading to immediate tax savings. Your investments then grow tax-deferred, meaning you don't pay taxes on the gains until retirement, when you withdraw the funds. This deferral allows your money to compound more aggressively over time.
+            </p>
+            <p>
+                On the other hand, a **Roth IRA** offers a different, yet equally compelling, advantage. Contributions to a Roth IRA are made with after-tax dollars, meaning they are not tax-deductible now. However, the magic happens in retirement: all qualified withdrawals, including all the investment gains, are entirely tax-free. Imagine a future where your retirement income isn't subject to the IRS! This makes the Roth IRA particularly attractive if you anticipate being in a higher tax bracket in retirement than you are today.
+            </p>
+            <p>
+                You might wonder why the U.S. government, which thrives on tax revenue, would create such beneficial accounts and then impose income limitations, especially on the Roth IRA. The simple answer lies in their objective: to encourage middle and lower-income individuals to save for retirement. Tax-advantaged accounts are a significant incentive, but to ensure these benefits are primarily accessible to those who need the most encouragement to save, income phase-out ranges are established. This prevents high-income earners from disproportionately benefiting from tax breaks intended for broader public participation in retirement savings. It's a mechanism to promote widespread financial security, not just for the wealthiest, but for a larger segment of the population.
+            </p>
+            <p>
+                Understanding these nuances is crucial for optimizing your retirement strategy. Below, we'll delve into the specifics of Roth IRA contribution limits based on income, providing a clear picture of how these rules apply to you.
+            </p>
+            <h2>Calculator</h2>
+            <label for="years">Choose your Tax Year:</label>
+
+            <select name="years" id="years">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+
+            <p></p>
+
+            <input type="checkbox" id="married" name="married">
+            <label for="married"> Married filing jointly?</label><br>
+
+            <input type="checkbox" id="old" name="old">
+            <label for="old"> Over the age of 50?</label><br>
+
+            <form action="javascript:drawChart(this)">
+                <label for="income">Taxable income (<a href="https://www.omnicalculator.com/finance/magi">MAGI</a>):</label>
+                <input type="text" id="income" name="income"><br><br>
+                <input type="submit" value="Calculate" class="jump-to-calculator-link">
+            </form>
+
+            <div id="contribution"></div>
+
+            <div id="curve_chart" style="width: 680px; height: 500px"></div> <h2>Why you wasted your time calculating this?</h2>
+            <p>
+                Pretty simply it's more than likely not worth your time to correctly put your maxes into these accounts. <br>
+                The best way forward in my opinion is just to put all of your yearly money into a Traditional IRA if you are in these income
+                ranges.<br>
+                At the end of the year, just perform a backdoor Roth conversion. This will simplify your life and really will only
+                increase your tax burden by the invested gain from the last year. In most cases that may be a tax burden of less than $500.<br>
+                <br>
+                I am not a financial advisor, just a believer that it's just better to keep your finances simple.
+                <br>
+                *source: <a
+                    href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            let policy = {
+                "2024": {
+                    "single": {
+                        "magi_min": 146000,
+                        "magi_max": 161000,
+                        "contrib_limit": 7000,
+                        "contrib_limit_over_50": 8000,
+                    },
+                    "married": {
+                        "magi_min": 230000,
+                        "magi_max": 240000,
+                        "contrib_limit": 7000,
+                        "contrib_limit_over_50": 8000,
+                    }
+                },
+                "2025": {
+                    "single": {
+                        "magi_min": 150000,
+                        "magi_max": 165000,
+                        "contrib_limit": 7000,
+                        "contrib_limit_over_50": 8000,
+                    },
+                    "married": {
+                        "magi_min": 236000,
+                        "magi_max": 246000,
+                        "contrib_limit": 7000,
+                        "contrib_limit_over_50": 8000,
+                    }
+                },
+                "2023": {
+                    "single": {
+                        "magi_min": 138000,
+                        "magi_max": 153000,
+                        "contrib_limit": 6500,
+                        "contrib_limit_over_50": 7500,
+                    },
+                    "married": {
+                        "magi_min": 218000,
+                        "magi_max": 228000,
+                        "contrib_limit": 6500,
+                        "contrib_limit_over_50": 7500,
+                    }
+                },
+                "2022": {
+                    "single": {
+                        "magi_min": 129000,
+                        "magi_max": 144000,
+                        "contrib_limit": 6000,
+                        "contrib_limit_over_50": 7000,
+                    },
+                    "married": {
+                        "magi_min": 204000,
+                        "magi_max": 214000,
+                        "contrib_limit": 6000,
+                        "contrib_limit_over_50": 7000,
+                    }
+                }
+            }
+
+            let year = document.getElementById("years").value;
+            let isMarried = document.getElementById("married").checked;
+            let isOld = document.getElementById("old").checked;
+            let sal = document.getElementById("income").value;
+
+            console.log(year, isMarried, isOld, sal)
+
+            p = isMarried ? policy[year]["married"] : policy[year]["single"];
+
+            console.log(p)
+
+            salaryBottomSingle = p["magi_min"];
+            salaryTopSingle = p["magi_max"];
+            contribLimit = isOld ? p["contrib_limit_over_50"]: p["contrib_limit"];
+
+            console.log(contribLimit)
+
+            function calculateTrad(inc) {
+                if (inc < salaryBottomSingle) {
+                    return 0;
+                };
+                if (inc > salaryTopSingle) {
+                    return contribLimit;
+                };
+                return ((inc - salaryBottomSingle) * (contribLimit)) / (salaryTopSingle - salaryBottomSingle);
+            };
+
+            let incomes = [
+                ['Income', 'Roth', 'Traditional'],
+            ];
+            incomes.push([0, contribLimit, 0]);
+            for (let income = salaryBottomSingle; income <= salaryTopSingle; income += 100) {
+                let tradContrib = calculateTrad(income);
+                let rothContrib = contribLimit - tradContrib;
+
+                incomes.push([income, parseFloat(rothContrib.toFixed(2)), parseFloat(tradContrib.toFixed(2))]);
+            }
+
+            incomes.push([400000, 0, contribLimit]);
+
+            console.log(incomes);
+            var data = google.visualization.arrayToDataTable(incomes);
+
+            let window = 5000;
+
+            var options = {
+                title: 'Roth IRA Income Contrib Maxes',
+                titleTextStyle: {
+                    color: '#FFF' // White text for title
+                },
+                legend: {
+                    position: 'bottom',
+                    textStyle: {
+                        color: '#FFF' // White text for legend
+                    }
+                },
+                backgroundColor: {
+                    fill: '#333' // Dark background color for the chart area
+                },
+                hAxis: {
+                    viewWindow: {
+                        max: salaryTopSingle + window,
+                        min: salaryBottomSingle - window
+                    },
+                    textStyle: {
+                        color: '#FFF' // White text for horizontal axis labels
+                    },
+                    gridlines: {
+                        color: '#555' // Slightly lighter gridlines for contrast
+                    }
+                },
+                vAxis: { // Added vAxis styles for dark mode
+                    textStyle: {
+                        color: '#FFF' // White text for vertical axis labels
+                    },
+                    gridlines: {
+                        color: '#555' // Slightly lighter gridlines for contrast
+                    }
+                }
+            };
+
+            if (sal && sal > 0) {
+                document.getElementById('contribution').innerHTML ="<p>" + "Trad Contribution: $" + calculateTrad(sal).toFixed(2) + " </p> <p> Roth Contribution:  $"+ (contribLimit - calculateTrad(sal)).toFixed(2) + "</p>";
+            }
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+</body>
+</html>

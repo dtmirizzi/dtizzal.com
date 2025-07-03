@@ -377,7 +377,7 @@ video {
     padding: 8px 15px;
     margin: 15px 0; /* Adjust margin as needed */
     background-color: #41414198; /* Light blue */
-    color: #111; /* Dark text for contrast */
+    color: #2dc7ff; /* Dark text for contrast */
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
@@ -385,4 +385,69 @@ video {
 }
 .jump-to-calculator-link:hover {
     background-color: #5d5d5d98; /* Lighter blue on hover */
+}
+
+/* General Input, Select, and Textarea Styling for Dark Mode */
+input[type="text"],
+select,
+option,
+textarea {
+    background-color: #444; /* Dark gray background */
+    color: #FFF;          /* White text color */
+    border: 1px solid #666; /* Lighter border for contrast */
+    padding: 8px 10px;    /* Add some padding */
+    border-radius: 4px;   /* Slightly rounded corners */
+    appearance: none;     /* Remove default browser styling for select */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Focus states for better accessibility */
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    border-color: #88C0D0; /* A contrasting color for focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 2px rgba(136, 192, 208, 0.5); /* Soft glow */
+}
+
+/* Checkbox Styling for Dark Mode */
+/* Hide the default checkbox */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;  /* Custom width */
+    height: 20px; /* Custom height */
+    border: 2px solid #666; /* Dark mode border color */
+    background-color: #444; /* Dark mode background color */
+    border-radius: 4px; /* Slightly rounded corners */
+    cursor: pointer;
+    vertical-align: middle; /* Align with text */
+    margin-right: 5px; /* Space between checkbox and label */
+    position: relative;
+    top: -1px; /* Slight adjustment for alignment */
+}
+
+/* Style for the custom checkmark when checked */
+input[type="checkbox"]:checked {
+    background-color: #88C0D0; /* Checked background color */
+    border-color: #88C0D0; /* Checked border color */
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px; /* Adjust as needed for alignment */
+    top: 2px;  /* Adjust as needed for alignment */
+    width: 5px;
+    height: 10px;
+    border: solid white; /* Checkmark color */
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Label text color for associated labels */
+label {
+    color: #EEE; /* Light text for labels */
 }
