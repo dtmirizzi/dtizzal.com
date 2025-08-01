@@ -3,6 +3,9 @@ const canvas = document.getElementById('canvas');
 const saveButton = document.getElementById('save-button');
 const downloadLinks = document.getElementById('download-links');
 const ctx = canvas.getContext('2d');
+const uploadButton = document.getElementById('upload-button');
+const fileInput = document.getElementById('file-input');
+const thumbnailContainer = document.getElementById('thumbnail-container');
 let img = new Image();
 let rects = [];
 let selectedRect = null;
@@ -18,9 +21,35 @@ function onOpenCvReady() {
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUpOrOut);
     canvas.addEventListener('mouseout', handleMouseUpOrOut);
+    uploadButton.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFileUpload);
 
     // Initial image load
     loadImage(document.querySelector('.thumbnail.active').dataset.fullSrc);
+}
+
+// --- Event Handlers ---
+function handleFileUpload(e) {
+    thumbnailContainer.innerHTML = '';
+    const files = e.target.files;
+    if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.dataset.fullSrc = e.target.result;
+                img.classList.add('thumbnail');
+                if (i === 0) {
+                    img.classList.add('active');
+                    loadImage(e.target.result);
+                }
+                thumbnailContainer.appendChild(img);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 }
 
 // --- Event Handlers ---
@@ -226,62 +255,73 @@ function drawImageToCanvas() {
     canvas.height = canvasHeight;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 }
-
 function findAndDrawRects() {
     let src = cv.imread(img);
+    const centerX = Math.floor(src.cols / 2);
+    const width = src.cols;
+    const height = src.rows;
+
+    // Convert to grayscale and enhance contrast
     let gray = new cv.Mat();
     cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-    let blurred = new cv.Mat();
-    cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
-    let edged = new cv.Mat();
-    cv.Canny(blurred, edged, 50, 150);
+    cv.normalize(gray, gray, 0, 255, cv.NORM_MINMAX);
+    cv.equalizeHist(gray, gray);
 
-    let contours = new cv.MatVector();
-    let hierarchy = new cv.Mat();
-    cv.findContours(edged, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    // Threshold to binary image: treat "non-dark" as content
+    let thresh = new cv.Mat();
+    cv.threshold(gray, thresh, 45, 255, cv.THRESH_BINARY);  // 30 is good for dark separation
 
-    let leftRects = [];
-    let rightRects = [];
-    const centerX = img.width / 2;
+    // Helper: find tight bounding box in region
+    function getTightRect(threshMat, roi) {
+        let subMat = threshMat.roi(roi);
+        let contours = new cv.MatVector();
+        let hierarchy = new cv.Mat();
+        cv.findContours(subMat, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
-    for (let i = 0; i < contours.size(); ++i) {
-        let cnt = contours.get(i);
-        let hull = new cv.Mat();
-        cv.convexHull(cnt, hull, false, true);
-        let rect = cv.boundingRect(hull);
-        hull.delete();
-
-        if (rect.width > 100 && rect.height > 100) {
-            if (rect.x + rect.width / 2 < centerX) {
-                leftRects.push({rect: rect, area: rect.width * rect.height});
-            } else {
-                rightRects.push({rect: rect, area: rect.width * rect.height});
+        let bestRect = null;
+        let maxArea = 0;
+        for (let i = 0; i < contours.size(); ++i) {
+            let cnt = contours.get(i);
+            let rect = cv.boundingRect(cnt);
+            let area = rect.width * rect.height;
+            if (area > maxArea) {
+                maxArea = area;
+                bestRect = rect;
             }
+            cnt.delete();
         }
+
+        contours.delete();
+        hierarchy.delete();
+        subMat.delete();
+
+        if (bestRect) {
+            // Adjust x for right ROI offset
+            bestRect.x += roi.x;
+            bestRect.y += roi.y;
+            return bestRect;
+        }
+        return roi; // fallback
     }
 
-    leftRects.sort((a, b) => b.area - a.area);
-    rightRects.sort((a, b) => b.area - a.area);
+    let leftROI = new cv.Rect(0, 0, centerX, height);
+    let rightROI = new cv.Rect(centerX, 0, width - centerX, height);
+
+    let leftRect = getTightRect(thresh, leftROI);
+    let rightRect = getTightRect(thresh, rightROI);
 
     rects = [];
-    if (leftRects.length > 0) {
-        rects.push(leftRects[0].rect);
-    }
-    if (rightRects.length > 0) {
-        rects.push(rightRects[0].rect);
-    }
-
-    rects.sort((a, b) => a.x - b.x);
+    if (leftRect) rects.push(leftRect);
+    if (rightRect) rects.push(rightRect);
 
     drawRects();
 
+    // Cleanup
     src.delete();
     gray.delete();
-    blurred.delete();
-    edged.delete();
-    contours.delete();
-    hierarchy.delete();
+    thresh.delete();
 }
+
 
 function drawRects() {
     const scaleX = canvas.width / img.naturalWidth;
@@ -290,7 +330,7 @@ function drawRects() {
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
     rects.forEach(rect => {
-        ctx.strokeStyle = (rect === selectedRect) ? '#87cefa' : 'red';
+        ctx.strokeStyle = (rect === selectedRect) ? '#87cefa' : '#FF6A74';
         ctx.lineWidth = 2;
         ctx.strokeRect(rect.x * scaleX, rect.y * scaleY, rect.width * scaleX, rect.height * scaleY);
         if (rect === selectedRect) {

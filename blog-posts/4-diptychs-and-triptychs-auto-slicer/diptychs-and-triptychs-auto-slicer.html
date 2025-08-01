@@ -77,6 +77,16 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+        #upload-button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -97,11 +107,15 @@
                     <canvas id="canvas"></canvas>
                 </div>
                 <div id="sidebar">
-                    <img src="./examples/bw_dip.jpg" data-full-src="./examples/bw_dip.jpg" class="thumbnail active">
-                    <img src="./examples/two-framed-7.jpg" data-full-src="./examples/two-framed-7.jpg" class="thumbnail">
-                    <img src="./examples/two-framed-5.jpg" data-full-src="./examples/two-framed-5.jpg" class="thumbnail">
-                    <img src="./examples/two-framed.jpg" data-full-src="./examples/two-framed.jpg" class="thumbnail">
-                    <!-- <img src="./examples/two-framed-10.jpg" data-full-src="./examples/two-framed-10.jpg" class_name="thumbnail"> !-->
+                    <input type="file" id="file-input" multiple accept="image/*" style="display: none;">
+                    <button id="upload-button">+</button>
+                    <div id="thumbnail-container">
+                        <img src="./examples/bw_dip.jpg" data-full-src="./examples/bw_dip.jpg" class="thumbnail active">
+                        <img src="./examples/two-framed-7.jpg" data-full-src="./examples/two-framed-7.jpg" class="thumbnail">
+                        <img src="./examples/two-framed-5.jpg" data-full-src="./examples/two-framed-5.jpg" class="thumbnail">
+                        <img src="./examples/two-framed.jpg" data-full-src="./examples/two-framed.jpg" class="thumbnail">
+                        <!-- <img src="./examples/two-framed-10.jpg" data-full-src="./examples/two-framed-10.jpg" class_name="thumbnail"> !-->
+                    </div>
                 </div>
             </div>
             <button class="jump-to-calculator-link" id="save-button">Save Sliced Images</button>
