@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DT Mirizzi - Diptychs and Triptychs Auto-slicer</title>
+    <title>DT Mirizzi - Diptychs Auto-slicer</title>
 
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
 
@@ -101,7 +101,7 @@
         
         <div id="article-content">
             
-            <h1>Diptychs and Triptychs Auto-slicer</h1>
+            <h1>Diptychs Auto-slicer</h1>
             <div id="main-container">
                 <div id="canvas-container">
                     <canvas id="canvas"></canvas>
@@ -118,11 +118,15 @@
                     </div>
                 </div>
             </div>
-            <button class="jump-to-calculator-link" id="save-button">Save Sliced Images</button>
+            <button class="jump-to-calculator-link" id="save-current-button">Save Slices for Current Image</button>
+            <button class="jump-to-calculator-link" id="save-all-button">Save Slices for All Images</button>
             <div id="download-links"></div>
-            <p>Images sources: https://burntembers.com/2014/03/25/finlayson-point-half-frame/ and https://gupmagazine.com/uncategorized/two-frame-films/ </p>
-            <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
+            <p>Images sources:</p>
+            <a>https://burntembers.com/2014/03/25/finlayson-point-half-frame/</a> 
+            <a>https://gupmagazine.com/uncategorized/two-frame-films/ </a>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
             <script src="./script.js"></script>
+            <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCvReady();"></script>
 
         </div>
     </div>

@@ -1,22 +1,25 @@
 const sidebar = document.getElementById('sidebar');
 const canvas = document.getElementById('canvas');
-const saveButton = document.getElementById('save-button');
 const downloadLinks = document.getElementById('download-links');
 const ctx = canvas.getContext('2d');
 const uploadButton = document.getElementById('upload-button');
 const fileInput = document.getElementById('file-input');
 const thumbnailContainer = document.getElementById('thumbnail-container');
+
+let imageRects = new Map(); // Stores { src: [rects] }
+
 let img = new Image();
-let rects = [];
+let rects = []; // Rects for the CURRENTLY active image
 let selectedRect = null;
 let drag = {x: 0, y: 0, active: false, handle: null};
 
 // --- Main Setup Function ---
-function onOpenCvReady() {
+function startApp() {
     // Initialize event listeners
     sidebar.addEventListener('click', handleThumbnailClick);
     window.addEventListener('resize', handleResize);
-    saveButton.addEventListener('click', handleSave);
+    document.getElementById('save-current-button').addEventListener('click', handleSave);
+    document.getElementById('save-all-button').addEventListener('click', handleSaveAll);
     canvas.addEventListener('mousedown', handleMouseDown);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUpOrOut);
@@ -26,6 +29,16 @@ function onOpenCvReady() {
 
     // Initial image load
     loadImage(document.querySelector('.thumbnail.active').dataset.fullSrc);
+}
+
+function onOpenCvReady() {
+    // Poll until cv.Mat is defined
+    const interval = setInterval(() => {
+        if (typeof cv !== 'undefined' && cv.Mat) {
+            clearInterval(interval);
+            startApp();
+        }
+    }, 100);
 }
 
 // --- Event Handlers ---
@@ -52,7 +65,6 @@ function handleFileUpload(e) {
     }
 }
 
-// --- Event Handlers ---
 function handleThumbnailClick(e) {
     if (e.target.classList.contains('thumbnail')) {
         document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
@@ -70,6 +82,7 @@ function handleResize() {
 
 function handleSave() {
     downloadLinks.innerHTML = '';
+    const originalFilename = img.src.split('/').pop().replace(/\.[^/.]+$/, "");
     rects.forEach((rect, i) => {
         let tempCanvas = document.createElement('canvas');
         tempCanvas.width = rect.width;
@@ -78,10 +91,69 @@ function handleSave() {
         tempCtx.drawImage(img, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
         let link = document.createElement('a');
         link.href = tempCanvas.toDataURL();
-        link.download = `sliced_${i + 1}.png`;
+        link.download = `sliced_${originalFilename}_${i + 1}.png`;
         link.innerText = `Download Sliced Image ${i + 1}`;
         downloadLinks.appendChild(link);
         downloadLinks.appendChild(document.createElement('br'));
+    });
+}
+
+async function handleSaveAll() {
+    downloadLinks.innerHTML = 'Preparing all sliced images for download... This may take a moment.';
+    const thumbnails = Array.from(document.querySelectorAll('.thumbnail'));
+    const zip = new JSZip();
+
+    for (const thumb of thumbnails) {
+        const src = thumb.dataset.fullSrc;
+        let imageRectangles = imageRects.get(src);
+
+        const tempImg = new Image();
+        tempImg.crossOrigin = "Anonymous";
+        tempImg.src = src;
+
+        await new Promise((resolve) => {
+            tempImg.onload = resolve;
+            tempImg.onerror = (err) => {
+                console.error("Failed to load image for bulk save:", src, err);
+                resolve(); // Resolve anyway to not block the whole process
+            };
+        });
+
+        if (!tempImg.complete || tempImg.naturalWidth === 0) {
+            console.warn("Skipping image because it could not be loaded:", src);
+            continue; // Skip to next image if this one failed to load
+        }
+
+        if (!imageRectangles) {
+            try {
+                imageRectangles = findRects(tempImg);
+                imageRects.set(src, imageRectangles);
+            } catch (e) {
+                console.error("Could not process image to find rectangles:", src, e);
+                continue; // Skip if opencv fails
+            }
+        }
+
+        const originalFilename = src.split('/').pop().replace(/\.[^/.]+$/, "");
+        for (let i = 0; i < imageRectangles.length; i++) {
+            const rect = imageRectangles[i];
+            let tempCanvas = document.createElement('canvas');
+            tempCanvas.width = rect.width;
+            tempCanvas.height = rect.height;
+            let tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(tempImg, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+            const blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
+            zip.file(`sliced_${originalFilename}_${i + 1}.png`, blob);
+        }
+    }
+
+    zip.generateAsync({type:"blob"}).then(function(content) {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = "sliced_images.zip";
+        link.innerText = "Download All Sliced Images as ZIP";
+        downloadLinks.innerHTML = '';
+        downloadLinks.appendChild(link);
     });
 }
 
@@ -191,6 +263,9 @@ function handleMouseMove(e) {
 }
 
 function handleMouseUpOrOut() {
+    if (drag.active && selectedRect) {
+        imageRects.set(img.originalSrc, rects);
+    }
     drag.active = false;
     drag.handle = null;
 }
@@ -240,11 +315,24 @@ function getCursorForHandle(handleName) {
 }
 
 function loadImage(src) {
+    img.originalSrc = src; // Store the original, consistent src
     img.src = src;
     img.onload = () => {
         drawImageToCanvas();
-        findAndDrawRects();
+        if (imageRects.has(src)) {
+            rects = imageRects.get(src).map(r => ({...r})); // Deep copy
+            drawRects();
+        } else {
+            findAndDrawRects();
+        }
     };
+    img.onerror = () => {
+        console.error("Failed to load image:", src);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.fillText("Error loading image. Check console for details.", canvas.width / 2, canvas.height / 2);
+    }
 }
 
 function drawImageToCanvas() {
@@ -255,8 +343,9 @@ function drawImageToCanvas() {
     canvas.height = canvasHeight;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 }
-function findAndDrawRects() {
-    let src = cv.imread(img);
+
+function findRects(imageElement) {
+    let src = cv.imread(imageElement);
     const centerX = Math.floor(src.cols / 2);
     const width = src.cols;
     const height = src.rows;
@@ -296,7 +385,6 @@ function findAndDrawRects() {
         subMat.delete();
 
         if (bestRect) {
-            // Adjust x for right ROI offset
             bestRect.x += roi.x;
             bestRect.y += roi.y;
             return bestRect;
@@ -310,18 +398,29 @@ function findAndDrawRects() {
     let leftRect = getTightRect(thresh, leftROI);
     let rightRect = getTightRect(thresh, rightROI);
 
-    rects = [];
-    if (leftRect) rects.push(leftRect);
-    if (rightRect) rects.push(rightRect);
-
-    drawRects();
+    let foundRects = [];
+    if (leftRect) foundRects.push(leftRect);
+    if (rightRect) foundRects.push(rightRect);
 
     // Cleanup
     src.delete();
     gray.delete();
     thresh.delete();
+
+    return foundRects;
 }
 
+function findAndDrawRects() {
+    try {
+        const cvRects = findRects(img);
+        rects = cvRects.map(r => ({ x: r.x, y: r.y, width: r.width, height: r.height }));
+        imageRects.set(img.originalSrc, rects);
+        drawRects();
+    } catch (e) {
+        console.error("OpenCV error in findAndDrawRects:", e);
+        drawImageToCanvas();
+    }
+}
 
 function drawRects() {
     const scaleX = canvas.width / img.naturalWidth;
