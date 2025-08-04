@@ -102,6 +102,36 @@
         <div id="article-content">
             
             <h1>Diptychs Auto-slicer</h1>
+            <p>Half-frame photography, a fascinating format that captures two vertical images on a single 35mm frame, offers a unique blend of economy and creative potential. But where did this intriguing format originate, and why did it gain traction?</p>
+
+            <h3>A Brief History of Half-Frame</h3>
+            <p>The concept of half-frame cameras rose to prominence in the mid-20th century. In an era where film was a significant expense, the primary motivation behind the half-frame format was simple: <b>economy</b>. By utilizing half the standard 35mm frame size (18x24mm instead of 24x36mm), photographers could effectively double the number of exposures on a single roll of film. A standard 36-exposure roll would yield 72 images, making photography more accessible to a wider audience.</p>
+            <p>Beyond cost savings, the smaller size and lighter weight of many half-frame cameras, like the popular Olympus Pen series, made them ideal for everyday carry and street photography. Their ease of use also appealed to casual photographers looking for a simple point-and-shoot experience.</p>
+
+            <h3>Why Half-Frame Photography?</h3>
+            <ul>
+            <li><b>Economy:</b> As mentioned, the primary driver was the ability to take twice as many photos on a single roll of film.</li>
+            <li><b>Compactness:</b> Half-frame cameras were often smaller and lighter than their full-frame counterparts, making them more portable.</li>
+            <li><b>Discreetness:</b> Their smaller size could also make them less conspicuous for street photography.</li>
+            <li><b>Unique Aesthetic:</b> The vertical orientation of the half-frame format offered a different perspective compared to the standard horizontal 35mm frame, encouraging photographers to think vertically.</li>
+            </ul>
+
+            <h3>Notable Figures and Half-Frame Cameras</h3>
+            <p>While not always their primary tool, some renowned photographers explored the possibilities of half-frame cameras. For instance, <b>Elliott Erwitt</b>, known for his candid and humorous black and white photographs, is said to have occasionally used an Olympus Pen. The format's discreet nature would have suited his street photography approach. While specific famous figures exclusively known for their half-frame work might be less documented than those using standard formats, the format's popularity meant many photographers, both amateur and professional, likely experimented with it. The Olympus Pen series, in particular, gained a strong following for its quality optics and ease of use.</p>
+
+            <h3>Understanding the Diptych</h3>
+            <p>In the context of half-frame photography, a <b>diptych</b> refers to a work of art consisting of two adjacent images that are intended to be viewed together. Because a half-frame camera captures two distinct images on a single frame, these pairs often lend themselves naturally to creating diptychs. Photographers could intentionally (or sometimes serendipitously) capture two related or contrasting subjects that, when viewed side-by-side, create a narrative, evoke a feeling, or offer a comparative perspective.</p>
+
+            <h3>Bridging the Gap: A Tool for Modern Half-Frame Enthusiasts</h3>
+            <p>Today, as film photography experiences a resurgence, enthusiasts are rediscovering the charm of half-frame cameras. However, the process of dealing with scanned half-frame negatives, which contain two separate images, can sometimes be cumbersome. This is why I developed a specialized tool designed to streamline the workflow for half-frame photographers.</p>
+            <p>My tool efficiently extracts the two individual sub-images from a scanned half-frame negative. It intelligently identifies and separates the two vertical frames, allowing for individual editing, printing, and sharing of each image. This eliminates the need for manual cropping and ensures precise separation, preserving the integrity of each captured moment.</p>
+            <p>For those embracing the unique aesthetic and economical benefits of half-frame photography, this tool aims to simplify the digital post-processing, making it easier than ever to enjoy and share your vertically-oriented visions and potential diptych creations.</p>
+
+            <h3>Bridging the Gap: A Tool for Modern Half-Frame Enthusiasts</h3>
+            <p>Today, as film photography experiences a resurgence, enthusiasts are rediscovering the charm of half-frame cameras. However, the process of dealing with scanned half-frame negatives, which contain two separate images, can sometimes be cumbersome. This is why I developed a specialized tool designed to streamline the workflow for half-frame photographers.</p>
+            <p>At its core, this tool uses computer vision to automatically detect and extract the individual frames. The code works by first converting the scanned image to grayscale and enhancing the contrast, making it easier to identify the boundaries of the photograph. It then applies a threshold to create a simplified, binary image where the photograph's content is starkly separated from the film's borders. The program effectively splits the scan down the middle, treating the left and right sides as separate "regions of interest." Within each region, it finds the contours of the photograph and determines the tightest possible bounding box. These bounding boxes give the precise coordinates for each of the two photographs, allowing the tool to crop and save them as individual files. This automated process eliminates the need for manual cropping and ensures that each image is extracted with pixel-perfect precision.</p>
+            <p>For those embracing the unique aesthetic and economical benefits of half-frame photography, this tool aims to simplify the digital post-processing, making it easier than ever to enjoy and share your vertically-oriented visions and potential diptych creations.</p>
+
             <div id="main-container">
                 <div id="canvas-container">
                     <canvas id="canvas"></canvas>

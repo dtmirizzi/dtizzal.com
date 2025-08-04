@@ -42,25 +42,40 @@ function onOpenCvReady() {
 }
 
 // --- Event Handlers ---
-function handleFileUpload(e) {
+async function handleFileUpload(e) {
     thumbnailContainer.innerHTML = '';
     const files = e.target.files;
     if (files.length > 0) {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.dataset.fullSrc = e.target.result;
-                img.classList.add('thumbnail');
-                if (i === 0) {
-                    img.classList.add('active');
-                    loadImage(e.target.result);
-                }
-                thumbnailContainer.appendChild(img);
+            // Use a promise to wait for file reading and rotation
+            const processedSrc = await new Promise((resolve) => {
+                reader.onload = async (e) => {
+                    const tempImg = new Image();
+                    tempImg.src = e.target.result;
+                    tempImg.onload = async () => {
+                        // Check orientation and rotate if portrait
+                        if (tempImg.naturalWidth < tempImg.naturalHeight) {
+                            const rotatedSrc = rotateImage(tempImg);
+                            resolve(rotatedSrc);
+                        } else {
+                            resolve(tempImg.src);
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+            });
+
+            const img = document.createElement('img');
+            img.src = processedSrc;
+            img.dataset.fullSrc = processedSrc;
+            img.classList.add('thumbnail');
+            if (i === 0) {
+                img.classList.add('active');
+                loadImage(processedSrc);
             }
-            reader.readAsDataURL(file);
+            thumbnailContainer.appendChild(img);
         }
     }
 }
@@ -123,10 +138,19 @@ async function handleSaveAll() {
             console.warn("Skipping image because it could not be loaded:", src);
             continue; // Skip to next image if this one failed to load
         }
+        
+        // Check orientation and rotate if portrait for bulk save
+        let finalImageElement = tempImg;
+        if (tempImg.naturalWidth < tempImg.naturalHeight) {
+            const rotatedSrc = rotateImage(tempImg);
+            finalImageElement = new Image();
+            finalImageElement.src = rotatedSrc;
+            await new Promise((resolve) => finalImageElement.onload = resolve);
+        }
 
         if (!imageRectangles) {
             try {
-                imageRectangles = findRects(tempImg);
+                imageRectangles = findRects(finalImageElement);
                 imageRects.set(src, imageRectangles);
             } catch (e) {
                 console.error("Could not process image to find rectangles:", src, e);
@@ -141,7 +165,7 @@ async function handleSaveAll() {
             tempCanvas.width = rect.width;
             tempCanvas.height = rect.height;
             let tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(tempImg, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+            tempCtx.drawImage(finalImageElement, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
             const blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
             zip.file(`sliced_${originalFilename}_${i + 1}.png`, blob);
         }
@@ -271,6 +295,24 @@ function handleMouseUpOrOut() {
 }
 
 // --- Helper Functions ---
+
+// New function to rotate an image and return a new data URL
+function rotateImage(imageElement) {
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    
+    // Set canvas dimensions to the rotated dimensions
+    tempCanvas.width = imageElement.naturalHeight;
+    tempCanvas.height = imageElement.naturalWidth;
+
+    // Perform the rotation
+    tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+    tempCtx.rotate(90 * Math.PI / 180);
+    tempCtx.drawImage(imageElement, -imageElement.naturalWidth / 2, -imageElement.naturalHeight / 2);
+    
+    return tempCanvas.toDataURL();
+}
+
 function getMousePos(e) {
     const scaleX = canvas.width / img.naturalWidth;
     const scaleY = canvas.height / img.naturalHeight;
