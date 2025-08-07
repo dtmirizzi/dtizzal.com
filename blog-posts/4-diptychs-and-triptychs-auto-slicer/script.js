@@ -113,71 +113,98 @@ function handleSave() {
     });
 }
 
+/**
+ * Helper function to load an image source asynchronously.
+ * @param {string} src The source URL or data URL of the image.
+ * @returns {Promise<HTMLImageElement>} A promise that resolves with the loaded image element.
+ */
+function loadImageAsync(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous"; // Important for canvas operations
+        img.onload = () => resolve(img);
+        img.onerror = (err) => {
+            // Reject the promise if the image fails to load
+            reject(new Error(`Failed to load image. src: ${src.substring(0, 100)}...`));
+        };
+        img.src = src;
+    });
+}
+
+
 async function handleSaveAll() {
-    downloadLinks.innerHTML = 'Preparing all sliced images for download... This may take a moment.';
+    downloadLinks.innerHTML = 'Preparing all sliced images... This may take a moment.';
     const thumbnails = Array.from(document.querySelectorAll('.thumbnail'));
     const zip = new JSZip();
 
-    for (const thumb of thumbnails) {
-        const src = thumb.dataset.fullSrc;
-        let imageRectangles = imageRects.get(src);
+    console.log(`Starting bulk save for ${thumbnails.length} images.`);
 
-        const tempImg = new Image();
-        tempImg.crossOrigin = "Anonymous";
-        tempImg.src = src;
-
-        await new Promise((resolve) => {
-            tempImg.onload = resolve;
-            tempImg.onerror = (err) => {
-                console.error("Failed to load image for bulk save:", src, err);
-                resolve(); // Resolve anyway to not block the whole process
-            };
-        });
-
-        if (!tempImg.complete || tempImg.naturalWidth === 0) {
-            console.warn("Skipping image because it could not be loaded:", src);
-            continue; // Skip to next image if this one failed to load
-        }
+    // Use a modern for...of loop which works well with async/await
+    for (let i = 0; i < thumbnails.length; i++) {
+        const thumb = thumbnails[i];
         
-        // Check orientation and rotate if portrait for bulk save
-        let finalImageElement = tempImg;
-        if (tempImg.naturalWidth < tempImg.naturalHeight) {
-            const rotatedSrc = rotateImage(tempImg);
-            finalImageElement = new Image();
-            finalImageElement.src = rotatedSrc;
-            await new Promise((resolve) => finalImageElement.onload = resolve);
-        }
+        try {
+            const src = thumb.dataset.fullSrc;
+            const originalName = thumb.dataset.originalName || `image_${i}`; // Fallback name
+            const baseFilename = originalName.replace(/\.[^/.]+$/, "");
+            
+            console.log(`Processing image ${i + 1}/${thumbnails.length}: ${originalName}`);
 
-        if (!imageRectangles) {
-            try {
-                imageRectangles = findRects(finalImageElement);
-                imageRects.set(src, imageRectangles);
-            } catch (e) {
-                console.error("Could not process image to find rectangles:", src, e);
-                continue; // Skip if opencv fails
+            // 1. Load the image using our new helper
+            let imageElement = await loadImageAsync(src);
+
+            // 2. Get the rectangles for this image
+            let imageRectangles = imageRects.get(src);
+            if (!imageRectangles) {
+                console.log(`No pre-existing rectangles found for ${originalName}, running detection...`);
+                // Note: The original upload function already rotates portrait images,
+                // so we can directly use the imageElement here.
+                imageRectangles = findRects(imageElement);
+                imageRects.set(src, imageRectangles); // Save the detected rects for future use
             }
-        }
 
-        const originalFilename = src.split('/').pop().replace(/\.[^/.]+$/, "");
-        for (let i = 0; i < imageRectangles.length; i++) {
-            const rect = imageRectangles[i];
-            let tempCanvas = document.createElement('canvas');
-            tempCanvas.width = rect.width;
-            tempCanvas.height = rect.height;
-            let tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(finalImageElement, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
-            const blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
-            zip.file(`sliced_${originalFilename}_${i + 1}.png`, blob);
+            console.log(`Found ${imageRectangles.length} rectangles for ${originalName}.`);
+
+            // 3. Loop through rectangles and add slices to the zip
+            for (let j = 0; j < imageRectangles.length; j++) {
+                const rect = imageRectangles[j];
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = rect.width;
+                tempCanvas.height = rect.height;
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                // Draw the sliced portion of the image to the temporary canvas
+                tempCtx.drawImage(imageElement, rect.x, rect.y, rect.width, rect.height, 0, 0, rect.width, rect.height);
+
+                // Convert canvas to a blob
+                const blob = await new Promise(resolve => tempCanvas.toBlob(resolve, 'image/png'));
+                
+                // Add the blob to the zip file with a clean name
+                zip.file(`sliced_${baseFilename}_${j + 1}.png`, blob);
+            }
+
+        } catch (error) {
+            // If anything goes wrong with one image, log it and move to the next
+            console.error(`Could not process image ${i + 1}. Skipping.`, error);
+            continue;
         }
     }
 
-    zip.generateAsync({type:"blob"}).then(function(content) {
+    console.log("All images processed. Generating ZIP file...");
+
+    // 4. Generate the ZIP and create a download link
+    zip.generateAsync({ type: "blob" }).then(function(content) {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(content);
         link.download = "sliced_images.zip";
         link.innerText = "Download All Sliced Images as ZIP";
-        downloadLinks.innerHTML = '';
+        
+        downloadLinks.innerHTML = ''; // Clear the "preparing" message
         downloadLinks.appendChild(link);
+        console.log("ZIP file is ready for download.");
+    }).catch(err => {
+        console.error("Error generating ZIP file:", err);
+        downloadLinks.innerText = "Sorry, there was an error creating the ZIP file.";
     });
 }
 
