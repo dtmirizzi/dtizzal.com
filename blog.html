@@ -14,9 +14,6 @@
       <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
       <link href="css/style.css" rel="stylesheet">
 
-        <!-- Global site tag (gtag.js) - Google Analytics 
-            =================================================== -->
-        <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
@@ -26,7 +23,36 @@
             gtag('config', 'G-Z4WRP0KWGX');
         </script>
 
-</head>
+        <style>
+            /* Adds space between each list item */
+            .talks ul li {
+                margin-bottom: 0.75em; /* Adjust this value as needed */
+            }
+
+            .blog-date {
+                font-size: 0.85em; /* Makes it smaller */
+                color: rgba(255, 255, 255, 0.7); /* Makes it lighter */
+                font-weight: 400; /* Ensures it's not bold */
+                margin-left: 0.5em; /* Adds a small space */
+            }
+
+            /* Updated link style for animation */
+            .talks ul li a {
+                color: #FFFFFF;
+                text-decoration: none;
+                /* --- UPDATED FOR ANIMATION --- */
+                transition: color 0.2s ease-out; /* Smooth transition for color */
+                /* Removed display and position as they are not needed for color change */
+            }
+
+            /* --- UPDATED HOVER RULE --- */
+            .talks ul li a:hover {
+                color: #AAAAAA; /* Slightly darker grey on hover */
+                /* Removed transform */
+            }
+            /* ----------------------- */
+        </style>
+        </head>
 
 <body>
     <a href="/index.html">⟵ back</a>
@@ -39,28 +65,33 @@
 
         <ul>
             <li>
+                <a href="/blog-posts/5-vertical-ai/vertical-ai.html" target="_blank" rel="noopener noreferrer">
+                    → The AI Revolution is Vertical <span class="blog-date">October 2025</span>
+                </a>
+            </li>
+            <li>
                 <a href="/blog-posts/4-diptychs-and-triptychs-auto-slicer/diptychs-and-triptychs-auto-slicer.html">
-                    → Diptychs Auto-slicer (August 2025)
+                    → Diptychs Auto-slicer <span class="blog-date">August 2025</span>
                 </a>
             </li>
             <li>
                 <a href="/blog-posts/3-gnostic/gnostic.html">
-                    → A “Dead” Religious Take on AI and Utopia (June 2025)
+                    → A “Dead” Religious Take on AI and Utopia <span class="blog-date">June 2025</span>
                 </a>
             </li>
             <li>
                 <a href="/blog-posts/1-job-helper/job-helper.html">
-                    → Decoding Your Next Career Move: A Software Engineer's Equation for Job Selection (May 2025)
+                    → Decoding Your Next Career Move: A Software Engineer's Equation for Job Selection <span class="blog-date">May 2025</span>
                 </a>
             </li>
             <li>
                 <a href="/blog-posts/2-ira-cal/ira-cal.html">
-                    → Roth IRA Contribution Limits Calculator (April 2024)
+                    → Roth IRA Contribution Limits Calculator <span class="blog-date">April 2024</span>
                 </a>
             </li>
             <li>
                 <a href="https://www.linkedin.com/pulse/building-meltano-target-elasticsearch-automating-space-dt-mirizzi-tgkjc/" target="_blank" rel="noopener noreferrer">
-                    → Meltano ElasticSearch Target (March 2025)
+                    → Meltano ElasticSearch Target <span class="blog-date">March 2023</span>
                 </a>
             </li>
         </ul>
@@ -68,3 +99,4 @@
     </div>
 
 </body>
+</html>
