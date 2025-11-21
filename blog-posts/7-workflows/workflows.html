@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DT Mirizzi - The Architect’s Dilemma: Escaping Legacy Orchestration</title>
+
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Mobile-First Styles (Default) --- */
+        body {
+            font-family: 'Courier Prime', monospace;
+            line-height: 1.6;
+            /* DARK MODE: Dark Grey Background, Light Text */
+            background-color: #1a1a1a; 
+            color: #e0e0e0;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Headings are now White */
+        h1, h2, h3 {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        /* Links are now a soft white/grey */
+        a {
+            color: #bbbbbb;
+            text-decoration: none;
+            border-bottom: 1px dotted #777;
+        }
+        
+        a:hover {
+            color: #ffffff;
+            text-decoration: none;
+            border-bottom: 1px solid #fff;
+        }
+
+        .my-image {
+          width: 100%;      
+          max-width: 800px; 
+          height: auto;
+          display: block;
+          margin: 20px auto;   
+          filter: brightness(0.9);
+          border-radius: 10px;
+        }
+
+        /* --- Desktop Styles --- */
+        @media (min-width: 600px) {
+          .my-image {
+            width: 100%;       
+            max-width: 800px;
+          }
+        }
+
+        /* --- RAPID FIRE QUIZ STYLES --- */
+        #orchestrator-quiz {
+            background-color: #262626;
+            border: 2px solid #555;
+            padding: 25px;
+            margin: 40px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .question-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .question-row:last-child {
+            border-bottom: none;
+        }
+
+        .question-text {
+            flex: 1;
+            padding-right: 15px;
+            font-size: 0.95rem;
+        }
+
+        .toggle-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Custom Radio Buttons looking like toggles */
+        .toggle-btn {
+            cursor: pointer;
+            padding: 5px 12px;
+            border: 1px solid #555;
+            background-color: #1a1a1a;
+            color: #888;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            border-color: #888;
+        }
+
+        .toggle-btn.selected-yes {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .toggle-btn.selected-no {
+            background-color: #333;
+            color: #aaa;
+        }
+        
+        /* Hide actual radios */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* STACKED GRAPH SECTION */
+        #quiz-results {
+            margin-top: 30px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border: 1px solid #444;
+        }
+
+        .stacked-graph-container {
+            height: 40px;
+            width: 100%;
+            background-color: #333;
+            display: flex;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* The colored segments of the bar */
+        .graph-segment {
+            height: 100%;
+            transition: width 0.5s ease-in-out;
+            /* Flex basis 0 ensures they scale properly from 0 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hiding small text if segment is too narrow */
+        .graph-segment span {
+            display: none; 
+        }
+
+        .fill-dagster { background-color: #6C63FF; }  /* Purple */
+        .fill-temporal { background-color: #00ADEF; } /* Blue */
+        .fill-argo { background-color: #EF7B47; }     /* Orange */
+        .fill-airflow { background-color: #00C7D4; }  /* Cyan */
+
+        /* LEGEND STYLES */
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .legend-color-box {
+            width: 12px;
+            height: 12px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .legend-percent {
+            margin-left: auto;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .category-title {
+            color: #888;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+        }
+
+    </style>
+
+    <!-- Meta -->
+  <meta name="title" content="DT Mirizzi">
+  <meta name="description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dtizzal.com/">
+  <meta property="og:title" content="DT Mirizzi">
+  <meta property="og:description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture.">
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://dtizzal.com/">
+  <meta property="twitter:title" content="DT Mirizzi">
+  <meta property="twitter:description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture.">
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png">
+
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-Z4WRP0KWGX');
+    </script>
+
+</head>
+
+<body>
+    <a href="/blog.html">⟵ back</a>
+
+    <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+        <source src="/img/Background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="job-helper">
+
+        <div id="article-content">
+            <h1><strong>The Architect’s Dilemma: Escaping the Event Horizon of Legacy Orchestration</strong></h1>
+
+            <iframe width="720" height="460"
+                src="https://www.youtube.com/embed/2SzG-a3zUdM?si=ri0C_YmALdWJqj_w">
+            </iframe>
+
+
+            <p>
+                The contemporary enterprise technology stack is undergoing a profound metamorphosis. We are transitioning from monolithic, static architectures to dynamic, event-driven, and decentralized ecosystems. At the heart of this transformation lies the "central nervous system" of modern infrastructure: the workflow orchestrator.
+            </p>
+            <p>
+                Historically viewed as a mere utility a "glorified cron" the orchestrator has evolved into a critical architectural primitive responsible for the reliability, observability, and efficiency of mission-critical systems. Yet, a quiet crisis is unfolding.
+            </p>
+            <p>
+                As data pipelines grow in complexity and microservices proliferate, legacy paradigms (like the monolithic task scheduler) are reaching their breaking points. Engineering leaders are forced to navigate a crowded marketplace Dagster, Temporal, Prefect, Argo while battling the dangerous internal temptation to "build it ourselves" using raw Kubernetes primitives.
+            </p>
+            <p>
+                This is not just a tool selection problem; it is a strategic risk assessment. The era of the "one size fits all" scheduler is over. The future belongs to specialized paradigms.
+            </p>
+
+            <h2><strong>1. The Economic and Technical Fallacy of "Build Your Own"</strong></h2>
+
+            <p>
+                Before evaluating commercial solutions, we must address the most alluring trap in platform engineering: the "Not Invented Here" syndrome.
+            </p>
+            <p>
+                The argument usually sounds like this: <em>"We run on Kubernetes. We can just write a simple controller that watches a CRD (Custom Resource Definition) and spawns Pods. Why pay a vendor?"</em>
+            </p>
+            <p>
+                This reductionist view confuses <strong>Resource Orchestration</strong> (Kubernetes) with <strong>Workflow Orchestration</strong>. The difference lies in state management, and attempting to bridge the gap leads to two devastating technical liabilities.
+            </p>
+
+            <h3><strong>The Dual-Write Paradox and Split-Brain States</strong></h3>
+            <p>
+                A robust orchestrator must maintain the state of a multi-step workflow (e.g., Task A succeeded, Task B is pending). This requires a persistence layer (Postgres/etcd). However, the orchestrator must also interact with an execution plane (the Kubernetes API) to launch Pods.
+            </p>
+
+            <p>
+                This introduces the distributed systems problem of <strong>dual writes</strong>.
+            </p>
+            <ul>
+                <li>
+                    If your controller writes <code>status: STARTED</code> to the database, but the Kubernetes API call fails (due to network partition or quota limits), your system enters a "split-brain" state: the workflow believes the task is running, but no execution is occurring.
+                </li>
+                <li>
+                    Conversely, if the Pod launches but the database update fails, you spawn "zombie" processes that consume expensive compute without being tracked.
+                </li>
+            </ul>
+            <p>
+                Solving this requires implementing complex transactional outbox patterns, sagas, or distinct consensus algorithms. These are engineering challenges that tools like Temporal have spent a decade refining. Building this in-house is a guaranteed way to burn engineering cycles on infrastructure plumbing rather than business logic.
+            </p>
+
+            <h3><strong>The "Control Plane Tax"</strong></h3>
+            <p>
+                Home-grown tools lack the sophisticated bin-packing logic of mature platforms. To avoid pod eviction due to resource starvation, internal teams typically overprovision clusters by <strong>50% to 70%</strong>.
+            </p>
+            <p>
+                Furthermore, a production-grade orchestrator requires a High Availability (HA) control plane (leader election, clustered etcd). Research indicates the hardware overhead for managing these control planes across environments often exceeds <strong>$60,000 USD annually</strong> a "Control Plane Tax" that adds zero direct value to your business product.
+            </p>
+
+            <h2><strong>2. Apache Airflow: The Aging Titan and the "Task Lag"</strong></h2>
+
+            <p>
+                Apache Airflow remains the default standard, with massive adoption. However, its architecture reflects the constraints of the era in which it was conceived.
+            </p>
+
+            <h3><strong>The Scheduler Bottleneck</strong></h3>
+            <p>
+                Airflow operates on a polling loop. The scheduler parses Python files to construct DAG objects in memory. As you scale to thousands of DAGs, this parsing loop becomes a monolithic bottleneck. This architecture introduces inherent <strong>"Task Lag."</strong> After Task A completes, the scheduler must notice the state change, evaluate dependencies, and queue Task B.
+            </p>
+            <p>
+                <strong>The Impact:</strong> For daily batch ETL, this is fine. For modern, near-real-time data ingestion or chaining short-lived microservices, this latency is prohibitive.
+            </p>
+
+            <h3><strong>The "Data-Aware" Disconnect</strong></h3>
+            <p>
+                Airflow is <strong>Task-Centric</strong>. It knows <em>when</em> to run a script, but it has no native understanding of <em>what</em> that script produces. It relies on implicit execution order rather than data availability. This leads to brittle pipelines where tasks run based on a clock (e.g., "Run at 9:00 AM") rather than the actual readiness of upstream data assets.
+            </p>
+
+            <h3><strong>The Looming Migration: Airflow 3.0</strong></h3>
+            <p>
+                Perhaps the strongest argument for re-evaluating Airflow now is the imminent release of Airflow 3.0. To support <strong>Workload Isolation (AIP-72)</strong> a necessary security feature Airflow is introducing breaking changes that remove direct database access for execution components.
+            </p>
+            <p>
+                <strong>The Reality:</strong> Moving to Airflow 3.0 is not a patch; it is a migration. If you are already facing the cost of a "Migration Tax," it is the perfect inflection point to evaluate if a more modern paradigm yields higher ROI.
+            </p>
+
+            <h2><strong>3. Dagster: The Asset-Centric Paradigm Shift</strong></h2>
+
+            <p>
+                For data teams, Dagster offers a superior conceptual model: <strong>Asset-Oriented Orchestration.</strong>
+            </p>
+
+            <h3><strong>Software-Defined Assets (SDAs)</strong></h3>
+            <p>
+                In Airflow, you define a graph of tasks. In Dagster, you define a graph of assets (tables, ML models, JSON files). You declare, <em>"I need the <code>daily_active_users</code> table,"</em> and Dagster works backward to determine the computation required.
+            </p>
+            <p>
+                <strong>Why it matters:</strong> This provides out-of-the-box lineage. If a transformation fails, you don't just see a red task; you see exactly which downstream dashboards and reports are stale.
+            </p>
+
+            <h3><strong>The "Lakehouse on a Laptop"</strong></h3>
+            <p>
+                Dagster uses an <strong>IO Manager</strong> abstraction to decouple business logic from storage. Your Python code computes a DataFrame, and the IO Manager handles writing it to Snowflake or S3.
+            </p>
+            <p>
+                <strong>The Benefit:</strong> In a unit test, you can swap the production IO Manager for an in-memory one. This allows engineers to build, test, and validate complex lakehouse architectures locally <strong>"Lakehouse on a Laptop"</strong> without spinning up cloud infrastructure, significantly accelerating the feedback loop.
+            </p>
+
+            <h2><strong>4. Temporal: The Physics of Durable Execution</strong></h2>
+
+            <p>
+                While Dagster revolutionizes data, Temporal represents a paradigm shift for application orchestration and distributed systems. It is not a "scheduler"; it is a <strong>Durable Execution Platform</strong>.
+            </p>
+
+            <h3><strong>The Event History & Replay Mechanism</strong></h3>
+            <p>
+                Temporal guarantees that code will execute to completion, regardless of hardware failures. It achieves this by recording every state transition (e.g., "Workflow Started," "Activity Scheduled") in a persistent append-only log called the <strong>Event History</strong>.
+            </p>
+
+            <p>
+                If a worker crashes, Temporal reschedules the workflow on a new worker. The new worker downloads the history and <strong>"replays"</strong> the code, fast-forwarding to the exact point of failure. This effectively makes your application "crash-proof."
+            </p>
+
+            <h3><strong>The Saga Pattern</strong></h3>
+            <p>
+                Temporal is the definitive solution for microservices orchestration, particularly for <strong>Sagas</strong> (distributed transactions).
+            </p>
+            <ul>
+                <li><em>Scenario:</em> An e-commerce checkout must 1 Reserve Inventory, 2 Charge Card, and 3 Ship Item.</li>
+                <li><em>The Problem:</em> If step 3 fails, you must rollback steps 1 and 2.</li>
+                <li><em>The Solution:</em> Coding this rollback logic in a custom system is prone to race conditions. Temporal handles Sagas natively, ensuring compensating transactions run even if the server crashes during error handling.</li>
+            </ul>
+
+            <h2><strong>5. Strategic Decision Matrix: Interactive Selector</strong></h2>
+
+            <p>
+                The "one tool to rule them all" approach is dead. Answer the rapid-fire questions below to see how the paradigms align with your specific engineering needs.
+            </p>
+
+            <!-- NEW RAPID FIRE QUIZ -->
+            <div id="orchestrator-quiz">
+                <div class="quiz-header">
+                    <h3>Orchestrator Compatibility Check</h3>
+                </div>
+
+                <div id="questions-container">
+                    <!-- Questions will be injected here via JS -->
+                </div>
+
+                <div id="quiz-results">
+                    <h3>Recommendation Profile</h3>
+                    
+                    <!-- THE UNIFIED STACKED BAR -->
+                    <div class="stacked-graph-container">
+                        <div id="bar-dagster" class="graph-segment fill-dagster" style="width: 25%"></div>
+                        <div id="bar-temporal" class="graph-segment fill-temporal" style="width: 25%"></div>
+                        <div id="bar-argo" class="graph-segment fill-argo" style="width: 25%"></div>
+                        <div id="bar-airflow" class="graph-segment fill-airflow" style="width: 25%"></div>
+                    </div>
+
+                    <!-- LEGEND -->
+                    <div class="legend-grid">
+                        <div class="legend-item">
+                            <div class="legend-color-box fill-dagster"></div>
+                            <div class="legend-text">Dagster (Data) <span id="val-dagster" class="legend-percent">25%</span></div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color-box fill-temporal"></div>
+                            <div class="legend-text">Temporal (Apps) <span id="val-temporal" class="legend-percent">25%</span></div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color-box fill-argo"></div>
+                            <div class="legend-text">Argo (Infra) <span id="val-argo" class="legend-percent">25%</span></div>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color-box fill-airflow"></div>
+                            <div class="legend-text">Airflow (General) <span id="val-airflow" class="legend-percent">25%</span></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <script>
+                // --- QUIZ DATA CONFIG ---
+                // Positive value adds to score. Negative value subtracts (optional).
+                const questions = [
+                    // WORKLOAD
+                    { cat: "Workload", text: "Are you building ETL or Analytics pipelines?", weights: { dagster: 3, airflow: 3, temporal: 0, argo: 0 } },
+                    { cat: "Workload", text: "Are you orchestrating Microservices (Sagas)?", weights: { dagster: 0, airflow: 0, temporal: 4, argo: 0 } },
+                    { cat: "Workload", text: "Is this for CI/CD or Infrastructure automation?", weights: { dagster: 0, airflow: 0, temporal: 0, argo: 4 } },
+                    
+                    // TECH STACK
+                    { cat: "Stack", text: "Is Python your team's primary language?", weights: { dagster: 2, airflow: 2, temporal: 0, argo: 0 } },
+                    { cat: "Stack", text: "Do you use Go, Java, or TypeScript?", weights: { dagster: 0, airflow: 0, temporal: 3, argo: 0 } },
+                    { cat: "Stack", text: "Do you prefer defining logic in YAML?", weights: { dagster: 0, airflow: 0, temporal: 0, argo: 3 } },
+                    { cat: "Stack", text: "Do you require native Kubernetes CRDs?", weights: { dagster: 0, airflow: 0, temporal: 0, argo: 3 } },
+
+                    // FEATURES
+                    { cat: "Features", text: "Is Data Lineage (Asset Awareness) critical?", weights: { dagster: 4, airflow: 0, temporal: 0, argo: 0 } },
+                    { cat: "Features", text: "Is backfilling historical data a frequent task?", weights: { dagster: 3, airflow: 1, temporal: 0, argo: 0 } },
+                    { cat: "Features", text: "Is 'Event Replay' (crash recovery) critical?", weights: { dagster: 0, airflow: 0, temporal: 4, argo: 0 } },
+                    { cat: "Features", text: "Do you need sub-second execution latency?", weights: { dagster: 0, airflow: 0, temporal: 3, argo: 0 } },
+                    
+                    // TESTING & OPS
+                    { cat: "Ops", text: "Do you need to run unit tests locally (no cloud)?", weights: { dagster: 3, airflow: 0, temporal: 1, argo: 0 } },
+                    { cat: "Ops", text: "Do you need 100s of pre-built integrations?", weights: { dagster: 1, airflow: 3, temporal: 0, argo: 0 } },
+                    { cat: "Ops", text: "Are you migrating specifically from Airflow?", weights: { dagster: 2, airflow: 1, temporal: 0, argo: 0 } },
+                    { cat: "Ops", text: "Is your team primarily Backend Engineers?", weights: { dagster: 0, airflow: 0, temporal: 2, argo: 0 } },
+                    { cat: "Ops", text: "Is your team primarily Data Engineers?", weights: { dagster: 2, airflow: 2, temporal: 0, argo: 0 } },
+                    { cat: "Ops", text: "Do you need 'Workload Isolation' security?", weights: { dagster: 1, airflow: 0, temporal: 1, argo: 1 } },
+                    { cat: "Ops", text: "Do you have a dedicated Platform Team?", weights: { dagster: 1, airflow: 1, temporal: 1, argo: 1 } }
+                ];
+
+                // State to hold answers: null (unanswered), true (yes), false (no)
+                let answers = new Array(questions.length).fill(null);
+
+                function renderQuiz() {
+                    const container = document.getElementById('questions-container');
+                    let currentCat = "";
+
+                    questions.forEach((q, index) => {
+                        // Add Category Header if it changes
+                        if (q.cat !== currentCat) {
+                            const catHeader = document.createElement('div');
+                            catHeader.className = 'category-title';
+                            catHeader.innerText = q.cat;
+                            container.appendChild(catHeader);
+                            currentCat = q.cat;
+                        }
+
+                        // Create Row
+                        const row = document.createElement('div');
+                        row.className = 'question-row';
+
+                        const text = document.createElement('div');
+                        text.className = 'question-text';
+                        text.innerText = q.text;
+
+                        const toggles = document.createElement('div');
+                        toggles.className = 'toggle-container';
+
+                        // Yes Button
+                        const yesBtn = document.createElement('div');
+                        yesBtn.className = 'toggle-btn';
+                        yesBtn.innerText = 'YES';
+                        yesBtn.onclick = () => handleAnswer(index, true, yesBtn, noBtn);
+
+                        // No Button
+                        const noBtn = document.createElement('div');
+                        noBtn.className = 'toggle-btn';
+                        noBtn.innerText = 'NO';
+                        noBtn.onclick = () => handleAnswer(index, false, yesBtn, noBtn);
+
+                        toggles.appendChild(yesBtn);
+                        toggles.appendChild(noBtn);
+                        row.appendChild(text);
+                        row.appendChild(toggles);
+                        container.appendChild(row);
+                    });
+                }
+
+                function handleAnswer(index, isYes, yesBtn, noBtn) {
+                    answers[index] = isYes;
+                    
+                    // Update UI classes
+                    if (isYes) {
+                        yesBtn.classList.add('selected-yes');
+                        noBtn.classList.remove('selected-no');
+                    } else {
+                        yesBtn.classList.remove('selected-yes');
+                        noBtn.classList.add('selected-no');
+                    }
+
+                    calculateResults();
+                }
+
+                function calculateResults() {
+                    let scores = { dagster: 0, airflow: 0, temporal: 0, argo: 0 };
+                    
+                    // Sum up weights for Yes answers
+                    answers.forEach((ans, idx) => {
+                        if (ans === true) {
+                            const w = questions[idx].weights;
+                            scores.dagster += w.dagster;
+                            scores.airflow += w.airflow;
+                            scores.temporal += w.temporal;
+                            scores.argo += w.argo;
+                        }
+                    });
+
+                    // Normalize to 100% Stacked Bar
+                    let total = scores.dagster + scores.airflow + scores.temporal + scores.argo;
+                    
+                    // Default state (25% each) if no score
+                    if (total === 0) {
+                        updateBar('dagster', 25);
+                        updateBar('temporal', 25);
+                        updateBar('argo', 25);
+                        updateBar('airflow', 25);
+                        return;
+                    }
+
+                    // Calculate Percentages
+                    let pDagster = (scores.dagster / total) * 100;
+                    let pTemporal = (scores.temporal / total) * 100;
+                    let pArgo = (scores.argo / total) * 100;
+                    let pAirflow = (scores.airflow / total) * 100;
+
+                    updateBar('dagster', pDagster);
+                    updateBar('temporal', pTemporal);
+                    updateBar('argo', pArgo);
+                    updateBar('airflow', pAirflow);
+                }
+
+                function updateBar(key, pct) {
+                    // Update Width
+                    document.getElementById('bar-' + key).style.width = pct + '%';
+                    
+                    // Update Text Legend
+                    // If pct is very small, show 0 or <1
+                    let displayTxt = Math.round(pct) + '%';
+                    document.getElementById('val-' + key).innerText = displayTxt;
+                }
+
+                // Initialize
+                renderQuiz();
+            </script>
+            <!-- END RAPID FIRE QUIZ -->
+
+            <h2><strong>The Verdict</strong></h2>
+            
+            <p>
+                <strong>Do Not Build:</strong> The "build vs. buy" calculus is decisively negative. The hidden costs of "Day 2" operations make custom orchestration a high-risk, low-reward strategy.
+            </p>
+            <p>
+                <strong>Migrate for Data:</strong> If you are a data team, use the Airflow 3.0 inflection point to adopt <strong>Dagster</strong>. The asset-based model aligns better with business value.
+            </p>
+            <p>
+                <strong>Adopt for Apps:</strong> For backend systems requiring reliability, <strong>Temporal</strong> is non-negotiable. It eliminates vast amounts of boilerplate error-handling code.
+            </p>
+            <p>
+                <strong>Use K8s Native for Infra:</strong> For pure CI/CD and infrastructure jobs, <strong>Argo Workflows</strong> offers the lowest friction by staying within the Kubernetes resource model.
+            </p>
+
+        </div>
+    </div>
+</body>
+</html>
