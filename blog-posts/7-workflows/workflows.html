@@ -413,19 +413,19 @@
                     <div class="legend-grid">
                         <div class="legend-item">
                             <div class="legend-color-box fill-dagster"></div>
-                            <div class="legend-text">Dagster (Data) <span id="val-dagster" class="legend-percent">25%</span></div>
+                            <div class="legend-text">Dagster <span id="val-dagster" class="legend-percent">25%</span></div>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color-box fill-temporal"></div>
-                            <div class="legend-text">Temporal (Apps) <span id="val-temporal" class="legend-percent">25%</span></div>
+                            <div class="legend-text">Temporal <span id="val-temporal" class="legend-percent">25%</span></div>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color-box fill-argo"></div>
-                            <div class="legend-text">Argo (Infra) <span id="val-argo" class="legend-percent">25%</span></div>
+                            <div class="legend-text">Argo Workflows <span id="val-argo" class="legend-percent">25%</span></div>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color-box fill-airflow"></div>
-                            <div class="legend-text">Airflow (General) <span id="val-airflow" class="legend-percent">25%</span></div>
+                            <div class="legend-text">Airflow <span id="val-airflow" class="legend-percent">25%</span></div>
                         </div>
                     </div>
 
@@ -438,7 +438,7 @@
                 const questions = [
                     // WORKLOAD
                     { cat: "Workload", text: "Are you building ETL or Analytics pipelines?", weights: { dagster: 3, airflow: 3, temporal: 0, argo: 0 } },
-                    { cat: "Workload", text: "Are you orchestrating Microservices (Sagas)?", weights: { dagster: 0, airflow: 0, temporal: 4, argo: 0 } },
+                    { cat: "Workload", text: "Are you orchestrating Microservices?", weights: { dagster: 0, airflow: 0, temporal: 4, argo: 0 } },
                     { cat: "Workload", text: "Is this for CI/CD or Infrastructure automation?", weights: { dagster: 0, airflow: 0, temporal: 0, argo: 4 } },
                     
                     // TECH STACK
