@@ -1,60 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>DT Mirizzi - Blog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DT Mirizzi - Blog</title>
 
-      <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-      <link href="css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet">
 
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-            gtag('config', 'G-Z4WRP0KWGX');
-        </script>
+        gtag('config', 'G-Z4WRP0KWGX');
+    </script>
 
-        <style>
-            /* Adds space between each list item */
-            .talks ul li {
-                margin-bottom: 0.75em; /* Adjust this value as needed */
-            }
+    <style>
+        /* Adds space between each list item */
+        .talks ul li {
+            margin-bottom: 0.75em;
+            /* Adjust this value as needed */
+        }
 
-            .blog-date {
-                font-size: 0.85em; /* Makes it smaller */
-                color: rgba(255, 255, 255, 0.7); /* Makes it lighter */
-                font-weight: 400; /* Ensures it's not bold */
-                margin-left: 0.5em; /* Adds a small space */
-            }
+        .blog-date {
+            font-size: 0.85em;
+            /* Makes it smaller */
+            color: rgba(255, 255, 255, 0.7);
+            /* Makes it lighter */
+            font-weight: 400;
+            /* Ensures it's not bold */
+            margin-left: 0.5em;
+            /* Adds a small space */
+        }
 
-            /* Updated link style for animation */
-            .talks ul li a {
-                color: #FFFFFF;
-                text-decoration: none;
-                /* --- UPDATED FOR ANIMATION --- */
-                transition: color 0.2s ease-out; /* Smooth transition for color */
-                /* Removed display and position as they are not needed for color change */
-            }
+        /* Updated link style for animation */
+        .talks ul li a {
+            color: #FFFFFF;
+            text-decoration: none;
+            /* --- UPDATED FOR ANIMATION --- */
+            transition: color 0.2s ease-out;
+            /* Smooth transition for color */
+            /* Removed display and position as they are not needed for color change */
+        }
 
-            /* --- UPDATED HOVER RULE --- */
-            .talks ul li a:hover {
-                color: #AAAAAA; /* Slightly darker grey on hover */
-                /* Removed transform */
-            }
-            /* ----------------------- */
-        </style>
-        </head>
+        /* --- UPDATED HOVER RULE --- */
+        .talks ul li a:hover {
+            color: #AAAAAA;
+            /* Slightly darker grey on hover */
+            /* Removed transform */
+        }
+
+        /* ----------------------- */
+    </style>
+</head>
 
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+    </button>
     <a href="/index.html">⟵ back</a>
 
     <div class="talks">
@@ -66,12 +79,14 @@
         <ul>
             <li>
                 <a href="/blog-posts/7-workflows/workflows.html">
-                    → The Architect’s Dilemma: Escaping the Event Horizon of Legacy Orchestration <span class="blog-date">November 2025</span>
+                    → The Architect’s Dilemma: Escaping the Event Horizon of Legacy Orchestration <span
+                        class="blog-date">November 2025</span>
                 </a>
             </li>
             <li>
                 <a href="/blog-posts/6-vertical-saas/vertical-saas.html">
-                    → SaaS Sold Us Products. The Next Wave Will Sell Us Outcomes <span class="blog-date">November 2025</span>
+                    → SaaS Sold Us Products. The Next Wave Will Sell Us Outcomes <span class="blog-date">November
+                        2025</span>
                 </a>
             </li>
             <li>
@@ -91,7 +106,8 @@
             </li>
             <li>
                 <a href="/blog-posts/1-job-helper/job-helper.html">
-                    → Decoding Your Next Career Move: A Software Engineer's Equation for Job Selection <span class="blog-date">May 2025</span>
+                    → Decoding Your Next Career Move: A Software Engineer's Equation for Job Selection <span
+                        class="blog-date">May 2025</span>
                 </a>
             </li>
             <li>
@@ -100,13 +116,17 @@
                 </a>
             </li>
             <li>
-                <a href="https://www.linkedin.com/pulse/building-meltano-target-elasticsearch-automating-space-dt-mirizzi-tgkjc/" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.linkedin.com/pulse/building-meltano-target-elasticsearch-automating-space-dt-mirizzi-tgkjc/"
+                    target="_blank" rel="noopener noreferrer">
                     → Meltano ElasticSearch Target <span class="blog-date">March 2023</span>
                 </a>
             </li>
         </ul>
-        
+
     </div>
 
+
+    <script src="js/theme.js"></script>
 </body>
+
 </html>

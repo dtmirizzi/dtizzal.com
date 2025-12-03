@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
     <link href="/css/style.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics 
@@ -25,6 +26,9 @@
     </script>
 </head>
 <body>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+    </button>
 
     <h2>Interactive Job Value Calculator</h2>
 <div id="article-content"> <hr style="margin-top: 40px; margin-bottom: 40px; border-color: #444;">
@@ -364,5 +368,6 @@
     });
 </script>
 
+    <script src="/js/theme.js"></script>
 </body>
 </html>

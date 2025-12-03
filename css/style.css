@@ -1,68 +1,82 @@
 body {
-	background-color: black;
-	color: rgba(255, 255, 255, 0.867);
-	text-align: center;
-	font-family: "Courier Prime", serif;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.867);
+    text-align: center;
+    font-family: "Courier Prime", serif;
 }
 
 h1 {
-	font-size: 3em;
-	margin-top: 25vh; /* Reduced margin for the list */
+    font-size: 3em;
+    margin-top: 25vh;
+    /* Reduced margin for the list */
 }
 
 ul {
-	list-style-type: none; /* Remove bullet points */
-	margin: 0;
-	padding: 0;
-	margin-top: 3vh;
+    list-style-type: none;
+    /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    margin-top: 3vh;
 }
 
 li {
-	margin: 0 5px; /* Add space between list items */
+    margin: 0 5px;
+    /* Add space between list items */
 }
 
 .inline {
-	display: inline; 
+    display: inline;
 }
 
 a {
-	color: rgba(255, 255, 255, 0.867); /* Set link color to white */
-	text-decoration: none; /* Remove underlines from links */
+    color: rgba(255, 255, 255, 0.867);
+    /* Set link color to white */
+    text-decoration: none;
+    /* Remove underlines from links */
 }
 
 a:hover {
-	color: rgba(255, 255, 255, 0.567); /* Change color to cyan on hover */
+    color: rgba(255, 255, 255, 0.567);
+    /* Change color to cyan on hover */
 }
 
 
 .about {
-    display: flex; /* Enable flexbox layout */
-    flex-direction: column; /* Align items vertically */
-    align-items: center; /* Center items horizontally */
-    text-align: center; /* Center the text content */
+    display: flex;
+    /* Enable flexbox layout */
+    flex-direction: column;
+    /* Align items vertically */
+    align-items: center;
+    /* Center items horizontally */
+    text-align: center;
+    /* Center the text content */
     margin-top: 5vh;
-	background-color: rgba(0, 0, 0, 0.79);
-	border-radius: 2px;
-	box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
+    background-color: rgba(0, 0, 0, 0.79);
+    border-radius: 2px;
+    box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
 }
 
 .talks {
-    display: flex; /* Enable flexbox layout */
-    flex-direction: column; /* Align items vertically */
-    align-items: center; /* Center items horizontally */
-    text-align: center; /* Center the text content */
+    display: flex;
+    /* Enable flexbox layout */
+    flex-direction: column;
+    /* Align items vertically */
+    align-items: center;
+    /* Center items horizontally */
+    text-align: center;
+    /* Center the text content */
     margin-top: 20vh;
-	background-color: rgba(0, 0, 0, 0.79);
-	border-radius: 2px;
-	box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
+    background-color: rgba(0, 0, 0, 0.79);
+    border-radius: 2px;
+    box-shadow: 0 0 2px 10px rgba(0, 0, 0, 0.79);
 }
 
 p {
-	max-width: 800px;
+    max-width: 800px;
 }
 
 .roundrect {
-	border-radius: 25px;
+    border-radius: 25px;
 }
 
 
@@ -70,24 +84,25 @@ video {
     position: fixed;
     top: 0;
     left: 0;
-	min-width: 100%;
-  	min-height: 100%;
-	width: auto;
-	height: auto;
-	align-items:center;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    align-items: center;
     justify-content: center;
-    z-index: -1; /* Place the video behind other elements */
-	object-fit: cover;
-  	object-position: center;
-	opacity: 0.6;
+    z-index: -1;
+    /* Place the video behind other elements */
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.6;
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 4
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 4
 }
 
 /* Ensure the main container for the video and article is relative */
@@ -98,37 +113,40 @@ video {
 
 /* Style for the background video */
 .job-helper video {
-    position: absolute; 
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover; 
-    z-index: 0; /* Keep video in the background */
+    object-fit: cover;
+    z-index: 0;
+    /* Keep video in the background */
 }
 
 /* Styles for the article content container */
 #article-content {
-    position: relative; 
-    z-index: 1; 
-    
-    margin-top: 15px; 
-    margin-bottom: 30px; 
-    margin-left: auto; /* This centers the block itself */
-    margin-right: auto; /* This centers the block itself */
-    
-    padding: 15px 20px; 
-    
-    background-color: rgba(0, 0, 0, 0.8); 
-    color: #f0f0f0; 
-    
-    max-width: 800px; 
+    position: relative;
+    z-index: 1;
+
+    margin-top: 15px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    /* This centers the block itself */
+    margin-right: auto;
+    /* This centers the block itself */
+
+    padding: 15px 20px;
+
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f0f0f0;
+
+    max-width: 800px;
     border-radius: 8px;
-    font-family: 'Courier Prime', monospace; 
+    font-family: 'Courier Prime', monospace;
     line-height: 1.7;
 
     /* --- Explicitly set text alignment for the article content --- */
-    text-align: left; 
+    text-align: left;
 }
 
 /* --- Text and Heading elements within #article-content --- */
@@ -136,21 +154,22 @@ video {
 #article-content h2,
 #article-content h3,
 #article-content p {
-    text-align: left; /* Ensure all block text elements are left-aligned */
+    text-align: left;
+    /* Ensure all block text elements are left-aligned */
 }
 
 #article-content h1 {
     font-size: 2em;
     margin-bottom: 0.5em;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #article-content h2 {
     font-size: 1.5em;
     margin-top: 1.5em;
     margin-bottom: 0.5em;
-    color: #dddddd; 
-    border-bottom: 1px solid #555555; 
+    color: #dddddd;
+    border-bottom: 1px solid #555555;
     padding-bottom: 0.3em;
 }
 
@@ -158,7 +177,7 @@ video {
     font-size: 1.2em;
     margin-top: 1em;
     margin-bottom: 0.3em;
-    color: #cccccc; 
+    color: #cccccc;
 }
 
 #article-content p {
@@ -168,14 +187,19 @@ video {
 /* --- List styling for proper left alignment and bullet indentation --- */
 #article-content ul,
 #article-content ol {
-    list-style-position: outside; /* Ensures bullets are outside the text flow, aligning text neatly */
-    margin-left: 0; /* Remove browser default margin that might push list too far right */
-    padding-left: 20px; /* Standard padding for bullet indentation. Adjust if needed (e.g., 1.5em) */
-    text-align: left; /* Ensure list text itself is left-aligned */
+    list-style-position: outside;
+    /* Ensures bullets are outside the text flow, aligning text neatly */
+    margin-left: 0;
+    /* Remove browser default margin that might push list too far right */
+    padding-left: 20px;
+    /* Standard padding for bullet indentation. Adjust if needed (e.g., 1.5em) */
+    text-align: left;
+    /* Ensure list text itself is left-aligned */
 }
 
 #article-content ul {
-    list-style-type: disc; /* Or circle, square */
+    list-style-type: disc;
+    /* Or circle, square */
 }
 
 #article-content ol {
@@ -184,207 +208,228 @@ video {
 
 #article-content li {
     margin-bottom: 0.5em;
-    text-align: left; /* Ensure list item text is left-aligned */
+    text-align: left;
+    /* Ensure list item text is left-aligned */
     /* If bullets are still misaligned, you might need to target li::marker or use pseudo-elements, 
        but the ul/ol padding-left is usually the key. */
 }
 
 /* --- Other existing styles for #article-content --- */
 #article-content a {
-    color: #87cefa; 
+    color: #87cefa;
     text-decoration: underline;
 }
 
 #article-content a:hover {
-    color: #add8e6; 
+    color: #add8e6;
 }
 
-#article-content em { 
+#article-content em {
     font-style: italic;
 }
 
 #article-content strong {
     font-weight: bold;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #article-content .equation {
     font-family: 'Courier New', Courier, monospace;
-    background-color: rgba(255, 255, 255, 0.1); 
-    color: #f0f0f0; 
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #f0f0f0;
     padding: 10px;
     border-radius: 4px;
     margin-bottom: 1em;
-    overflow-x: auto; 
-    border: 1px solid #444; 
-    text-align: center; /* Equations can remain centered if preferred, or set to left */
+    overflow-x: auto;
+    border: 1px solid #444;
+    text-align: center;
+    /* Equations can remain centered if preferred, or set to left */
 }
 
 /* Styles for the calculator - can be moved to your main style.css */
-#article-content { 
-	font-family: 'Courier Prime', monospace;
-	color: #f0f0f0; 
-	line-height: 1.7;
+#article-content {
+    font-family: 'Courier Prime', monospace;
+    color: #f0f0f0;
+    line-height: 1.7;
 }
 
 #jobValueCalculatorContainer {
-	background-color: rgba(15, 15, 15, 0.9); 
-	padding: 25px;
-	border-radius: 10px;
-	margin-top: 30px;
-	border: 1px solid #333;
+    background-color: rgba(15, 15, 15, 0.9);
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 30px;
+    border: 1px solid #333;
 }
 
 #jobValueCalculatorContainer h2,
 #jobValueCalculatorContainer h3 {
-	color: #ffffff;
-	border-bottom: 1px solid #444;
-	padding-bottom: 8px;
-	margin-top: 25px;
-	margin-bottom: 15px;
+    color: #ffffff;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+    margin-top: 25px;
+    margin-bottom: 15px;
 }
- #jobValueCalculatorContainer h2 {
-	font-size: 1.6em;
- }
- #jobValueCalculatorContainer h3 {
-	font-size: 1.3em;
- }
+
+#jobValueCalculatorContainer h2 {
+    font-size: 1.6em;
+}
+
+#jobValueCalculatorContainer h3 {
+    font-size: 1.3em;
+}
 
 
 .calculator-input-group {
-	margin-bottom: 20px;
-	padding: 10px;
-	background-color: rgba(25, 25, 25, 0.7);
-	border-radius: 6px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(25, 25, 25, 0.7);
+    border-radius: 6px;
 }
 
 .calculator-input-group label {
-	display: block;
-	margin-bottom: 8px;
-	color: #cccccc;
-	font-weight: normal;
-	font-size: 0.95em;
+    display: block;
+    margin-bottom: 8px;
+    color: #cccccc;
+    font-weight: normal;
+    font-size: 0.95em;
 }
-.calculator-input-group label em { 
-	font-style: italic;
-	color: #87cefa; 
+
+.calculator-input-group label em {
+    font-style: italic;
+    color: #87cefa;
 }
 
 .calculator-input-group input[type="number"],
 .calculator-input-group input[type="range"] {
-	width: 98%; 
-	padding: 10px;
-	border-radius: 4px;
-	border: 1px solid #555555;
-	background-color: #3a3a3a;
-	color: #ffffff;
-	font-family: 'Courier Prime', monospace;
-	font-size: 1em;
-	box-sizing: border-box;
+    width: 98%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #555555;
+    background-color: #3a3a3a;
+    color: #ffffff;
+    font-family: 'Courier Prime', monospace;
+    font-size: 1em;
+    box-sizing: border-box;
 }
 
 .calculator-input-group input[type="range"] {
-	width: 85%; 
-	padding: 0; 
-	margin-top: 5px;
-	vertical-align: middle;
+    width: 85%;
+    padding: 0;
+    margin-top: 5px;
+    vertical-align: middle;
 }
 
 .slider-value-display {
-	font-weight: bold;
-	color: #87cefa; 
-	display: inline-block;
-	min-width: 40px; 
-	margin-left: 10px;
-	font-size: 1em;
-	vertical-align: middle;
+    font-weight: bold;
+    color: #87cefa;
+    display: inline-block;
+    min-width: 40px;
+    margin-left: 10px;
+    font-size: 1em;
+    vertical-align: middle;
 }
 
 .calculator-input-group small {
-	display: block;
-	font-size: 0.8em;
-	color: #aaaaaa;
-	margin-top: 5px;
-	line-height: 1.4;
+    display: block;
+    font-size: 0.8em;
+    color: #aaaaaa;
+    margin-top: 5px;
+    line-height: 1.4;
 }
 
 .cmax-info {
-	font-size: 0.85em;
-	color: #b0b0b0;
-	margin-top: 5px;
-	padding: 8px;
-	background-color: rgba(40,40,40,0.6);
-	border-radius: 4px;
+    font-size: 0.85em;
+    color: #b0b0b0;
+    margin-top: 5px;
+    padding: 8px;
+    background-color: rgba(40, 40, 40, 0.6);
+    border-radius: 4px;
 }
 
 
 .calculator-results-area {
-	margin-top: 30px;
-	padding: 20px;
-	background-color: rgba(0,0,0,0.4);
-	border-radius: 8px;
-	border: 1px solid #444;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    border: 1px solid #444;
 }
 
 .calculator-results-area p {
-	font-size: 1.15em;
-	color: #ffffff;
-	margin-bottom: 12px;
+    font-size: 1.15em;
+    color: #ffffff;
+    margin-bottom: 12px;
 }
 
 .calculator-results-area span.result-value {
-	font-weight: bold;
-	color: #87cefa; 
-	font-size: 1.1em;
+    font-weight: bold;
+    color: #87cefa;
+    font-size: 1.1em;
 }
+
 .calculator-results-area span#comparisonResultText.positive {
-	color: #90ee90; /* Light Green */
+    color: #90ee90;
+    /* Light Green */
 }
+
 .calculator-results-area span#comparisonResultText.negative {
-	color: #f08080; /* Light Coral */
+    color: #f08080;
+    /* Light Coral */
 }
+
 .calculator-results-area span#comparisonResultText.neutral {
-	color: #fafad2; /* Light Goldenrod Yellow */
+    color: #fafad2;
+    /* Light Goldenrod Yellow */
 }
 
 .notched-slider-description {
-	padding: 8px;
-	background-color: rgba(50,50,50,0.5);
-	border-radius: 4px;
-	margin-top: 5px;
+    padding: 8px;
+    background-color: rgba(50, 50, 50, 0.5);
+    border-radius: 4px;
+    margin-top: 5px;
 }
+
 .notched-slider-description ul {
-	list-style-type: none;
-	padding-left: 0;
-	margin: 0;
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
 }
+
 .notched-slider-description li {
-	font-size: 0.75em;
-	color: #b0b0b0;
+    font-size: 0.75em;
+    color: #b0b0b0;
 }
+
 .calculator-visualization-area {
-	margin-top: 30px;
-	padding: 15px;
-	background-color: rgba(25, 25, 25, 0.7);
-	border-radius: 6px;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: rgba(25, 25, 25, 0.7);
+    border-radius: 6px;
 }
+
 .calculator-visualization-area h3 {
-	margin-top: 0; /* Adjust if needed */
+    margin-top: 0;
+    /* Adjust if needed */
 }
 
 .jump-to-calculator-link {
     display: inline-block;
     padding: 8px 15px;
-    margin: 15px 0; /* Adjust margin as needed */
-    background-color: #41414198; /* Light blue */
-    color: #2dc7ff; /* Dark text for contrast */
+    margin: 15px 0;
+    /* Adjust margin as needed */
+    background-color: #41414198;
+    /* Light blue */
+    color: #2dc7ff;
+    /* Dark text for contrast */
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
+
 .jump-to-calculator-link:hover {
-    background-color: #5d5d5d98; /* Lighter blue on hover */
+    background-color: #5d5d5d98;
+    /* Lighter blue on hover */
 }
 
 /* General Input, Select, and Textarea Styling for Dark Mode */
@@ -392,12 +437,18 @@ input[type="text"],
 select,
 option,
 textarea {
-    background-color: #444; /* Dark gray background */
-    color: #FFF;          /* White text color */
-    border: 1px solid #666; /* Lighter border for contrast */
-    padding: 8px 10px;    /* Add some padding */
-    border-radius: 4px;   /* Slightly rounded corners */
-    appearance: none;     /* Remove default browser styling for select */
+    background-color: #444;
+    /* Dark gray background */
+    color: #FFF;
+    /* White text color */
+    border: 1px solid #666;
+    /* Lighter border for contrast */
+    padding: 8px 10px;
+    /* Add some padding */
+    border-radius: 4px;
+    /* Slightly rounded corners */
+    appearance: none;
+    /* Remove default browser styling for select */
     -webkit-appearance: none;
     -moz-appearance: none;
 }
@@ -406,9 +457,12 @@ textarea {
 input[type="text"]:focus,
 select:focus,
 textarea:focus {
-    border-color: #88C0D0; /* A contrasting color for focus */
-    outline: none; /* Remove default outline */
-    box-shadow: 0 0 0 2px rgba(136, 192, 208, 0.5); /* Soft glow */
+    border-color: #88C0D0;
+    /* A contrasting color for focus */
+    outline: none;
+    /* Remove default outline */
+    box-shadow: 0 0 0 2px rgba(136, 192, 208, 0.5);
+    /* Soft glow */
 }
 
 /* Checkbox Styling for Dark Mode */
@@ -417,65 +471,242 @@ input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    width: 20px;  /* Custom width */
-    height: 20px; /* Custom height */
-    border: 2px solid #666; /* Dark mode border color */
-    background-color: #444; /* Dark mode background color */
-    border-radius: 4px; /* Slightly rounded corners */
+    width: 20px;
+    /* Custom width */
+    height: 20px;
+    /* Custom height */
+    border: 2px solid #666;
+    /* Dark mode border color */
+    background-color: #444;
+    /* Dark mode background color */
+    border-radius: 4px;
+    /* Slightly rounded corners */
     cursor: pointer;
-    vertical-align: middle; /* Align with text */
-    margin-right: 5px; /* Space between checkbox and label */
+    vertical-align: middle;
+    /* Align with text */
+    margin-right: 5px;
+    /* Space between checkbox and label */
     position: relative;
-    top: -1px; /* Slight adjustment for alignment */
+    top: -1px;
+    /* Slight adjustment for alignment */
 }
 
 /* Style for the custom checkmark when checked */
 input[type="checkbox"]:checked {
-    background-color: #88C0D0; /* Checked background color */
-    border-color: #88C0D0; /* Checked border color */
+    background-color: #88C0D0;
+    /* Checked background color */
+    border-color: #88C0D0;
+    /* Checked border color */
 }
 
 input[type="checkbox"]:checked::after {
     content: '';
     position: absolute;
-    left: 6px; /* Adjust as needed for alignment */
-    top: 2px;  /* Adjust as needed for alignment */
+    left: 6px;
+    /* Adjust as needed for alignment */
+    top: 2px;
+    /* Adjust as needed for alignment */
     width: 5px;
     height: 10px;
-    border: solid white; /* Checkmark color */
+    border: solid white;
+    /* Checkmark color */
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
 
 /* Label text color for associated labels */
 label {
-    color: #EEE; /* Light text for labels */
+    color: #EEE;
+    /* Light text for labels */
 }
 
 
 /* Styling for the reference buttons */
 .reference-button {
-	display: block; /* Makes the link behave like a block-level element */
-	background-color: #5252527b; /* A darker blue-grey, fitting the dark theme */
-	color: #ECEFF4; /* Light text color for contrast */
-	padding: 2px 2px;
-	margin-bottom: 2px; /* Space between buttons */
-	border-radius: 2px;
-	text-decoration: none; /* Remove default underline */
-	font-family: 'Courier Prime', monospace; /* Match article font */
-	font-size: 0.9em;
-	transition: background-color 0.3s ease, transform 0.2s ease;
-	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: block;
+    /* Makes the link behave like a block-level element */
+    background-color: #5252527b;
+    /* A darker blue-grey, fitting the dark theme */
+    color: #ECEFF4;
+    /* Light text color for contrast */
+    padding: 2px 2px;
+    margin-bottom: 2px;
+    /* Space between buttons */
+    border-radius: 2px;
+    text-decoration: none;
+    /* Remove default underline */
+    font-family: 'Courier Prime', monospace;
+    /* Match article font */
+    font-size: 0.9em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .reference-button:hover {
-	background-color: #5E6778; /* Slightly lighter on hover */
-	transform: translateY(-2px); /* Slight lift effect */
-	box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    background-color: #5E6778;
+    /* Slightly lighter on hover */
+    transform: translateY(-2px);
+    /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Ensure footnote links in the main text are styled appropriately */
 sup a {
-	text-decoration: none;
-	color: inherit; /* Inherit text color from parent paragraph */
+    text-decoration: none;
+    color: inherit;
+    /* Inherit text color from parent paragraph */
+}
+
+/* --- Light Mode Styles --- */
+body.light-mode {
+    background-color: #f0f0f0;
+    color: #1a1a1a;
+}
+
+body.light-mode a {
+    color: #1a1a1a;
+}
+
+body.light-mode a:hover {
+    color: #555555;
+}
+
+body.light-mode video {
+    filter: invert(1);
+}
+
+body.light-mode .about,
+body.light-mode .talks,
+body.light-mode #article-content,
+body.light-mode #jobValueCalculatorContainer,
+body.light-mode .calculator-input-group,
+body.light-mode .calculator-visualization-area,
+body.light-mode .cmax-info,
+body.light-mode .notched-slider-description,
+body.light-mode .calculator-results-area {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #1a1a1a;
+    box-shadow: 0 0 2px 10px rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode #article-content h1,
+body.light-mode #article-content h2,
+body.light-mode #article-content h3,
+body.light-mode #article-content strong,
+body.light-mode #jobValueCalculatorContainer h2,
+body.light-mode #jobValueCalculatorContainer h3 {
+    color: #1a1a1a;
+}
+
+body.light-mode #article-content h2,
+body.light-mode #jobValueCalculatorContainer h2,
+body.light-mode #jobValueCalculatorContainer h3 {
+    border-bottom-color: #ccc;
+}
+
+body.light-mode .blog-date {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+body.light-mode .talks ul li a {
+    color: #1a1a1a;
+}
+
+body.light-mode .talks ul li a:hover {
+    color: #555555;
+}
+
+body.light-mode input[type="text"],
+body.light-mode select,
+body.light-mode option,
+body.light-mode textarea,
+body.light-mode .calculator-input-group input[type="number"] {
+    background-color: #fff;
+    color: #1a1a1a;
+    border-color: #ccc;
+}
+
+body.light-mode .calculator-input-group label {
+    color: #333;
+}
+
+body.light-mode .calculator-input-group small {
+    color: #666;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.theme-toggle .material-symbols-outlined {
+    font-size: 24px;
+}
+
+/* --- Light Mode Quiz Styles --- */
+body.light-mode #orchestrator-quiz,
+body.light-mode #quiz-results {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: #ccc !important;
+    color: #1a1a1a !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .quiz-header,
+body.light-mode .question-row,
+body.light-mode .category-title {
+    border-bottom-color: #ddd;
+}
+
+body.light-mode .category-title {
+    color: #555;
+}
+
+body.light-mode .toggle-btn {
+    background-color: #fff;
+    color: #555;
+    border-color: #ccc;
+}
+
+body.light-mode .toggle-btn:hover {
+    border-color: #888;
+    background-color: #f9f9f9;
+}
+
+body.light-mode .toggle-btn.selected-yes {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+body.light-mode .toggle-btn.selected-no {
+    background-color: #e0e0e0;
+    color: #888;
+    border-color: #ccc;
+}
+
+body.light-mode .stacked-graph-container {
+    background-color: #eee;
+}
+
+body.light-mode .legend-item {
+    color: #333;
+}
+
+body.light-mode .legend-percent {
+    color: #1a1a1a;
 }
