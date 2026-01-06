@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - Thinking Like a CTO of an AI-Powered Rollup</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    /* Minimal blog styles (matching your post) */
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .my-image { width: 100%; max-width: 800px; }
+    }
+
+    /* Optional, but keeps your footnotes readable */
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol { padding-left: 20px; }
+    .footnotes li { margin: 8px 0; }
+  </style>
+
+  <!-- Meta -->
+  <meta name="title" content="DT Mirizzi" />
+  <meta name="description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="DT Mirizzi" />
+  <meta property="og:description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="DT Mirizzi" />
+  <meta property="twitter:description" content="Principal Software Engineer. Thoughts on Orchestration, AI, and Architecture." />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">⟵ back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>Thinking Like a CTO of an AI Powered Rollup</strong></h1>
+
+      <p>
+        I'm a product engineer making the leap into a CTO role at an AI powered rollup. That's not just a title change it's a shift in how
+        I think about technology, product, people, and risk. This isn't a pure software startup, and it isn't traditional private equity either.
+        It's owning real businesses while trying to build a compounding technology advantage inside them.
+      </p>
+
+      <p>
+        The model has real momentum. Reuters reported that Thrive backed Crete plans to invest more than $500 million acquiring and modernizing
+        accounting firms with AI tooling.<sup><a href="#fn1">[1]</a></sup> General Catalyst has described a strategy of buying service providers and
+        applying AI to expand their capacity and outcomes, rather than merely selling software into slow moving markets.<sup><a href="#fn2">[2]</a></sup>
+        In parallel, established PE platforms are building centralized AI programs; Vista has publicly framed its "Agentic AI Factory" as a way to
+        deploy agentic workflows across its portfolio at scale.<sup><a href="#fn3">[3]</a></sup>
+      </p>
+
+      <p>
+        I'm skeptical anyway. Rollups are hard. Culture is fragile. AI can commoditize work faster than it creates durable pricing power, and the
+        "two businesses in one" problem is real: you're operating a services company while trying to build a platform that behaves like software.
+        But I'm bullish on the discipline. Ownership plus workflow access plus compounding data is a rare setup for measurable productivity gains.
+        If this works, it won't be because of a chatbot. It will be because of systems.
+      </p>
+
+      <h2><strong>The real product is the operating system</strong></h2>
+
+      <img src="ai-rollup.png" class="my-image">
+
+      <p>
+        The core product of an AI rollup is not a feature. It's the internal operating system that standardizes how work happens across the portfolio.
+        The operating system is a thin platform above whatever tools each acquired company already runs. It defines reality (data), defines work (workflows),
+        and then uses AI inside those boundaries.
+      </p>
+
+      <p>
+        This is why serious players keep describing platforms rather than point tools. General Catalyst's services thesis emphasizes building a system that
+        improves service delivery e2e.<sup><a href="#fn2">[2]</a></sup> Vista's approach emphasizes reusable agentic capability across many companies,
+        which only works if the underlying interfaces and controls are consistent.<sup><a href="#fn3">[3]</a></sup> Compounding requires shared rails.
+      </p>
+
+      <h2><strong>Phase 0: Don't break revenue</strong></h2>
+
+      <p>
+        The first priority post close is stability. Don't break the revenue engine. Instrument the workflows, measure cycle time and rework, and ship assistive
+        wins that reduce cognitive load immediately: better search, faster drafting, clean extraction, simpler handoffs. If operators don't feel helped early,
+        adoption rots quietly and the platform becomes a mandate instead of a partner.
+      </p>
+
+      <h2><strong>Phase 0.5: Build the core product</strong></h2>
+
+      <p>
+        Most roadmaps jump straight to "standardize the work objects." I think there's a phase that has to come first: building the core platform itself. In the
+        first six to eight weeks, the job is to lay down primitives you won't regret later.
+      </p>
+
+      <p>
+        It starts with a canonical data model: customers, contracts, work units (cases/jobs/tickets), deliverables, billing, and renewals. Without shared definitions
+        of reality, AI becomes guesswork and reporting becomes politics. On top of that sits workflow orchestration: intake, triage, assignment, execution, QA, delivery,
+        billing, renewal—plus the exception paths that actually dominate real operations. AI becomes safe when it operates inside workflows, not around them.
+      </p>
+
+      <p>
+        The AI layer should begin narrow and boring. Retrieval must be grounded in the systems of record. Extraction and drafting must be tied to specific workflow
+        steps. Action must be gated, reversible, and logged. This is also where you build the trust layer: an "AI change log" that shows what happened, why it happened,
+        and how to undo it. If you can't audit it, you can't scale it.
+      </p>
+
+      <p>
+        Finally, the platform needs an integration and onboarding kit. Rollups live or die on time to value after acquisition. If each new company takes months to map
+        data, reconcile tooling, and rebuild workflows, the economics break. The platform has to make onboarding repeatable.
+      </p>
+
+      <h2><strong>Phase 1-4: Standardize, automate, compound</strong></h2>
+
+      <p>
+        Once the core product exists, the roadmap becomes more familiar. Phase 1 is standardization across acquisitions: shared objects, shared metrics, shared visibility.
+        Phase 2 is workflow first automation: triage, document generation, QA checks, billing support high volume tasks where consistency matters. Phase 3 is the integration
+        flywheel: new acquisitions onboard faster and cross sell becomes data driven instead of ad hoc. Phase 4 is the long game: decide whether the platform remains internal
+        or becomes a product line.
+      </p>
+
+      <h2><strong>From internal platform to external leverage</strong></h2>
+
+      <p>
+        There's a strategic opportunity if the internal product is real. Once it runs production workflows and measurably improves outcomes, you can begin to offer it as a
+        platform—not as a generic SaaS tool, but as a vertical operating system with implementation playbooks. That's the "Palantir" analogy: software plus a deployment
+        posture that handles messy reality.
+      </p>
+
+      <p>
+        The order matters. You don't start with a pricing page. You start by proving outcomes internally, then productizing repeatability, then extending to partners who want
+        the system without being acquired. Done well, you become the AI partner that doesn't just advise—you ship working infrastructure.
+      </p>
+
+      <h2><strong>Empathy and abundance are not soft ideas</strong></h2>
+
+      <p>
+        This model only scales if people trust it. Trust doesn't come from "AI strategy." It comes from daily experience: the system makes work easier, not harder; it's a
+        partner, not a supervisor; it keeps humans in control; it respects craft and judgment. The abundance mindset has to be real: more capacity, better quality, healthier
+        growth. Even the most AI forward rollup narratives emphasize augmenting professionals rather than replacing them, because adoption is the bottleneck.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        The irony is that empathy is not just moral, it's practical. Voluntary adoption is the only asset that really compounds.
+      </p>
+
+      <h2><strong>Hiring: who we need, and what's on the other side</strong></h2>
+
+      <p>
+        An AI rollup needs builders who are comfortable with messy systems and production constraints. We need product engineers who translate operations into primitives,
+        integration and workflow engineers who can make multiple systems behave like one, applied AI engineers who care about grounding and auditability, and operators who are
+        respected by the field and can turn tribal knowledge into playbooks. If the platform team behaves like "we're here to fix you," we lose. We need people who can partner.
+      </p>
+
+      <p>
+        The reward isn't just equity, though that matters. It's leverage. If you help build the canonical model, the workflow engine, and the safe AI runtime, you're not shipping
+        features you're building the machine that turns fragmented businesses into coherent platforms. That skill set is rare. And if the thesis holds, the payoff is bigger than
+        money: proof that AI can scale work without dehumanizing it.
+      </p>
+
+      <h2><strong>Closing thought</strong></h2>
+
+      <p>
+        I'm skeptical of AI powered rollups as a buzzword. I'm bullish on the discipline. If this works, it won't be because AI is magical. It will be because we were disciplined
+        about systems, honest about risk, and serious about partnering with the people who actually do the work.
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn1">
+            Reuters — "Thrive-backed accounting firm Crete to spend $500 million in AI roll-up" (June 2025).
+            <a href="https://www.reuters.com/business/thrive-backed-accounting-firm-crete-spend-500-million-ai-roll-up-2025-06-04/" target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn2">
+            General Catalyst — "The Future of Services" (services + AI thesis).
+            <a href="https://www.generalcatalyst.com/stories/the-future-of-services" target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn3">
+            Vista Equity Partners — "Introducing Vista's Agentic AI Factory."
+            <a href="https://www.vistaequitypartners.com/insights/agentic-ai-factory/" target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+</html>
