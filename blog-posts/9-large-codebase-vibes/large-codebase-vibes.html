@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - Big Codebase Vibes: Taming the 14M LOC Monorepo</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    /* Minimal blog styles */
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    /* Table styling for the tool stack */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #2a2a2a;
+      color: #fff;
+    }
+
+    @media (min-width: 600px) {
+      .my-image { width: 100%; max-width: 800px; }
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol { padding-left: 20px; }
+    .footnotes li { margin: 8px 0; }
+  </style>
+
+  <meta name="title" content="DT Mirizzi - Big Codebase Vibes" />
+  <meta name="description" content="Principal Software Engineer. Taming 14M LOC with Claude Code, MCP, and Gastown Architectures." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="Big Codebase Vibes" />
+  <meta property="og:description" content="Principal Software Engineer. Taming 14M LOC with Claude Code, MCP, and Gastown Architectures." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="Big Codebase Vibes" />
+  <meta property="twitter:description" content="Principal Software Engineer. Taming 14M LOC with Claude Code, MCP, and Gastown Architectures." />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">⟵ back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto" style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1; opacity: 0.1;">
+    <source src="/img/Background.mp4" type="video/mp4" />
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>Big Codebase Vibes: Taming the 14M LOC Monorepo</strong></h1>
+
+      <p>
+        In modern software engineering, we often know <em>what</em> needs to change, but in a massive polyglot codebase, the "where" and "how" are the real killers.
+        At our scale—navigating over 14 million lines of code across JavaScript, Python, Java, and Go—no single engineer has the full map in their head.
+      </p>
+
+      <p>
+        When a "Distributed Infrastructure Task" (DIT) hits your desk, the first question isn't "How do I code this?" but "Is this a frontend issue, a backend bug,
+        or an infra mismatch?" Standard LLM chat windows fail here. They lack the "sensory organs" to navigate deep complexity. To solve this, we’ve moved beyond
+        simple chat interfaces to a <strong>tiered AI assistance strategy</strong> using Claude Code, Model Context Protocol (MCP), and a Hierarchical Documentation strategy.
+      </p>
+
+      <h2><strong>The Stack: Bridging the Context Gap</strong></h2>
+
+      <img src="mcp-stack-diagram.png" class="my-image" alt="Diagram showing LLM connected to MCP tools">
+
+      <p>
+        To navigate a codebase this dense, we need tools that act as agents, not just text generators. We use the <strong>Model Context Protocol (MCP)</strong> to
+        give Claude direct access to our environment.<sup><a href="#fn2">[2]</a></sup>
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>The Problem</th>
+            <th>The "Superpower"</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Serena (MCP)</strong></td>
+            <td>Context Window Limits</td>
+            <td><strong>Semantic Navigation.</strong> Instead of reading every file, it indexes symbols to "jump to definition" across the repo without burning tokens.</td>
+          </tr>
+          <tr>
+            <td><strong>Agent-Browser</strong></td>
+            <td>Data Silos</td>
+            <td><strong>External Sight.</strong> Allows the AI to view web UIs, Grafana dashboards, and live documentation not checked into git.</td>
+          </tr>
+          <tr>
+            <td><strong>CLAUDE.md Hierarchy</strong></td>
+            <td>Tribal Knowledge</td>
+            <td><strong>Bottom-Up Memory.</strong> Recursive documentation capturing architecture and conventions at the folder level.</td>
+          </tr>
+          <tr>
+            <td><strong>Skills</strong></td>
+            <td>Workflow Friction</td>
+            <td><strong>Top-Down Behavior.</strong> Specialized instructions for repetitive tasks (e.g., "Deploy to Stage").</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2><strong>The Methodology: Top-Down vs. Bottom-Up</strong></h2>
+
+      <p>
+        The core of our approach is balancing <strong>Behavior</strong> (what the AI does) with <strong>Knowledge</strong> (what the AI knows). This mirrors the
+        emerging industry standard of separating "Skills" from "Context."
+      </p>
+
+      <img src="top-down-bottom-up.png" class="my-image" alt="Diagram contrasting top-down skills with bottom-up documentation">
+
+      <h3><strong>1. Top-Down: Skills as Mental Frameworks</strong></h3>
+      <p>
+        Skills are logical groupings of capabilities. Instead of manually explaining how to build a Java service every session, we define a <code>java-service</code> skill.
+        When Claude enters a <code>terraform-infra</code> context, it automatically loads the "Infra Skill," which forbids manual console changes and forces
+        <code>plan/apply</code> workflows.
+      </p>
+
+      <h3><strong>2. Bottom-Up: The CLAUDE.md Hierarchy</strong></h3>
+      <p>
+        Because 14M lines of code is too much for one index, we use a recursive documentation strategy known as <strong>Progressive Disclosure</strong>.
+      </p>
+      <ul>
+        <li><strong>Root CLAUDE.md:</strong> High-level architecture and links to domains.</li>
+        <li><strong>Domain CLAUDE.md:</strong> Specific patterns for infra or services.</li>
+        <li><strong>Service CLAUDE.md:</strong> The "ground truth"—local build commands and gotchas.</li>
+      </ul>
+      <p>
+        This prevents "Context Pollution." When working on the frontend, Claude doesn't need to know the Terraform state locking mechanism. It only loads what is
+        relevant to the current directory.
+      </p>
+
+      <h2><strong>The "Fix" in Action</strong></h2>
+
+      <p>
+        We recently faced a complex bug involving a specific service failing silently in production. The old way involved 4 hours of grepping logs and checking three
+        different repos. The Agentic way was different:
+      </p>
+      <ol>
+        <li><strong>Agent-Browser</strong> checked the live Grafana dashboard to pinpoint the error timestamp.</li>
+        <li><strong>Serena</strong> traced the error ID across the <code>java-service</code> and <code>python-ml</code> repositories, identifying a schema mismatch.</li>
+        <li><strong>Claude Code</strong> proposed a PR that updated the schema <em>and</em> patched the Terraform config to redeploy consumers.</li>
+      </ol>
+
+      <h2><strong>Future Work: The Agentic Horizon</strong></h2>
+
+      <img src="gastown-architecture.png" class="my-image" alt="Diagram of multi-agent orchestration">
+
+      <p>
+        While our current stack has 10x'd our ability to <em>navigate</em> the codebase, we are now looking at how to <em>industrialize</em> the actual coding process.
+        We are moving from "Assistant" models to "Orchestration" models.
+      </p>
+
+      <h3><strong>1. From "Chat" to "Gastown" (Multi-Agent Orchestration)</strong></h3>
+      <p>
+        The next bottleneck isn't generating code; it's managing the agents generating the code. We are exploring frameworks similar to <strong>Steve Yegge’s "Gastown"</strong>,
+        which treats the development environment like a factory rather than a chat window.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+      <p>
+        Instead of one developer chatting with one Claude, we use a "Mayor" agent to coordinate multiple "Worker" agents. You tell the Mayor, "Refactor the auth module,"
+        and it spins up three specialized agents: one to map dependencies, one to write the interface, and one to run the test suite in a loop.
+      </p>
+
+      <h3><strong>2. Infinite Context with MemGPT (Letta)</strong></h3>
+      <p>
+        Currently, every session starts fresh. We are experimenting with <strong>MemGPT</strong> (now Letta) to act like an OS for our agents, paging memories in and out
+        of the context window. If Claude learns a specific quirk about our Terraform setup, it writes it to long-term storage, allowing a different session two months
+        later to recall that fact.
+      </p>
+
+      <h3><strong>3. Loop-Based Engineering (LangGraph)</strong></h3>
+      <p>
+        Most LLM interactions are DAGs (linear paths), but engineering is a loop. We are adopting <strong>LangGraph</strong> to build "Stateful" agents that follow
+        the pattern: <code>Code -> Test -> Fail -> Analyze Error -> Fix -> Test -> Pass</code>.
+      </p>
+
+      <h3><strong>4. The "Operator" Model (Computer Use)</strong></h3>
+      <p>
+        Finally, we are preparing for the "Computer Use" paradigm. Our current MCP tools allow Claude to <em>read</em> APIs, but "Operator" models will allow agents to
+        <em>use</em> the GUI—clicking through our AWS console to debug networking or logging into internal admin panels to toggle feature flags.
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn1">
+            Sourcegraph / Steve Yegge — "Beyond the IDE: Toward Multi-Agent Orchestration" (The Gastown Thesis).
+            <a href="https://www.youtube.com/watch?v=D0cG4GLuzgM" target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn2">
+             Anthropic — "Claude Code and Model Context Protocol."
+            <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+</html>
