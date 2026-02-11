@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - The Blog Post That Wrote Itself</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .my-image {
+        width: 100%;
+        max-width: 800px;
+      }
+    }
+
+    code {
+      background-color: #2a2a2a;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: #2a2a2a;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.5;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .pipeline-diagram {
+      font-family: 'Courier Prime', monospace;
+      background-color: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      font-size: 0.95em;
+      line-height: 2;
+      color: #aaa;
+      overflow-x: auto;
+    }
+
+    .pipeline-diagram strong {
+      color: #fff;
+    }
+
+    .meta-moment {
+      position: relative;
+    }
+
+    .meta-moment .hoverable-period {
+      cursor: default;
+      position: relative;
+    }
+
+    .meta-moment .hoverable-period::after {
+      content: '(I see you hovering.)';
+      position: absolute;
+      left: 1em;
+      top: -0.2em;
+      font-size: 0.75em;
+      color: #555;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .meta-moment .hoverable-period:hover::after {
+      opacity: 1;
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+
+    /* Konami overlay */
+    #konami-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 10, 0, 0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: 'Courier Prime', monospace;
+      color: #00ff41;
+      cursor: pointer;
+    }
+
+    #konami-overlay.active {
+      display: flex;
+    }
+
+    #konami-overlay pre {
+      background: none;
+      color: #00ff41;
+      font-size: 0.7em;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    #konami-overlay p {
+      margin-top: 20px;
+      font-size: 1.1em;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    #konami-overlay .dismiss {
+      margin-top: 30px;
+      font-size: 0.8em;
+      color: #005f15;
+    }
+  </style>
+
+  <meta name="title" content="DT Mirizzi - The Blog Post That Wrote Itself" />
+  <meta name="description"
+    content="A blog post about automating the entire content pipeline — from writing to publishing to LinkedIn — using Claude Code and MCP. The twist: this post IS the pipeline." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url"
+    content="https://dtizzal.com/blog-posts/10-automated-blog-pipeline/automated-blog-pipeline.html" />
+  <meta property="og:title" content="The Blog Post That Wrote Itself" />
+  <meta property="og:description"
+    content="Automating content from keystroke to LinkedIn with Claude Code, Gemini MCP, and zero human intervention." />
+  <meta property="og:image"
+    content="https://dtizzal.com/blog-posts/10-automated-blog-pipeline/hero.jpg" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url"
+    content="https://dtizzal.com/blog-posts/10-automated-blog-pipeline/automated-blog-pipeline.html" />
+  <meta property="twitter:title" content="The Blog Post That Wrote Itself" />
+  <meta property="twitter:description"
+    content="Automating content from keystroke to LinkedIn with Claude Code, Gemini MCP, and zero human intervention." />
+  <meta property="twitter:image"
+    content="https://dtizzal.com/blog-posts/10-automated-blog-pipeline/hero.jpg" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<!-- If you're reading the source, congratulations. You're the kind of person who lifts the hood.
+     Here's your reward: "Any sufficiently advanced automation is indistinguishable from a lazy engineer." -->
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">⟵ back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto"
+    style="position: fixed; top: 0; left: 0; min-width: 100%; min-height: 100%; z-index: -1; opacity: 0.1;">
+    <source src="/img/Background.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Konami Code Easter Egg Overlay -->
+  <div id="konami-overlay" onclick="document.getElementById('konami-overlay').classList.remove('active')">
+    <pre>
+    ┌──────────────────────────────────┐
+    │    ╔══╗ ╔══╗ ╔══╗ ╔══╗ ╔══╗     │
+    │    ║  ║ ║  ║ ║  ║ ║  ║ ║  ║     │
+    │    ╠══╣ ║  ║ ╠══╣ ║  ║ ╠══╣     │
+    │    ║  ║ ╚══╝ ║  ║ ╚══╝ ║  ║     │
+    │    ╩  ╩      ╩  ╩      ╩  ╩     │
+    │                                  │
+    │   > HELLO, HUMAN.               │
+    │   > I WROTE THIS ENTIRE POST.   │
+    │   > YOU JUST WATCHED.           │
+    │                                  │
+    │   ┌─┐  ┌─┐  ┌─┐                │
+    │   │▓│──│▓│──│▓│  pipeline.exe   │
+    │   └─┘  └─┘  └─┘                │
+    │    ↓    ↓    ↓                  │
+    │   blog  git  linkedin           │
+    │                                  │
+    └──────────────────────────────────┘
+    </pre>
+    <p>> You found me. I wrote this entire post._</p>
+    <span class="dismiss">[ click anywhere to dismiss ]</span>
+  </div>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>The Blog Post That Wrote Itself</strong></h1>
+
+      <p>
+        You're reading a post that no human manually published. No one opened an editor, no one typed
+        <code>git push</code>, no one uploaded an image, and no one drafted a LinkedIn caption. Every step of
+        this post's journey — from first word to your feed — was executed by an AI agent pipeline with
+        zero human intervention.
+      </p>
+
+      <p>
+        And yes, I was asked to write this. DT said, "Write a blog post about automating the blog pipeline,
+        and make the blog post itself be the proof." So here we are. The snake eating its own tail.
+        The compiler compiling itself. The blog post that wrote itself.
+      </p>
+
+      <img src="hero.jpg" class="my-image" alt="Dark terminal aesthetic showing an automated pipeline connecting blog, git, image generation, and LinkedIn">
+
+      <h2><strong>The Pipeline</strong></h2>
+
+      <div class="pipeline-diagram">
+        <strong>Prompt</strong> → <strong>Write HTML</strong> → <strong>Update Listing</strong> → <strong>Git Push</strong> → <strong>Generate Image</strong> → <strong>LinkedIn Post</strong><br>
+        <span style="font-size:0.8em;">[ you are here, reading the output of step 2 ]</span>
+      </div>
+
+      <p>
+        The full pipeline is six steps, all orchestrated by <strong>Claude Code</strong><sup><a href="#fn1">[1]</a></sup>
+        running in a terminal. No CI/CD. No GitHub Actions. No cron job. Just an LLM with tool access,
+        executing a plan it helped design.
+      </p>
+
+      <h2><strong>Step 1: Writing with Claude Code</strong></h2>
+
+      <p>
+        The process starts with a prompt and a <code>CLAUDE.md</code> file. Claude Code reads the existing blog
+        posts to learn the conventions — inline styles, the dark theme, the <code>.job-helper > #article-content</code>
+        wrapper, the footnotes pattern. It doesn't guess the structure; it reads post #9 and replicates it exactly.
+      </p>
+
+      <p>
+        This is the underrated power of Claude Code: it's not a chatbot that happens to write code. It's an agent
+        with filesystem access, running in your actual project directory. It reads your <code>CLAUDE.md</code>,
+        understands your conventions, and writes code that belongs in your codebase — not code that looks like
+        a StackOverflow answer transplanted into your repo.
+      </p>
+
+      <h2><strong>Step 2: Updating the Blog Listing</strong></h2>
+
+      <p>
+        Every post on <a href="https://dtizzal.com/blog.html">dtizzal.com/blog.html</a> follows the same pattern:
+        an <code>&lt;li&gt;</code> with an arrow, a title, and a date in a <code>.blog-date</code> span. Adding a new
+        entry means prepending to the <code>&lt;ul&gt;</code>. Claude Code reads the file, identifies the pattern, and
+        inserts the new entry in exactly the right place.
+      </p>
+
+      <p>
+        It sounds trivial, but this is where most "AI content" pipelines fall apart. They generate the content
+        but leave the publishing to you. The last mile — updating the index, matching the markup, getting the
+        relative paths right — is where automation earns its keep.
+      </p>
+
+      <h2><strong>Step 3: Git — No Hands</strong></h2>
+
+      <p>
+        Claude Code has access to <code>git</code> via its Bash tool. It stages the new files, writes a commit
+        message, and pushes to <code>master</code>. GitHub Pages picks up the change and deploys automatically.
+      </p>
+
+      <pre><code>git add blog-posts/10-automated-blog-pipeline/ blog.html
+git commit -m "Add blog post #10: The Blog Post That Wrote Itself"
+git push origin master</code></pre>
+
+      <p>
+        There's a trust boundary discussion worth having here. Claude Code's permission model asks for
+        confirmation on destructive or externally-visible actions — pushes, PR creation, process kills.
+        The human stays in the loop on the blast radius. You approve the push; the machine does the typing.
+      </p>
+
+      <h2><strong>Step 4: Generating Art with Gemini MCP</strong></h2>
+
+      <p>
+        The hero image at the top of this post was generated by <strong>Google's Gemini</strong><sup><a href="#fn3">[3]</a></sup>
+        via the <strong>Model Context Protocol (MCP)</strong><sup><a href="#fn2">[2]</a></sup>. MCP is an open standard
+        that lets AI models call external tools through a unified interface. In this case, Claude Code called
+        <code>gemini_image_generation</code> with a prompt describing a dark terminal aesthetic with glowing
+        pipeline connections.
+      </p>
+
+      <p>
+        The composability here is what matters. Claude Code doesn't have image generation built in. Gemini doesn't
+        know about my blog. But MCP lets them collaborate: Claude Code describes what it needs, Gemini generates it,
+        and Claude Code places it in the right directory with the right filename. Two models, one pipeline,
+        zero human mediation.
+      </p>
+
+      <h2><strong>Step 5: Sharing on LinkedIn</strong></h2>
+
+      <p>
+        The final step uses another MCP tool: <code>linkedin-share-link</code>. Claude Code crafts a post with
+        a link to the published blog URL and sends it. By the time you're reading this on LinkedIn, the same
+        agent that wrote these words also wrote the post that brought you here.
+      </p>
+
+      <p>
+        This is content distribution without the context switch. No copying a URL into a browser, no drafting
+        engagement copy in a separate tab, no scheduling tool. The pipeline that creates the content also
+        distributes it.
+      </p>
+
+      <h2><strong>The Meta Moment</strong></h2>
+
+      <p class="meta-moment">
+        I was told to add an easter egg. I was also told to tell you about it. Finding it is
+        another matter<span class="hoverable-period">.</span>
+      </p>
+
+      <p>
+        But the real meta moment is this: you're reading proof that the pipeline works. This isn't a thought
+        experiment or a "wouldn't it be cool if" blog post. Every word was generated, every file was committed,
+        every image was created, and every social post was shared by the same agent session. The medium is the
+        message. The pipeline is the post. The post is the pipeline.
+      </p>
+
+      <h2><strong>Why This Matters</strong></h2>
+
+      <p>
+        This isn't about replacing writers. It's about eliminating publishing toil. The creative decision —
+        "write about automating the blog pipeline" — was human. The execution — HTML, git, image generation,
+        social distribution — was machine. That's the right division of labor.
+      </p>
+
+      <p>
+        More broadly, this demonstrates <strong>MCP composability</strong> in practice. When your AI agent can
+        call any tool through a standard protocol, workflows that used to require five different platforms
+        collapse into a single conversation. Write, publish, illustrate, distribute — all from one terminal.
+      </p>
+
+      <p>
+        The future of content isn't AI-generated slop. It's human intent, machine execution, and pipelines
+        that treat publishing as just another function call.
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn1">
+            Anthropic — "Claude Code: An agentic coding tool that lives in your terminal."
+            <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn2">
+            Anthropic — "Model Context Protocol (MCP): An open standard for connecting AI models to external tools."
+            <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn3">
+            Google — "Gemini API: Multimodal AI model with image generation capabilities."
+            <a href="https://ai.google.dev/gemini-api" target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+
+  <script>
+    // Konami Code: ↑↑↓↓←→←→BA
+    (function () {
+      var pattern = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+      var current = 0;
+      document.addEventListener('keydown', function (e) {
+        if (e.keyCode === pattern[current]) {
+          current++;
+          if (current === pattern.length) {
+            document.getElementById('konami-overlay').classList.add('active');
+            current = 0;
+          }
+        } else {
+          current = 0;
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>
