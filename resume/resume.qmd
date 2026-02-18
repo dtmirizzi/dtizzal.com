@@ -1,0 +1,153 @@
+---
+format:
+  pdf:
+    pdf-engine: xelatex
+    documentclass: article
+    geometry:
+      - margin=0.5in
+      - top=0.4in
+      - bottom=0.4in
+    include-in-header:
+      - tron-theme.tex
+    keep-tex: false
+---
+
+\begin{minipage}[t]{0.22\textwidth}
+\centering
+\vspace{0pt}
+\begin{tikzpicture}
+\clip[rounded corners=8pt] (0,0) rectangle (1.6in,1.6in);
+\node[anchor=south west, inner sep=0] at (0,0) {\includegraphics[width=1.6in]{DT.jpeg}};
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.74\textwidth}
+\vspace{0pt}
+{\fontsize{26}{30}\selectfont\bfseries\color{accentcyan}\texttt{DT MIRIZZI}}\par
+\vspace{3pt}
+{\color{accentcyan}\rule{\linewidth}{1pt}}\par
+\vspace{4pt}
+{\color{bodytext}\fontsize{10}{12}\selectfont
+CTO and Co-Founder\par
+\vspace{2pt}
+\color{accentcyan}\faIcon{map-marker-alt}\color{bodytext}\ San Francisco, CA\par
+\color{accentcyan}\faIcon{envelope}\color{bodytext}\ dtmirizzi@gmail.com\par
+\color{accentcyan}\faIcon{phone}\color{bodytext}\ 760-579-2678\par
+\color{accentcyan}\faIcon{globe}\color{bodytext}\ dtizzal.com\par
+\color{accentcyan}\faIcon{linkedin}\color{bodytext}\ linkedin.com/in/dtmirizzidamian\par
+\color{accentcyan}\faIcon{github}\color{bodytext}\ github.com/dtmirizzi
+}
+\end{minipage}
+
+
+\sectionheading{SUMMARY}
+
+CTO and Co-Founder of Grwnd.ai, pioneering the AI rollup model -- acquiring vertical service businesses and embedding a shared AI operating system to scale them. 9+ years building and scaling security platforms end-to-end. Led cross-functional teams shipping identity, DLP, and threat detection products from zero to production at both startup and enterprise scale. Deep expertise in distributed systems, cloud-native architecture, and fullstack development across Golang, Java, TypeScript, and Python. Early adopter of AI-assisted development -- integrates LLMs into every stage of the workflow from architecture and code generation to testing, code review, and documentation. Conference speaker, open-source contributor, and technical writer. SoCal native living in San Francisco. Active artist and angel investor in the cybersecurity space.
+
+\vspace{-2pt}
+
+\sectionheading{EXPERIENCE}
+
+\jobtitle{CTO \& Co-Founder}{Grwnd.ai}{Mar 2026 -- Present}{San Francisco, CA}{https://grwnd.ai}
+
+\vspace{-8pt}
+
+- Pioneered the AI rollup strategy: acquiring vertical service businesses and embedding a shared AI operating system to standardize workflows, compound data, and scale capacity across the portfolio
+- Architecting the core platform from scratch -- canonical data model, workflow orchestration engine, and auditable AI runtime that operators trust
+- Designing the acquisition onboarding playbook to collapse time-to-value for each new portfolio company
+- Leading hiring and culture, building a team of product engineers, applied AI engineers, and integration specialists
+- \techstack{Golang, Python, TypeScript, Kubernetes, LLMs}
+
+\vspace{1pt}
+
+\jobtitle{Principal Software Engineer}{Palo Alto Networks}{Nov 2023 -- Mar 2026}{San Francisco, CA}{https://www.paloaltonetworks.com}
+
+\vspace{-8pt}
+
+- Architected and led development of the Prisma SaaS Identity module from concept to GA, authoring the PRD, technical design, and execution roadmap
+- Designed and implemented engine mapping subsystem for the DLP Core platform, enabling policy evaluation across new data channels
+- Own and operate multiple production services in the Data Loss Prevention stack serving enterprise customers at scale
+- Mentor engineers across teams and drive architectural decisions for the broader DLP platform
+- \techstack{Java, Spring, Quarkus, TypeScript, Golang, Python, Kubernetes}
+
+\vspace{1pt}
+
+\jobtitle{Senior Staff Engineer}{Palo Alto Networks}{Aug 2023 -- Nov 2023}{San Francisco, CA}{https://www.paloaltonetworks.com}
+
+\vspace{1pt}
+
+\jobtitle{Senior Software Engineer}{Obsidian Security}{Jul 2021 -- Aug 2023}{}{https://www.obsidiansecurity.com}
+
+\vspace{-8pt}
+
+- Led a team of engineers scaling the SaaS security platform from early customers to acquisition-ready, processing billions of events daily
+- Owned and shipped production integrations with Atlassian, CrowdStrike, and Zoom, directly expanding the platform's addressable market
+- Designed and deployed an in-house authentication and authorization stack, eliminating third-party auth dependencies
+- Drove engineering culture initiatives including internal tech talks, onboarding programs, and team events
+- \techstack{Golang, Python, TypeScript, Kubernetes, Snowflake}
+
+\vspace{1pt}
+
+\jobtitle{Software Engineer}{Obsidian Security}{Jun 2018 -- Aug 2021}{Newport Beach, CA}{https://www.obsidiansecurity.com}
+
+\vspace{-8pt}
+
+- Founding-era engineer; built core platform services from scratch including data ingestion pipelines, detection engines, and API layers
+- Contributed to the architecture that enabled the company's Series B and C fundraising rounds
+- \techstack{Golang, Python, TypeScript, Kubernetes}
+
+\vspace{1pt}
+
+\jobtitle{Software Engineer}{XYPRO Technology}{Jun 2017 -- May 2018}{}{https://www.xypro.com}
+
+\vspace{-8pt}
+
+- Built security monitoring tools for HPE NonStop mission-critical systems used by financial institutions
+
+\vspace{1pt}
+
+\jobtitle{Data Analyst}{Los Angeles Rams}{Aug 2017 -- Dec 2017}{}{https://www.therams.com}
+
+\vspace{-8pt}
+
+- Developed data analysis pipelines for player performance and scouting metrics
+
+\vspace{1pt}
+
+\jobtitle{IT Specialist}{ID Analytics (acq. LexisNexis)}{May 2016 -- Nov 2016}{}{https://risk.lexisnexis.com}
+
+\vspace{-8pt}
+
+- Supported infrastructure and internal tooling at an identity analytics company later acquired by LexisNexis
+
+\vspace{-2pt}
+
+\sectionheading{SKILLS}
+
+\vspace{-4pt}
+
+\begin{minipage}[t]{0.48\textwidth}
+{\color{accentcyan}\textbf{Languages:}} {\color{bodytext}Golang, Java, Python, TypeScript, SQL}\par
+\vspace{2pt}
+{\color{accentcyan}\textbf{Frameworks:}} {\color{bodytext}Spring, Quarkus, React.js, gRPC}\par
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+{\color{accentcyan}\textbf{Infrastructure:}} {\color{bodytext}Kubernetes, Docker, Linux, AWS, GCP}\par
+\vspace{2pt}
+{\color{accentcyan}\textbf{Other:}} {\color{bodytext}Distributed Systems, Snowflake, CI/CD, System Design}\par
+\end{minipage}
+
+\vspace{-2pt}
+
+\sectionheading{EDUCATION}
+
+\jobtitle{B.S. Computer Science}{California Lutheran University}{}{}{https://www.callutheran.edu}
+
+\vspace{-8pt}
+
+- Computer Science Teaching Assistant (May 2015 -- Apr 2018)
+
+\begin{center}
+{\color{dimtext}\footnotesize Investor: Obsidian Security (Jul 2023 -- Present)}
+\end{center}

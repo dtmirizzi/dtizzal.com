@@ -1,0 +1,104 @@
+% === TRON THEME (LIGHT MODE) FOR RESUME ===
+% Light background, cyan accents, monospace font
+
+% Core packages
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\usepackage{fontawesome5}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{etoolbox}
+\usepackage{eso-pic}
+
+% === COLOR DEFINITIONS (light mode - matching dtizzal.com) ===
+\definecolor{bglight}{HTML}{FDFDFD}
+\definecolor{accentcyan}{HTML}{0E8AC8}
+\definecolor{dimcyan}{HTML}{1A8FC4}
+\definecolor{gridline}{HTML}{CCCCCC}
+\definecolor{bodytext}{HTML}{1A1A1A}
+\definecolor{dimtext}{HTML}{555555}
+\definecolor{headingtext}{HTML}{000000}
+\definecolor{sectionrule}{HTML}{0E8AC8}
+
+% === PAGE SETUP ===
+\color{bodytext}
+
+% === FONT SETUP ===
+\setmonofont{Courier New}[
+  BoldFont=Courier New Bold,
+  ItalicFont=Courier New Italic,
+  BoldItalicFont=Courier New Bold Italic
+]
+\setmainfont{Courier New}[
+  BoldFont=Courier New Bold,
+  ItalicFont=Courier New Italic,
+  BoldItalicFont=Courier New Bold Italic
+]
+
+% === HYPERLINK SETUP ===
+\hypersetup{
+  colorlinks=false,
+  pdfborder={0 0 0}
+}
+
+% === LIST STYLING ===
+\setlist[itemize]{
+  leftmargin=12pt,
+  itemsep=0pt,
+  parsep=0pt,
+  topsep=2pt,
+  label={\color{accentcyan}\textbullet}
+}
+
+% === CUSTOM COMMANDS ===
+
+% Section heading with cyan accent line
+\newcommand{\sectionheading}[1]{%
+  \vspace{6pt}%
+  {\color{accentcyan}\fontsize{10}{12}\selectfont\bfseries\texttt{// #1}}%
+  \par\vspace{1pt}%
+  {\color{sectionrule}\rule{\linewidth}{0.5pt}}%
+  \par\vspace{3pt}%
+}
+
+% Job title entry - uses etoolbox \ifblank for reliable empty checks
+% Args: {title}{company}{dates}{location}{url}
+\newcommand{\jobtitle}[5]{%
+  {\color{headingtext}\bfseries #1}%
+  \ifblank{#2}{}{ {\color{accentcyan}@} \ifblank{#5}{{\color{dimcyan}#2}}{{\color{dimcyan}\href{#5}{\color{dimcyan}#2}}}}%
+  \hfill%
+  \ifblank{#3}{}{{\color{dimtext}\small #3}}%
+  \ifblank{#4}{}{ {\color{dimtext}\small | #4}}%
+  \par\vspace{4pt}%
+}
+
+% Tech stack inline
+\newcommand{\techstack}[1]{%
+  {\color{dimcyan}\footnotesize\texttt{[#1]}}%
+}
+
+% === SUPPRESS PAGE NUMBERS ===
+\pagenumbering{gobble}
+
+% === PARAGRAPH SPACING ===
+\setlength{\parskip}{2pt}
+\setlength{\parindent}{0pt}
+
+% === FONT SIZE ===
+\AtBeginDocument{\fontsize{9}{11}\selectfont}
+
+% === TRON GRID BACKGROUND AT BOTTOM ===
+\AddToShipoutPictureBG{%
+  \AtPageLowerLeft{%
+    \includegraphics[width=\paperwidth]{tron-grid.png}%
+  }%
+  % Semi-transparent white overlay so text stays readable
+  \AtPageLowerLeft{%
+    \begin{tikzpicture}[remember picture, overlay]
+      \fill[white, opacity=0.75] (0,0) rectangle (\paperwidth,\paperheight);
+    \end{tikzpicture}%
+  }%
+}
