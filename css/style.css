@@ -79,40 +79,6 @@ p {
     border-radius: 25px;
 }
 
-.resume-download-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    background-color: #41414198;
-    color: #2dc7ff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-family: 'Courier Prime', monospace;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-
-.resume-download-btn:hover {
-    background-color: #5d5d5d98;
-    color: #2dc7ff;
-}
-
-.resume-download-btn .material-symbols-outlined {
-    font-size: 18px;
-    vertical-align: middle;
-}
-
-body.light-mode .resume-download-btn {
-    background-color: #e0e0e0;
-    color: #0E8AC8;
-}
-
-body.light-mode .resume-download-btn:hover {
-    background-color: #d0d0d0;
-    color: #0E8AC8;
-}
-
 
 video {
     position: fixed;
