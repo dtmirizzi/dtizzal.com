@@ -177,6 +177,62 @@
         a pane of glass on top of a regex engine.
       </p>
 
+      <!-- Diagram: Legacy vs AI-Native Security -->
+      <svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <style>
+          .diagram-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+          .diagram-label { font-size: 14px; }
+          .diagram-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+          .diagram-small { font-size: 11px; fill: #999999; }
+        </style>
+        <!-- Left: Legacy -->
+        <text x="170" y="28" text-anchor="middle" class="diagram-text diagram-title">Legacy Security</text>
+        <rect x="70" y="45" width="200" height="38" rx="4" fill="none" stroke="#555" stroke-width="1.5"/>
+        <text x="170" y="69" text-anchor="middle" class="diagram-text diagram-label">Signatures / Hashes</text>
+        <line x1="170" y1="83" x2="170" y2="103" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <rect x="70" y="103" width="200" height="38" rx="4" fill="none" stroke="#555" stroke-width="1.5"/>
+        <text x="170" y="127" text-anchor="middle" class="diagram-text diagram-label">Pattern Matching</text>
+        <line x1="170" y1="141" x2="170" y2="161" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <rect x="70" y="161" width="200" height="38" rx="4" fill="none" stroke="#555" stroke-width="1.5"/>
+        <text x="170" y="185" text-anchor="middle" class="diagram-text diagram-label">Static Rules Engine</text>
+        <line x1="170" y1="199" x2="170" y2="219" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <rect x="70" y="219" width="200" height="38" rx="4" fill="none" stroke="#555" stroke-width="1.5"/>
+        <text x="170" y="243" text-anchor="middle" class="diagram-text diagram-label">Dashboard + Alerts</text>
+        <line x1="170" y1="257" x2="170" y2="277" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+        <rect x="70" y="277" width="200" height="38" rx="4" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="170" y="301" text-anchor="middle" class="diagram-text diagram-label" style="fill:#888;">Human Analyst Triages</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="20" x2="380" y2="330" stroke="#333" stroke-width="1" stroke-dasharray="6,4"/>
+
+        <!-- Right: AI-Native -->
+        <text x="570" y="28" text-anchor="middle" class="diagram-text diagram-title" style="fill:#2dc7ff;">AI-Native Security</text>
+        <rect x="470" y="45" width="200" height="38" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="570" y="69" text-anchor="middle" class="diagram-text diagram-label">Code / Telemetry</text>
+        <line x1="570" y1="83" x2="570" y2="103" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <rect x="470" y="103" width="200" height="38" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="570" y="127" text-anchor="middle" class="diagram-text diagram-label">Reasoning Engine</text>
+        <line x1="570" y1="141" x2="570" y2="161" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <rect x="470" y="161" width="200" height="38" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="570" y="185" text-anchor="middle" class="diagram-text diagram-label">Context + Intent</text>
+        <line x1="570" y1="199" x2="570" y2="219" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <rect x="470" y="219" width="200" height="38" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="570" y="243" text-anchor="middle" class="diagram-text diagram-label">Action + Explanation</text>
+        <line x1="570" y1="257" x2="570" y2="277" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+        <rect x="470" y="277" width="200" height="38" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="570" y="301" text-anchor="middle" class="diagram-text diagram-label" style="fill:#2dc7ff;">Human Reviews Result</text>
+
+        <!-- Arrow markers -->
+        <defs>
+          <marker id="arrowGray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#555" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+          </marker>
+        </defs>
+      </svg>
+
       <p>
         Claude Code Security doesn't scan code with pattern matching. It "maps component interactions and data flow"
         to find vulnerabilities like input filtering defects and authentication bypass weaknesses. It ranks findings by
@@ -202,6 +258,63 @@
       <p>
         Anthropic's structural advantage is threefold:
       </p>
+
+      <!-- Diagram: Anthropic's Feedback Loop -->
+      <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <style>
+          .fb-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+          .fb-label { font-size: 12px; }
+          .fb-title { font-size: 11px; font-weight: 700; }
+          .fb-small { font-size: 10px; fill: #999; }
+        </style>
+        <defs>
+          <marker id="fbArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+          </marker>
+          <marker id="fbArrowReturn" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#555" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Node 1: Research -->
+        <rect x="20" y="60" width="150" height="55" rx="5" fill="rgba(45,199,255,0.08)" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="95" y="83" text-anchor="middle" class="fb-text fb-title" style="fill:#2dc7ff;">AI Research</text>
+        <text x="95" y="100" text-anchor="middle" class="fb-text fb-small" style="fill:#2dc7ff;">new model capability</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="170" y1="87" x2="215" y2="87" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#fbArrow)"/>
+        <text x="192" y="80" text-anchor="middle" class="fb-text fb-small">weeks</text>
+
+        <!-- Node 2: Product Team -->
+        <rect x="215" y="60" width="150" height="55" rx="5" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="290" y="83" text-anchor="middle" class="fb-text fb-title">Product Team</text>
+        <text x="290" y="100" text-anchor="middle" class="fb-text fb-small">prototypes feature</text>
+
+        <!-- Arrow 2→3 -->
+        <line x1="365" y1="87" x2="410" y2="87" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#fbArrow)"/>
+        <text x="387" y="80" text-anchor="middle" class="fb-text fb-small">weeks</text>
+
+        <!-- Node 3: Security Feature -->
+        <rect x="410" y="60" width="150" height="55" rx="5" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="485" y="83" text-anchor="middle" class="fb-text fb-title">Ship Feature</text>
+        <text x="485" y="100" text-anchor="middle" class="fb-text fb-small">security product</text>
+
+        <!-- Arrow 3→4 -->
+        <line x1="560" y1="87" x2="595" y2="87" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#fbArrow)"/>
+
+        <!-- Node 4: Customers -->
+        <rect x="595" y="60" width="150" height="55" rx="5" fill="none" stroke="#2dc7ff" stroke-width="1.5"/>
+        <text x="670" y="83" text-anchor="middle" class="fb-text fb-title">Customers</text>
+        <text x="670" y="100" text-anchor="middle" class="fb-text fb-small">validate + feedback</text>
+
+        <!-- Return arrow: curved path back from Customers to Research -->
+        <path d="M670,115 L670,170 L95,170 L95,115" fill="none" stroke="#555" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#fbArrowReturn)"/>
+        <text x="380" y="188" text-anchor="middle" class="fb-text fb-small">feedback informs next research cycle</text>
+
+        <!-- Contrast label -->
+        <text x="380" y="30" text-anchor="middle" class="fb-text fb-title" style="fill:#2dc7ff;">Anthropic: weeks from research to product</text>
+        <text x="380" y="210" text-anchor="middle" class="fb-text fb-small" style="fill:#666;">Legacy vendors: quarters from vendor API call to shipped feature</text>
+      </svg>
 
       <p>
         First, they own the model. They're not integrating someone else's reasoning engine; they're building it. When
@@ -236,6 +349,68 @@
         Here's what someone could build if they started from a reasoning engine instead of a signature database:
       </p>
 
+      <!-- Diagram: AI-Native Endpoint Detection Flow -->
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <style>
+          .ep-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+          .ep-label { font-size: 13px; }
+          .ep-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+          .ep-small { font-size: 10px; fill: #999; }
+        </style>
+        <defs>
+          <marker id="epArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+          </marker>
+          <marker id="epArrowDim" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" fill="none" stroke="#666" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Source: Endpoint Telemetry -->
+        <rect x="10" y="140" width="160" height="60" rx="5" fill="none" stroke="#666" stroke-width="1.5"/>
+        <text x="90" y="165" text-anchor="middle" class="ep-text ep-label">Process Telemetry</text>
+        <text x="90" y="182" text-anchor="middle" class="ep-text ep-small">syscalls, memory, network</text>
+
+        <!-- Arrow to reasoning engine -->
+        <line x1="170" y1="170" x2="240" y2="170" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#epArrow)"/>
+
+        <!-- Center: AI Reasoning Engine -->
+        <rect x="240" y="120" width="190" height="100" rx="8" fill="rgba(45,199,255,0.08)" stroke="#2dc7ff" stroke-width="2"/>
+        <text x="335" y="155" text-anchor="middle" class="ep-text ep-title" style="fill:#2dc7ff;">AI Reasoning</text>
+        <text x="335" y="175" text-anchor="middle" class="ep-text ep-title" style="fill:#2dc7ff;">Engine</text>
+        <text x="335" y="205" text-anchor="middle" class="ep-text ep-small" style="fill:#2dc7ff;">understands intent,</text>
+        <text x="335" y="217" text-anchor="middle" class="ep-text ep-small" style="fill:#2dc7ff;">not just patterns</text>
+
+        <!-- Output branches -->
+        <!-- Top-right: Intent Analysis -->
+        <line x1="430" y1="145" x2="510" y2="65" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#epArrow)"/>
+        <rect x="510" y="35" width="210" height="55" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+        <text x="615" y="57" text-anchor="middle" class="ep-text ep-label">Intent Analysis</text>
+        <text x="615" y="76" text-anchor="middle" class="ep-text ep-small">"this process is trying to</text>
+        <text x="615" y="87" text-anchor="middle" class="ep-text ep-small">execute code as svchost.exe"</text>
+
+        <!-- Mid-right: Kill Chain Mapping -->
+        <line x1="430" y1="165" x2="510" y2="150" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#epArrow)"/>
+        <rect x="510" y="120" width="210" height="55" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+        <text x="615" y="142" text-anchor="middle" class="ep-text ep-label">Kill Chain Mapping</text>
+        <text x="615" y="161" text-anchor="middle" class="ep-text ep-small">traces lateral movement,</text>
+        <text x="615" y="172" text-anchor="middle" class="ep-text ep-small">identifies initial access</text>
+
+        <!-- Lower-right: Surgical Response -->
+        <line x1="430" y1="185" x2="510" y2="235" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#epArrow)"/>
+        <rect x="510" y="205" width="210" height="55" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+        <text x="615" y="227" text-anchor="middle" class="ep-text ep-label">Surgical Response</text>
+        <text x="615" y="246" text-anchor="middle" class="ep-text ep-small">isolate credential, not host;</text>
+        <text x="615" y="257" text-anchor="middle" class="ep-text ep-small">contain without collateral</text>
+
+        <!-- Bottom-right: Incident Report -->
+        <line x1="430" y1="200" x2="510" y2="320" stroke="#2dc7ff" stroke-width="1.5" marker-end="url(#epArrow)"/>
+        <rect x="510" y="290" width="210" height="55" rx="4" fill="none" stroke="#2dc7ff" stroke-width="1.2"/>
+        <text x="615" y="312" text-anchor="middle" class="ep-text ep-label">Plain-English Report</text>
+        <text x="615" y="331" text-anchor="middle" class="ep-text ep-small">"attacker used CVE-XXXX via</text>
+        <text x="615" y="342" text-anchor="middle" class="ep-text ep-small">phishing to pivot to DC"</text>
+      </svg>
+
       <p>
         Imagine an endpoint agent that doesn't pattern-match on known-bad hashes or YARA rules but actually
         understands what a process is doing and why. A PowerShell script downloads a payload, reflectively loads a
@@ -256,7 +431,7 @@
         Take it further. Today's incident response workflow is: alert fires, SOC analyst triages, analyst pivots
         through logs, analyst builds a timeline, analyst escalates or closes. That's a reasoning task. An AI-native
         endpoint could collapse the entire triage-investigate-respond loop into something that happens at machine speed.
-        Not "auto-quarantine the host" — that's a blunt instrument. Actual reasoning: trace the lateral movement path,
+        Not "auto-quarantine the host." That's a blunt instrument. Actual reasoning: trace the lateral movement path,
         identify the initial access vector, determine blast radius, surgically isolate the compromised credential,
         and generate a plain-English incident report. All before a human SOC analyst finishes reading the first alert.
       </p>
@@ -319,7 +494,7 @@
       </p>
 
       <p>
-        The legacy vendors — including the one that employs me — will acquire, partner, and rebrand. Some will adapt.
+        The legacy vendors, including the one that employs me, will acquire, partner, and rebrand. Some will adapt.
         Most will slowly become irrelevant in the same way that antivirus companies became irrelevant when the threat
         landscape moved past signature matching. The difference is that this time the displacement won't take a
         decade. It'll take a product cycle.
@@ -342,12 +517,12 @@
         <h3><strong>Sources</strong></h3>
         <ol>
           <li id="fn1">
-            SiliconAngle — "Cybersecurity stocks drop as Anthropic debuts Claude Code Security" (February 2026).
+            SiliconAngle -"Cybersecurity stocks drop as Anthropic debuts Claude Code Security" (February 2026).
             <a href="https://siliconangle.com/2026/02/20/cybersecurity-stocks-drop-anthropic-debuts-claude-code-security/"
               target="_blank" rel="noopener">Link</a>
           </li>
           <li id="fn2">
-            Anthropic — "Software Engineer, Cybersecurity Products" job posting.
+            Anthropic -"Software Engineer, Cybersecurity Products" job posting.
             <a href="https://job-boards.greenhouse.io/anthropic/jobs/5063007008"
               target="_blank" rel="noopener">Link</a>
           </li>
