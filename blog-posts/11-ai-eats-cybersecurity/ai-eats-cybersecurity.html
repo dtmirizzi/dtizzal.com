@@ -155,6 +155,14 @@
         rather than signatures.
       </p>
 
+      <p>
+        And it goes deeper than code scanning. Anthropic recently hired an endpoint security director to lead their
+        security vendor product team. Read that again. Endpoint security. That's not "we're building a dev tool."
+        That's a direct declaration that they intend to compete on the terrain where CrowdStrike, SentinelOne, and
+        yes, Palo Alto Networks live and breathe. They're not tiptoeing around the incumbents. They're walking
+        straight into the product categories that generate the most revenue in cybersecurity.
+      </p>
+
       <h2><strong>The legacy vendors are not ready</strong></h2>
 
       <p>
@@ -216,6 +224,57 @@
         It just works where you already are.
       </p>
 
+      <h2><strong>What AI-native endpoint security actually looks like</strong></h2>
+
+      <p>
+        I work at Palo Alto Networks. I build security products. So when I say that a reckoning may be coming for
+        the endpoint security industry, I'm not saying it from the cheap seats. I'm saying it because I can see what's
+        possible and I can see how far the current paradigm is from it.
+      </p>
+
+      <p>
+        Here's what someone could build if they started from a reasoning engine instead of a signature database:
+      </p>
+
+      <p>
+        Imagine an endpoint agent that doesn't pattern-match on known-bad hashes or YARA rules but actually
+        understands what a process is doing and why. A PowerShell script downloads a payload, reflectively loads a
+        DLL, and injects into a trusted process. Today's EDR flags this based on a behavioral rule someone wrote:
+        "PowerShell + download + injection = suspicious." The rule works until the attacker changes the sequence,
+        obfuscates the commands, or uses a different LOLBin. The rule is brittle because it encodes the "what" without
+        understanding the "why."
+      </p>
+
+      <p>
+        An AI-native endpoint agent could reason about intent. It wouldn't need a rule for every permutation. It would
+        understand that a process is attempting to execute arbitrary code in the context of another process and that
+        this behavior is inconsistent with the application's purpose. The same reasoning that lets Claude read code and
+        find authentication bypasses would let it read process telemetry and find kill chains in real time.
+      </p>
+
+      <p>
+        Take it further. Today's incident response workflow is: alert fires, SOC analyst triages, analyst pivots
+        through logs, analyst builds a timeline, analyst escalates or closes. That's a reasoning task. An AI-native
+        endpoint could collapse the entire triage-investigate-respond loop into something that happens at machine speed.
+        Not "auto-quarantine the host" — that's a blunt instrument. Actual reasoning: trace the lateral movement path,
+        identify the initial access vector, determine blast radius, surgically isolate the compromised credential,
+        and generate a plain-English incident report. All before a human SOC analyst finishes reading the first alert.
+      </p>
+
+      <p>
+        Or consider memory forensics. Today it requires a specialist who can read hex dumps and understand PE
+        structures. An AI that can reason about memory layouts could identify injected code, packed malware, and
+        rootkit hooks not by matching signatures but by understanding what shouldn't be there. It could explain in
+        natural language exactly what was modified, how the attacker got in, and what they were trying to do.
+      </p>
+
+      <p>
+        This isn't science fiction. Every one of these capabilities is a straightforward application of the reasoning
+        skills that models like Claude already demonstrate in other domains. The gap isn't intelligence. It's
+        infrastructure: getting the right telemetry to the model, at the right latency, with the right context window.
+        That's an engineering problem. And Anthropic just hired an endpoint security director to solve it.
+      </p>
+
       <h2><strong>This isn't just Anthropic</strong></h2>
 
       <p>
@@ -252,22 +311,31 @@
       <h2><strong>The uncomfortable conclusion</strong></h2>
 
       <p>
-        I work in security. I've spent my career building security products. And I think the honest assessment is this:
-        the cybersecurity industry as we know it is about to be fundamentally restructured by AI, and the restructuring
-        won't be led by the incumbents. It will be led by the AI labs who can reason about security from first
-        principles, prototype at research speed, and ship into workflows where developers and operators already live.
+        I build security products at Palo Alto Networks. I'm not writing this from the outside. And the honest
+        assessment is this: the cybersecurity industry as we know it is about to be fundamentally restructured by AI,
+        and the restructuring won't be led by the incumbents. It will be led by the AI labs who can reason about
+        security from first principles, prototype at research speed, and ship into workflows where developers and
+        operators already live.
       </p>
 
       <p>
-        The legacy vendors will acquire, partner, and rebrand. Some will adapt. Most will slowly become irrelevant in
-        the same way that antivirus companies became irrelevant when the threat landscape moved past signature
-        matching. The difference is that this time the displacement won't take a decade. It'll take a product cycle.
+        The legacy vendors — including the one that employs me — will acquire, partner, and rebrand. Some will adapt.
+        Most will slowly become irrelevant in the same way that antivirus companies became irrelevant when the threat
+        landscape moved past signature matching. The difference is that this time the displacement won't take a
+        decade. It'll take a product cycle.
       </p>
 
       <p>
         Anthropic is hiring engineers to "prototype new ideas and build from the ground up" at the intersection of AI
         research and cybersecurity product development, paying $320K-$405K. That's not a job posting. That's a
         declaration of intent. And the market heard it loud and clear.
+      </p>
+
+      <p>
+        I'll admit: when I saw what they were building, I threw my hat in the ring. When you spend years building
+        security products and then see a team that's rethinking the entire problem from the model layer up, it's hard
+        not to want a seat at that table. Whether or not I end up there, the direction is unmistakable. The future of
+        cybersecurity is being prototyped right now, and it's not happening at the vendors.
       </p>
 
       <div class="footnotes" id="footnotes">
