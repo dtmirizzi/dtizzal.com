@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - The Harness Is the Security Layer</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .my-image {
+        width: 100%;
+        max-width: 800px;
+      }
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+
+    /* SVG theme-aware styles */
+    .diagram-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+    .diagram-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+    .diagram-label { font-size: 13px; }
+    .diagram-small { font-size: 11px; fill: #999999; }
+    .diagram-accent { fill: #2dc7ff; }
+    .diagram-accent-stroke { stroke: #2dc7ff; }
+    .diagram-dim { fill: #888888; }
+    .diagram-dim-stroke { stroke: #555555; }
+    .diagram-warn { fill: #ff6b6b; }
+    .diagram-warn-stroke { stroke: #ff6b6b; }
+    .diagram-ok { fill: #51cf66; }
+    .diagram-ok-stroke { stroke: #51cf66; }
+    .diagram-box { fill: none; stroke: #555; stroke-width: 1.5; }
+    .diagram-box-accent { fill: none; stroke: #2dc7ff; stroke-width: 1.5; }
+    .diagram-box-warn { fill: none; stroke: #ff6b6b; stroke-width: 1.5; }
+    .diagram-box-ok { fill: none; stroke: #51cf66; stroke-width: 1.5; }
+    .diagram-bg-accent { fill: rgba(45,199,255,0.08); }
+    .diagram-bg-warn { fill: rgba(255,107,107,0.08); }
+    .diagram-bg-ok { fill: rgba(81,207,102,0.08); }
+    .diagram-divider { stroke: #333; stroke-width: 1; stroke-dasharray: 6,4; }
+
+    /* Light mode SVG overrides */
+    body.light-mode .diagram-text { fill: #1a1a1a; }
+    body.light-mode .diagram-title { fill: #1a1a1a; }
+    body.light-mode .diagram-small { fill: #666666; }
+    body.light-mode .diagram-accent { fill: #0E8AC8; }
+    body.light-mode .diagram-accent-stroke { stroke: #0E8AC8; }
+    body.light-mode .diagram-dim { fill: #888888; }
+    body.light-mode .diagram-dim-stroke { stroke: #aaaaaa; }
+    body.light-mode .diagram-warn { fill: #d63031; }
+    body.light-mode .diagram-warn-stroke { stroke: #d63031; }
+    body.light-mode .diagram-ok { fill: #2d8a3e; }
+    body.light-mode .diagram-ok-stroke { stroke: #2d8a3e; }
+    body.light-mode .diagram-box { stroke: #aaaaaa; }
+    body.light-mode .diagram-box-accent { stroke: #0E8AC8; }
+    body.light-mode .diagram-box-warn { stroke: #d63031; }
+    body.light-mode .diagram-box-ok { stroke: #2d8a3e; }
+    body.light-mode .diagram-bg-accent { fill: rgba(14,138,200,0.08); }
+    body.light-mode .diagram-bg-warn { fill: rgba(214,48,49,0.08); }
+    body.light-mode .diagram-bg-ok { fill: rgba(45,138,62,0.08); }
+    body.light-mode .diagram-divider { stroke: #cccccc; }
+
+    blockquote {
+      border-left: 3px solid #2dc7ff;
+      margin: 1.5em 0;
+      padding: 0.5em 1em;
+      font-style: italic;
+      color: #bbb;
+    }
+
+    body.light-mode blockquote {
+      border-left-color: #0E8AC8;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      color: #ffffff;
+      font-weight: 700;
+      border-bottom: 2px solid #555;
+    }
+
+    body.light-mode th {
+      color: #1a1a1a;
+      border-bottom-color: #aaa;
+    }
+
+    body.light-mode td {
+      border-bottom-color: #ccc;
+    }
+  </style>
+
+  <meta name="title" content="DT Mirizzi" />
+  <meta name="description" content="The Harness Is the Security Layer: Why agent security belongs in the orchestration layer, not prompts, model weights, or sandboxes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="The Harness Is the Security Layer" />
+  <meta property="og:description"
+    content="Prompts are suggestions. Model weights are dispositions. Sandboxes are containment zones. The harness is the control plane. Security belongs in the control plane." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="The Harness Is the Security Layer" />
+  <meta property="twitter:description"
+    content="Prompts are suggestions. Model weights are dispositions. Sandboxes are containment zones. The harness is the control plane. Security belongs in the control plane." />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">&#x27F5; back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>The Harness Is the Security Layer</strong></h1>
+
+      <p>
+        AI agents are getting real permissions. They execute code, call APIs, modify infrastructure, and make
+        decisions with downstream consequences. The security question has shifted from "can the model say
+        something harmful" to "can the agent <em>do</em> something harmful." That's not a content moderation
+        problem. That's access control, blast radius containment, and behavioral enforcement. Classic security
+        engineering applied to a new kind of principal.
+      </p>
+
+      <p>
+        So where do you enforce security? There are four candidate layers: the prompt, the model weights, the VM
+        sandbox, and the harness. The industry is converging on all four simultaneously under the banner of
+        "defense in depth." But the layers are not equal. Three of them have structural limitations that make them
+        necessary but insufficient. One of them is load-bearing.
+      </p>
+
+      <!-- Diagram: The Four Layers -->
+      <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arrowDown" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">Where Does Security Live?</text>
+
+        <!-- Layer 1: Prompt -->
+        <rect x="130" y="50" width="500" height="55" rx="6" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="380" y="72" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Layer 1: Prompt Guards</text>
+        <text x="380" y="92" text-anchor="middle" class="diagram-text diagram-small">"please don't do bad things" -- a suggestion, not a boundary</text>
+
+        <!-- Layer 2: Model Weights -->
+        <rect x="130" y="120" width="500" height="55" rx="6" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="380" y="142" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Layer 2: Model Weights (RLHF)</text>
+        <text x="380" y="162" text-anchor="middle" class="diagram-text diagram-small">broad behavioral shaping -- static, blunt, you don't own it</text>
+
+        <!-- Layer 3: VM Sandbox -->
+        <rect x="130" y="190" width="500" height="55" rx="6" class="diagram-box diagram-bg-warn"/>
+        <text x="380" y="212" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Layer 3: VM Sandbox</text>
+        <text x="380" y="232" text-anchor="middle" class="diagram-text diagram-small">strong containment -- but the useful agent needs permissions inside it</text>
+
+        <!-- Layer 4: Harness -->
+        <rect x="130" y="260" width="500" height="65" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="380" y="282" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Layer 4: The Harness (Control Plane)</text>
+        <text x="380" y="302" text-anchor="middle" class="diagram-text diagram-small">deterministic gates + context control + architectural constraints + audit</text>
+        <text x="380" y="316" text-anchor="middle" class="diagram-text diagram-small diagram-accent">enforceable, org-specific, observable, adaptive</text>
+
+        <!-- Arrows connecting layers -->
+        <line x1="380" y1="105" x2="380" y2="120" class="diagram-dim-stroke" stroke-width="1.5"/>
+        <line x1="380" y1="175" x2="380" y2="190" class="diagram-dim-stroke" stroke-width="1.5"/>
+        <line x1="380" y1="245" x2="380" y2="260" class="diagram-accent-stroke" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+        <!-- Bottom label -->
+        <text x="380" y="360" text-anchor="middle" class="diagram-text diagram-small">The prompt is a suggestion. The weights are a disposition.</text>
+        <text x="380" y="378" text-anchor="middle" class="diagram-text diagram-small">The sandbox is a containment zone. The harness is a control plane.</text>
+        <text x="380" y="406" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Security belongs in the control plane.</text>
+      </svg>
+
+      <h2><strong>What is harness engineering?</strong></h2>
+
+      <p>
+        The term comes from Birgitta Bockeler's analysis of an experiment where a team built a 1M+ line codebase
+        using AI agents over five months with "no manually typed code" as a forcing function. The harness is
+        defined as "the tooling and practices we can use to keep AI agents in check," mixing deterministic and
+        LLM-based approaches across three categories: context engineering (controlling what the model sees),
+        architectural constraints (enforcing structural boundaries), and garbage collection (periodic agents
+        detecting inconsistencies and violations).<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        The security framing writes itself. Context engineering is information-theoretic least privilege.
+        Architectural constraints are enforceable security policy. Garbage collection is continuous compliance
+        monitoring. The harness isn't a new concept for security engineers. It's the control plane pattern
+        applied to a new kind of compute.
+      </p>
+
+      <h2><strong>Layer 1: prompt-level security</strong></h2>
+
+      <p>
+        System prompts and prompt-level guardrails instruct the model to refuse dangerous actions. "Do not
+        execute destructive commands." "Never access production credentials." The appeal is obvious: fast to
+        implement, zero infrastructure cost, and easy to reason about. The problem is equally obvious: it
+        doesn't work as a security boundary.
+      </p>
+
+      <p>
+        Prompt injection is ranked #1 on the OWASP Top 10 for LLM Applications, appearing in over 73% of
+        production AI deployments assessed during security audits.<sup><a href="#fn2">[2]</a></sup> OpenAI has
+        acknowledged that AI browsers "may always be vulnerable to prompt injection
+        attacks."<sup><a href="#fn3">[3]</a></sup> In 2025, a major coding assistant suffered a CVE allowing
+        remote code execution via prompt injection, potentially compromising millions of developer
+        machines.<sup><a href="#fn4">[4]</a></sup> A separate vulnerability demonstrated second-order prompt
+        injection: a low-privilege agent tricking a higher-privilege agent into performing unauthorized actions
+        on its behalf.<sup><a href="#fn4">[4]</a></sup>
+      </p>
+
+      <p>
+        Indirect prompt injection hides malicious instructions in content retrieved via RAG, web pages, loaded
+        files, or tool outputs. The model processes this external content as part of its context and executes
+        the hidden instruction.<sup><a href="#fn5">[5]</a></sup><sup><a href="#fn6">[6]</a></sup> The attack
+        surface isn't the prompt itself. It's everything the model reads.
+      </p>
+
+      <p>
+        The fundamental issue is well stated by NVIDIA's security guidance: "If a capability is dangerous, it
+        should be removed via policy, not prompts."<sup><a href="#fn7">[7]</a></sup> A prompt is a suggestion
+        to a probabilistic system. There is no deterministic guarantee that "do not execute rm -rf" in a
+        system prompt will hold under adversarial input. When a prompt-level guard fails, there's no log, no
+        linter output, no test failure. It just does the thing. You find out after the damage.
+      </p>
+
+      <p>
+        And it doesn't scale with autonomy. As agents get longer-running and multi-step, the attack surface of
+        each prompt interaction compounds. You can't prompt-engineer your way out of a 200-step agentic
+        workflow. Prompt-level security is perimeter security for a system with no perimeter.
+      </p>
+
+      <h2><strong>Layer 2: base model fine-tuning / RLHF</strong></h2>
+
+      <p>
+        Baking safety into model weights via RLHF or Constitutional AI sounds ideal: make the model
+        <em>inherently</em> safe. The tradeoffs are structural.
+      </p>
+
+      <p>
+        First, you almost certainly don't own the model. Most organizations consume models via API. You can't
+        RLHF someone else's model. Fine-tuning open-weight models means maintaining a fork of a rapidly moving
+        foundation, which is itself a security liability. Every upstream update requires re-evaluation. Every
+        custom safety behavior needs re-validation.
+      </p>
+
+      <p>
+        Second, the alignment tax is real and documented. RLHF can cause "forgetting" of pretrained abilities,
+        creating a measured trade-off between alignment performance and capability
+        preservation.<sup><a href="#fn8">[8]</a></sup> Providers typically spend $8-15M in additional compute
+        per major model release on alignment procedures. Runtime safety monitors add 10-30%
+        latency.<sup><a href="#fn9">[9]</a></sup> Heavy safety fine-tuning degrades the very capability that
+        makes the model useful.
+      </p>
+
+      <p>
+        Third, RLHF safety training can't encode organization-specific security policies. "Don't touch
+        production databases." "Don't call external APIs without auth headers." "Don't write to /etc." These are
+        your policies, not universal norms. RLHF operates at the level of broad behavioral dispositions. It
+        either over-refuses benign requests or gets bypassed by novel framings. Neither failure mode is
+        acceptable for security.
+      </p>
+
+      <p>
+        Fourth, model weights are frozen at training time. Your threat model changes weekly. A fine-tuning cycle
+        takes days and costs thousands of dollars. A harness constraint deploys in minutes with a new linter rule
+        or architectural boundary. Static defense against dynamic threats is a losing strategy every security
+        engineer has learned the hard way.
+      </p>
+
+      <h2><strong>Layer 3: VM sandboxing</strong></h2>
+
+      <p>
+        MicroVM sandboxing is the most technically impressive of the insufficient layers. Firecracker boots in
+        ~125ms with ~5MB memory overhead per instance, providing dedicated kernels per workload. A kernel exploit
+        inside one VM cannot reach the host or other VMs. Docker is moving from containers to dedicated microVMs
+        for coding agents. This is genuinely strong
+        isolation.<sup><a href="#fn10">[10]</a></sup><sup><a href="#fn11">[11]</a></sup><sup><a href="#fn12">[12]</a></sup>
+      </p>
+
+      <!-- Diagram: What the Sandbox Sees vs What Matters -->
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arrowOk" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-ok-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrowWarn" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">The Sandbox Paradox</text>
+
+        <!-- Left: What sandbox stops -->
+        <text x="190" y="58" text-anchor="middle" class="diagram-text diagram-label diagram-ok">What the Sandbox Stops</text>
+
+        <rect x="50" y="75" width="280" height="34" rx="4" class="diagram-box-ok"/>
+        <text x="190" y="97" text-anchor="middle" class="diagram-text diagram-small">VM escape / host compromise</text>
+
+        <rect x="50" y="117" width="280" height="34" rx="4" class="diagram-box-ok"/>
+        <text x="190" y="139" text-anchor="middle" class="diagram-text diagram-small">cross-tenant lateral movement</text>
+
+        <rect x="50" y="159" width="280" height="34" rx="4" class="diagram-box-ok"/>
+        <text x="190" y="181" text-anchor="middle" class="diagram-text diagram-small">unrestricted filesystem access</text>
+
+        <rect x="50" y="201" width="280" height="34" rx="4" class="diagram-box-ok"/>
+        <text x="190" y="223" text-anchor="middle" class="diagram-text diagram-small">resource exhaustion attacks</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="50" x2="380" y2="320" class="diagram-divider"/>
+
+        <!-- Right: What sandbox misses -->
+        <text x="570" y="58" text-anchor="middle" class="diagram-text diagram-label diagram-warn">What the Sandbox Misses</text>
+
+        <rect x="430" y="75" width="280" height="34" rx="4" class="diagram-box-warn"/>
+        <text x="570" y="97" text-anchor="middle" class="diagram-text diagram-small">prompt-injected agent with valid creds</text>
+
+        <rect x="430" y="117" width="280" height="34" rx="4" class="diagram-box-warn"/>
+        <text x="570" y="139" text-anchor="middle" class="diagram-text diagram-small">data exfil via DNS / ICMP / allowed protocols</text>
+
+        <rect x="430" y="159" width="280" height="34" rx="4" class="diagram-box-warn"/>
+        <text x="570" y="181" text-anchor="middle" class="diagram-text diagram-small">poisoned repo files, MCP responses, git history</text>
+
+        <rect x="430" y="201" width="280" height="34" rx="4" class="diagram-box-warn"/>
+        <text x="570" y="223" text-anchor="middle" class="diagram-text diagram-small">unauthorized API calls with granted permissions</text>
+
+        <rect x="430" y="243" width="280" height="34" rx="4" class="diagram-box-warn"/>
+        <text x="570" y="265" text-anchor="middle" class="diagram-text diagram-small">semantic attacks using data the agent should read</text>
+
+        <!-- Bottom -->
+        <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-small">Containment answers "how bad can it get?"</text>
+        <text x="380" y="330" text-anchor="middle" class="diagram-text diagram-small diagram-warn">It doesn't answer "how do we stop it from going bad?"</text>
+      </svg>
+
+      <p>
+        But sandboxing solves the wrong problem in isolation. A prompt-injected agent running inside a sandbox
+        is still a compromised agent. It just can't escape the VM. If the sandbox has network access, database
+        credentials, or API keys -- and it needs these to be useful -- the agent can exfiltrate data, corrupt
+        state, or make unauthorized calls <em>within</em> the sandbox boundary.<sup><a href="#fn13">[13]</a></sup>
+      </p>
+
+      <p>
+        Data exfiltration from inside a sandbox is genuinely hard to prevent. A compromised sandbox can encode
+        data in DNS queries, use ICMP tunneling, or exploit any application-layer protocol that's allowed.
+        Egress allowlists help but don't eliminate the problem.<sup><a href="#fn10">[10]</a></sup>
+      </p>
+
+      <p>
+        Poisoned inputs work perfectly inside sandboxes. Malicious repository configuration files, git histories
+        with embedded prompt injections, and malicious tool responses all operate inside the isolation boundary.
+        The sandbox doesn't protect against content that the agent is <em>supposed</em> to
+        read.<sup><a href="#fn7">[7]</a></sup>
+      </p>
+
+      <p>
+        Here's the core tension: the whole point of an agent is to <em>do things</em>. A perfectly sandboxed
+        agent with no network, no filesystem, and no API access is useless. The moment you grant capabilities,
+        the sandbox becomes a blast radius limiter, not a security control. It contains damage; it doesn't
+        prevent it. Sandboxing is a containment strategy. What we need is a prevention strategy.
+      </p>
+
+      <h2><strong>Layer 4: the harness</strong></h2>
+
+      <p>
+        The harness sits between the model and the world. This is where security has always worked best: at the
+        control plane, not the data plane or the compute layer.
+      </p>
+
+      <!-- Diagram: Harness Architecture -->
+      <svg viewBox="0 0 760 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="harnessArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+          <marker id="harnessArrowDim" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-dim-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title diagram-accent">The Harness as Security Architecture</text>
+
+        <!-- Top: LLM / Agent -->
+        <rect x="280" y="50" width="200" height="50" rx="6" class="diagram-box"/>
+        <text x="380" y="72" text-anchor="middle" class="diagram-text diagram-label">LLM Agent</text>
+        <text x="380" y="90" text-anchor="middle" class="diagram-text diagram-small">probabilistic, capable, untrusted</text>
+
+        <line x1="380" y1="100" x2="380" y2="130" class="diagram-accent-stroke" stroke-width="2" marker-end="url(#harnessArrow)"/>
+
+        <!-- Harness Box (large, containing sub-components) -->
+        <rect x="80" y="130" width="600" height="240" rx="8" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="380" y="155" text-anchor="middle" class="diagram-text diagram-title diagram-accent">HARNESS (CONTROL PLANE)</text>
+
+        <!-- Sub-component 1: Context Engineering -->
+        <rect x="105" y="170" width="175" height="75" rx="4" class="diagram-box-accent"/>
+        <text x="192" y="192" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Context Control</text>
+        <text x="192" y="210" text-anchor="middle" class="diagram-text diagram-small">info-theoretic</text>
+        <text x="192" y="224" text-anchor="middle" class="diagram-text diagram-small">least privilege</text>
+
+        <!-- Sub-component 2: Deterministic Gates -->
+        <rect x="293" y="170" width="175" height="75" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="192" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Deterministic Gates</text>
+        <text x="380" y="210" text-anchor="middle" class="diagram-text diagram-small">linters, validators,</text>
+        <text x="380" y="224" text-anchor="middle" class="diagram-text diagram-small">hard policy enforcement</text>
+
+        <!-- Sub-component 3: Architectural Constraints -->
+        <rect x="481" y="170" width="175" height="75" rx="4" class="diagram-box-accent"/>
+        <text x="568" y="192" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Arch Constraints</text>
+        <text x="568" y="210" text-anchor="middle" class="diagram-text diagram-small">module boundaries,</text>
+        <text x="568" y="224" text-anchor="middle" class="diagram-text diagram-small">structural tests</text>
+
+        <!-- Sub-component 4: Garbage Collection / Monitoring -->
+        <rect x="105" y="260" width="270" height="55" rx="4" class="diagram-box-accent"/>
+        <text x="240" y="282" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Continuous Monitoring</text>
+        <text x="240" y="300" text-anchor="middle" class="diagram-text diagram-small">periodic agents + anomaly detection + audit log</text>
+
+        <!-- Sub-component 5: Feedback Loop -->
+        <rect x="388" y="260" width="270" height="55" rx="4" class="diagram-box-accent"/>
+        <text x="523" y="282" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Feedback Loop</text>
+        <text x="523" y="300" text-anchor="middle" class="diagram-text diagram-small">every failure = diagnostic signal = harness update</text>
+
+        <!-- Arrow out to world -->
+        <line x1="380" y1="370" x2="380" y2="400" class="diagram-accent-stroke" stroke-width="2" marker-end="url(#harnessArrow)"/>
+
+        <!-- Bottom: The World -->
+        <rect x="230" y="400" width="300" height="50" rx="6" class="diagram-box-ok diagram-bg-ok"/>
+        <text x="380" y="422" text-anchor="middle" class="diagram-text diagram-label diagram-ok">Filesystem / APIs / Infrastructure</text>
+        <text x="380" y="440" text-anchor="middle" class="diagram-text diagram-small">only reachable through enforced policy</text>
+
+        <!-- Side label -->
+        <text x="48" y="255" text-anchor="middle" class="diagram-text diagram-small diagram-accent" transform="rotate(-90, 48, 255)">enforceable boundary</text>
+      </svg>
+
+      <p>
+        <strong>Deterministic gates for security-critical operations.</strong> Deterministic guardrails are
+        "hard rules that reject, redact, or add security context to inputs and outputs, providing absolute
+        boundaries that cannot be linguistically manipulated." When the cost of failure is high, you want a
+        pure function that returns <code>false</code>, not a probabilistic
+        guess.<sup><a href="#fn14">[14]</a></sup><sup><a href="#fn15">[15]</a></sup>
+      </p>
+
+      <p>
+        <strong>Context engineering as least privilege.</strong> The harness controls what the model sees. If
+        the agent doesn't need production credentials to write a frontend component, the harness never surfaces
+        them. This is network segmentation applied to the information plane. Most IAM failures occur because
+        systems only know <em>who</em> is asking, not <em>what</em> is happening in the world. Context
+        engineering closes that gap.<sup><a href="#fn14">[14]</a></sup>
+      </p>
+
+      <p>
+        <strong>Architectural constraints as enforceable policy.</strong> Module boundaries, stable data
+        structures, and structural tests map directly to blast radius containment, least privilege, and
+        separation of concerns. If the agent structurally cannot reach production credentials because the
+        harness enforces that boundary, no prompt injection matters. The attack doesn't fail because the model
+        chose to refuse. It fails because the path doesn't exist.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        <strong>The feedback loop is an audit trail.</strong> "When agents struggle, treat it as diagnostic
+        feedback: identify what is missing -- tools, guardrails, documentation -- and feed it back." Every
+        harness failure is a logged, reviewable event. This is security telemetry built into the development
+        lifecycle, not bolted on after the fact.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        <strong>Garbage collection is continuous compliance.</strong> Periodic agents detecting inconsistencies
+        and constraint violations is continuous security monitoring. It's SAST/DAST applied to the entire agent
+        lifecycle, not just a CI gate.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        <strong>Defense in depth without alignment tax.</strong> Layered controls (architectural constraints +
+        deterministic linters + LLM monitors + garbage collection) without degrading model capability. The model
+        stays maximally capable; constraints are external. You get security without paying for it in
+        performance.<sup><a href="#fn16">[16]</a></sup>
+      </p>
+
+      <p>
+        <strong>Adaptable at the speed of threats.</strong> A new linter rule or architectural constraint
+        deploys in minutes. A model fine-tune takes days and costs thousands. A VM image rebuild takes hours.
+        The harness matches the pace of the threat landscape because it's software, not weights or
+        infrastructure.
+      </p>
+
+      <h2><strong>The comparison</strong></h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Strength</th>
+            <th>Structural Weakness</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prompt</td>
+            <td>Fast to implement, zero infra cost</td>
+            <td>Not a security boundary; bypassed by injection</td>
+          </tr>
+          <tr>
+            <td>Model Weights</td>
+            <td>Broad behavioral shaping</td>
+            <td>Alignment tax, static, not org-specific, you don't own it</td>
+          </tr>
+          <tr>
+            <td>VM Sandbox</td>
+            <td>Strong blast radius containment</td>
+            <td>Doesn't prevent semantic attacks; useful agents need permissions</td>
+          </tr>
+          <tr>
+            <td><strong>Harness</strong></td>
+            <td>Deterministic + adaptive, org-specific, observable</td>
+            <td>Requires significant tooling investment; not a quick win</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2><strong>The right mental model</strong></h2>
+
+      <p>
+        Think about it like container security. You <em>could</em> try to make every application binary
+        inherently secure (fine-tuning). You <em>could</em> tell the application "please don't access the
+        network" (prompt sandboxing). You <em>could</em> run it in a VM with no connectivity (sandbox). Or you
+        could run it with network policies, read-only filesystems, seccomp profiles, and resource limits (the
+        harness). The industry converged on the last option because it's the only one that provides
+        deterministic enforcement without crippling the workload.
+      </p>
+
+      <p>
+        The harness is the kernel. The model is a userspace process. Security belongs in the kernel.
+      </p>
+
+      <p>
+        The three pillars of agentic AI safety -- guardrails, permissions, and auditability -- all need
+        implementation.<sup><a href="#fn17">[17]</a></sup> But they need to be implemented at a layer that can
+        actually enforce them. Guardrails as prompts are suggestions. Guardrails as deterministic gates are
+        policy. Permissions in model weights are dispositions. Permissions in the harness are access control.
+        Auditability inside a sandbox is logs. Auditability in the harness is a security telemetry pipeline.
+      </p>
+
+      <h2><strong>The investment problem</strong></h2>
+
+      <p>
+        The honest caveat: harness engineering is expensive. The experiment analyzed by Bockeler took five
+        months and produced over a million lines of code. This isn't a YAML file and a
+        weekend.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        Organizations will need to decide whether to build harnesses in-house, adopt standardized frameworks,
+        or wait for platform providers to build them. The "service template" analogy from the original article
+        is apt: expect harness templates, forking challenges, and the same maintenance burden as any shared
+        infrastructure. Retrofitting harnesses to legacy codebases may prove uneconomical, analogous to the
+        experience of drowning in static analysis alerts when you turn on a linter for the first time on a
+        ten-year-old codebase.
+      </p>
+
+      <p>
+        But the alternative is relying on prompt-level guards, model-level alignment, or sandbox containment
+        alone. 73% of assessed deployments are vulnerable to prompt injection. The alignment tax degrades
+        capability. Sandboxes don't stop semantic attacks. The investment in the harness is the investment in
+        actual security. Everything else is theater dressed up as defense in depth.
+      </p>
+
+      <p>
+        The good news is that harness engineering isn't alien to security teams. It's the same discipline we've
+        always practiced -- access control, policy enforcement, telemetry, continuous monitoring -- applied to
+        a new kind of principal. The patterns are familiar. The substrate is new. And the organizations that
+        figure this out first will be the ones whose agents are actually trustworthy, not just sandboxed and
+        hoped for the best.
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn1">
+            Bockeler, "Harness Engineering" -- Martin Fowler (2025).
+            <a href="https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn2">
+            Obsidian Security -- "Prompt Injection Attacks: The Most Common AI Exploit" (2025).
+            <a href="https://www.obsidiansecurity.com/blog/prompt-injection"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn3">
+            TechCrunch -- "OpenAI says AI browsers may always be vulnerable to prompt injection attacks" (December 2025).
+            <a href="https://techcrunch.com/2025/12/22/openai-says-ai-browsers-may-always-be-vulnerable-to-prompt-injection-attacks/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn4">
+            Sombrainc -- "LLM Security Risks in 2026: Prompt Injection, RAG, and Shadow AI."
+            <a href="https://sombrainc.com/blog/llm-security-risks-2026"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn5">
+            Lakera -- "Indirect Prompt Injection: The Hidden Threat Breaking Modern AI Systems."
+            <a href="https://www.lakera.ai/blog/indirect-prompt-injection"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn6">
+            ScienceDirect -- "From prompt injections to protocol exploits: Threats in LLM-powered AI agents workflows."
+            <a href="https://www.sciencedirect.com/science/article/pii/S2405959525001997"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn7">
+            NVIDIA -- "Practical Security Guidance for Sandboxing Agentic Workflows and Managing Execution Risk."
+            <a href="https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn8">
+            Lin & Tan -- "Mitigating the Alignment Tax of RLHF" (EMNLP 2024).
+            <a href="https://arxiv.org/abs/2309.06256"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn9">
+            Monetizely -- "The AI Alignment Tax: Understanding the Cost of Safety in AI Capability Development."
+            <a href="https://www.getmonetizely.com/articles/the-ai-alignment-tax-understanding-the-cost-of-safety-in-ai-capability-development"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn10">
+            Northflank -- "How to Sandbox AI Agents in 2026: MicroVMs, gVisor & Isolation Strategies."
+            <a href="https://northflank.com/blog/how-to-sandbox-ai-agents"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn11">
+            Docker -- "A New Approach for Coding Agent Safety."
+            <a href="https://www.docker.com/blog/docker-sandboxes-a-new-approach-for-coding-agent-safety/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn12">
+            E2B -- Open-source secure cloud runtime for AI agents.
+            <a href="https://e2b.dev/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn13">
+            Trend Micro -- "Unveiling AI Agent Vulnerabilities Part III: Data Exfiltration."
+            <a href="https://www.trendmicro.com/vinfo/us/security/news/threat-landscape/unveiling-ai-agent-vulnerabilities-part-iii-data-exfiltration"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn14">
+            Civic -- "You Need Deterministic Guardrails for AI Agent Security."
+            <a href="https://www.civic.com/resources/deterministic-guardrails-for-ai-agent-security"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn15">
+            DEV Community -- "Building Deterministic Guardrails for Autonomous Agents."
+            <a href="https://dev.to/suhavi/building-deterministic-guardrails-for-autonomous-agents-1c5a"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn16">
+            Snyk -- "The Future of AI Agent Security Is Guardrails."
+            <a href="https://snyk.io/blog/future-of-ai-agent-security-guardrails/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn17">
+            Dextra Labs -- "Agentic AI Safety Playbook 2025: Guardrails, Permissions & Governance."
+            <a href="https://dextralabs.com/blog/agentic-ai-safety-playbook-guardrails-permissions-auditability/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn18">
+            OWASP -- "AI Agent Security Cheat Sheet."
+            <a href="https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+
+</html>

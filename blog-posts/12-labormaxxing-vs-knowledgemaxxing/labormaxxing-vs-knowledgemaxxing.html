@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - LaborMaxxing vs KnowledgeMaxxing</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .my-image {
+        width: 100%;
+        max-width: 800px;
+      }
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+
+    /* SVG theme-aware styles */
+    .diagram-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+    .diagram-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+    .diagram-label { font-size: 13px; }
+    .diagram-small { font-size: 11px; fill: #999999; }
+    .diagram-accent { fill: #2dc7ff; }
+    .diagram-accent-stroke { stroke: #2dc7ff; }
+    .diagram-dim { fill: #888888; }
+    .diagram-dim-stroke { stroke: #555555; }
+    .diagram-warn { fill: #ff6b6b; }
+    .diagram-warn-stroke { stroke: #ff6b6b; }
+    .diagram-ok { fill: #51cf66; }
+    .diagram-ok-stroke { stroke: #51cf66; }
+    .diagram-box { fill: none; stroke: #555; stroke-width: 1.5; }
+    .diagram-box-accent { fill: none; stroke: #2dc7ff; stroke-width: 1.5; }
+    .diagram-box-warn { fill: none; stroke: #ff6b6b; stroke-width: 1.5; }
+    .diagram-box-ok { fill: none; stroke: #51cf66; stroke-width: 1.5; }
+    .diagram-bg-accent { fill: rgba(45,199,255,0.08); }
+    .diagram-bg-warn { fill: rgba(255,107,107,0.08); }
+    .diagram-bg-ok { fill: rgba(81,207,102,0.08); }
+    .diagram-divider { stroke: #333; stroke-width: 1; stroke-dasharray: 6,4; }
+
+    /* Light mode SVG overrides */
+    body.light-mode .diagram-text { fill: #1a1a1a; }
+    body.light-mode .diagram-title { fill: #1a1a1a; }
+    body.light-mode .diagram-small { fill: #666666; }
+    body.light-mode .diagram-accent { fill: #0E8AC8; }
+    body.light-mode .diagram-accent-stroke { stroke: #0E8AC8; }
+    body.light-mode .diagram-dim { fill: #888888; }
+    body.light-mode .diagram-dim-stroke { stroke: #aaaaaa; }
+    body.light-mode .diagram-warn { fill: #d63031; }
+    body.light-mode .diagram-warn-stroke { stroke: #d63031; }
+    body.light-mode .diagram-ok { fill: #2d8a3e; }
+    body.light-mode .diagram-ok-stroke { stroke: #2d8a3e; }
+    body.light-mode .diagram-box { stroke: #aaaaaa; }
+    body.light-mode .diagram-box-accent { stroke: #0E8AC8; }
+    body.light-mode .diagram-box-warn { stroke: #d63031; }
+    body.light-mode .diagram-box-ok { stroke: #2d8a3e; }
+    body.light-mode .diagram-bg-accent { fill: rgba(14,138,200,0.08); }
+    body.light-mode .diagram-bg-warn { fill: rgba(214,48,49,0.08); }
+    body.light-mode .diagram-bg-ok { fill: rgba(45,138,62,0.08); }
+    body.light-mode .diagram-divider { stroke: #cccccc; }
+
+    blockquote {
+      border-left: 3px solid #2dc7ff;
+      margin: 1.5em 0;
+      padding: 0.5em 1em;
+      font-style: italic;
+      color: #bbb;
+    }
+
+    body.light-mode blockquote {
+      border-left-color: #0E8AC8;
+      color: #555;
+    }
+  </style>
+
+  <meta name="title" content="DT Mirizzi" />
+  <meta name="description" content="LaborMaxxing vs KnowledgeMaxxing: A Marxist Case for Google's AI Strategy" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="LaborMaxxing vs KnowledgeMaxxing" />
+  <meta property="og:description"
+    content="OpenAI and Anthropic are LaborMaxxing. Google is KnowledgeMaxxing. A Marxist critique of the AI lab strategies." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="LaborMaxxing vs KnowledgeMaxxing" />
+  <meta property="twitter:description"
+    content="OpenAI and Anthropic are LaborMaxxing. Google is KnowledgeMaxxing. A Marxist critique of the AI lab strategies." />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">&#x27F5; back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>LaborMaxxing vs KnowledgeMaxxing: A Marxist Case for Google's AI Strategy</strong></h1>
+
+      <img class="my-image" src="meme.png" alt="Clavicular frame mogging - KnowledgeMaxxing vs LaborMaxxing" />
+
+      <p>
+        On February 5th, 2026, a streamer named Clavicular took a selfie with a fraternity member at Arizona State
+        University. The photo went viral. 13.5 million views. The verdict from the internet: he got
+        <em>brutally frame mogged</em>. If you don't know what that means, congratulations on touching grass recently.
+        For the rest of us who have been rotmaxxing on the timeline, the "-maxxing" suffix has become the
+        default way to describe going all-in on any particular strategy. Looksmaxxing. Gymmaxxing. Jestermaxxing.
+        It's optimization culture distilled into a single suffix.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        So let me introduce two new terms to the lexicon: <strong>LaborMaxxing</strong> and
+        <strong>KnowledgeMaxxing</strong>.
+      </p>
+
+      <p>
+        Right now, the major AI labs are pursuing two completely different strategies. OpenAI and Anthropic
+        are LaborMaxxing: building AI that replaces human labor. Google DeepMind is KnowledgeMaxxing: building
+        AI that expands human knowledge. One is zero-sum. The other isn't. And the one you root for says a
+        lot about what you think the future should look like.
+      </p>
+
+      <h2><strong>What is LaborMaxxing?</strong></h2>
+
+      <p>
+        LaborMaxxing is the strategy of optimizing AI models to do work that humans currently get paid for. Not
+        "assist with" or "augment." <em>Do.</em> The thesis is simple: if an AI agent can write code, manage
+        email, fill out forms, triage support tickets, and navigate software interfaces, then every dollar
+        currently spent on a human doing those tasks is addressable market.
+      </p>
+
+      <p>
+        The evidence isn't subtle.
+      </p>
+
+      <p>
+        On February 5th, 2026, OpenAI launched <strong>Frontier</strong>, an enterprise platform explicitly
+        designed so companies can deploy AI agents like human employees. It includes an <em>onboarding process
+        for agents</em> and a feedback loop for improvement, mimicking HR workflows. Bloomberg's headline:
+        "OpenAI Unveils Platform to Help Companies Deploy 'AI Coworkers.'" Initial customers include HP,
+        Intuit, Oracle, Uber. The $20,000/month pricing tier for research agents signals OpenAI believes a
+        single AI agent can produce at least $100K of value monthly. Value that currently goes to human
+        salaries.<sup><a href="#fn2">[2]</a></sup>
+      </p>
+
+      <p>
+        Ten days later, OpenAI hired <strong>Peter Steinberger</strong>, the creator of
+        <strong>OpenClaw</strong>, the fastest-growing project in GitHub history with 200,000+ stars. OpenClaw
+        is an autonomous AI agent that manages email, handles calendar, browses the web, runs shell commands,
+        and chains tool-use actions together without asking permission at each step. It is, functionally, a
+        digital employee. Sam Altman announced the hire saying: <em>"Peter Steinberger is joining OpenAI to
+        drive the next generation of personal agents... We expect this will quickly become core to our product
+        offerings."</em><sup><a href="#fn3">[3]</a></sup>
+      </p>
+
+      <p>
+        OpenAI's <strong>Operator</strong>, powered by the Computer-Using Agent model, uses reinforcement
+        learning to interact with graphical interfaces. Clicking, scrolling, typing, managing logins. They are
+        literally training AI to use the same tools humans use. This is the purest possible form of labor
+        substitution.
+      </p>
+
+      <p>
+        And Anthropic? Same playbook. Claude Opus 4.6 leads SWE-Bench with a 72.5% score. Claude Code is an
+        agentic coding tool designed to write, test, and ship software autonomously. MCP (Model Context Protocol)
+        is an open standard for connecting AI agents to tools, APIs, and data sources. The entire product
+        surface is oriented toward one thing: making AI capable of doing the work software engineers currently
+        do.<sup><a href="#fn4">[4]</a></sup>
+      </p>
+
+      <p>
+        Full disclosure: this blog post is being co-written with Claude Opus 4.6 inside Claude Code. I am
+        using a LaborMaxxing product to write an essay critiquing LaborMaxxing. The tool is doing exactly what
+        it was designed to do: displacing the labor of writing. I'm not going to pretend that isn't funny.
+      </p>
+
+      <!-- Diagram: The LaborMaxxing Stack -->
+      <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arrowWarn" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">The LaborMaxxing Stack</text>
+
+        <!-- Layer 1: Foundation Models -->
+        <rect x="130" y="50" width="500" height="50" rx="6" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="380" y="72" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Foundation Models</text>
+        <text x="380" y="90" text-anchor="middle" class="diagram-text diagram-small">GPT-5, Claude Opus 4.6, o3 -- optimized for task completion</text>
+
+        <line x1="380" y1="100" x2="380" y2="120" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn)"/>
+
+        <!-- Layer 2: Tool Use / RL -->
+        <rect x="130" y="120" width="500" height="50" rx="6" class="diagram-box-warn"/>
+        <text x="380" y="142" text-anchor="middle" class="diagram-text diagram-label">Agent RL + Tool Calling</text>
+        <text x="380" y="160" text-anchor="middle" class="diagram-text diagram-small">Operator, CUA, Claude Code, MCP -- trained to use human tools</text>
+
+        <line x1="380" y1="170" x2="380" y2="190" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn)"/>
+
+        <!-- Layer 3: Orchestration -->
+        <rect x="130" y="190" width="500" height="50" rx="6" class="diagram-box-warn"/>
+        <text x="380" y="212" text-anchor="middle" class="diagram-text diagram-label">Orchestration Platforms</text>
+        <text x="380" y="230" text-anchor="middle" class="diagram-text diagram-small">Frontier, OpenClaw -- onboard agents like employees</text>
+
+        <line x1="380" y1="240" x2="380" y2="260" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn)"/>
+
+        <!-- Layer 4: Labor Market -->
+        <rect x="130" y="260" width="500" height="50" rx="6" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="380" y="282" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Human Labor Market</text>
+        <text x="380" y="300" text-anchor="middle" class="diagram-text diagram-small">target: every dollar spent on knowledge work</text>
+
+        <!-- Bottom label -->
+        <text x="380" y="345" text-anchor="middle" class="diagram-text diagram-small">Each layer exists to displace the one below it.</text>
+        <text x="380" y="365" text-anchor="middle" class="diagram-text diagram-small diagram-warn">The bottom layer is you.</text>
+      </svg>
+
+      <h2><strong>What is KnowledgeMaxxing?</strong></h2>
+
+      <p>
+        KnowledgeMaxxing is a different game. Instead of building AI that does human work, you build AI that
+        discovers things no human has discovered yet. The target isn't the labor market. It's the frontier
+        of knowledge.
+      </p>
+
+      <p>
+        On February 19th, 2026, Google released <strong>Gemini 3.1 Pro</strong>. The benchmarks are
+        impressive across the board: 77.1% on ARC-AGI-2 (more than double the reasoning of Gemini 3 Pro),
+        94.3% on GPQA Diamond (graduate-level science), 2887 Elo on LiveCodeBench Pro, and #1 rankings on
+        12 of 18 tracked benchmarks.<sup><a href="#fn5">[5]</a></sup>
+      </p>
+
+      <p>
+        But the benchmark that matters most for this argument is <strong>SciCode</strong>: a benchmark that
+        evaluates programming for scientific research applications. Gemini 3.1 Pro leads the field at 59.0%.
+        This isn't a coding benchmark in the "write me a React component" sense. This is a benchmark for
+        whether AI can help solve scientific problems. Google is optimizing for this. That's not an accident.
+      </p>
+
+      <p>
+        And it's not just benchmarks. Look at the portfolio:
+      </p>
+
+      <h3><strong>Medicine and drug discovery</strong></h3>
+
+      <ul>
+        <li><strong>AlphaFold</strong> solved the 50-year-old protein folding problem and won the Nobel Prize
+          in Chemistry in 2024. Over 3 million researchers in 190+ countries now use it. AlphaFold 3 extended
+          this to protein-DNA, protein-RNA, and protein-drug interactions.</li>
+        <li><strong>Isomorphic Labs</strong>, DeepMind's drug discovery spinoff, unveiled <strong>IsoDDE</strong>
+          in February 2026, doubling AlphaFold 3's accuracy on protein-ligand structure prediction. Scientists
+          called it "effectively an AlphaFold 4." They have $3B in partnerships with Eli Lilly and Novartis
+          targeting aggressive cancers and neurodegenerative diseases, with first clinical trials expected by
+          end of 2026.<sup><a href="#fn7">[7]</a></sup></li>
+        <li><strong>AI Co-Scientist</strong>, a multi-agent system on Gemini, generates novel scientific
+          hypotheses. At Stanford, it identified drug repurposing candidates for liver fibrosis. For Acute
+          Myeloid Leukemia, it proposed treatments that were confirmed to inhibit tumor viability in lab
+          tests. For antimicrobial resistance, it predicted resistance mechanisms that matched experimental
+          results <em>before they were published</em>.</li>
+        <li><strong>TxGemma</strong>, an open-source model family for therapeutics, outperforms prior
+          state-of-the-art on 64 of 66 drug discovery tasks. Any lab in the world can download it for free.</li>
+        <li>A 27-billion-parameter biology model built with Yale (<strong>C2S-Scale</strong>) discovered that
+          combining silmitasertib with low-dose interferon increases cancer antigen presentation by 50%,
+          potentially making "cold" tumors visible to the immune system. This was experimentally validated in
+          living cells.<sup><a href="#fn8">[8]</a></sup></li>
+      </ul>
+
+      <h3><strong>Mathematics</strong></h3>
+
+      <ul>
+        <li><strong>Gemini Deep Think</strong> scored 35/42 on the 2025 International Mathematical Olympiad,
+          gold-medal standard. It settled a decade-old conjecture in online submodular optimization by
+          engineering a counterexample that proved human intuition false.</li>
+        <li><strong>AlphaEvolve</strong> broke the record for 4x4 complex matrix multiplication that had
+          stood since Strassen's algorithm in 1969. Across 50 open math problems, it discovered improved
+          solutions 20% of the time.<sup><a href="#fn9">[9]</a></sup></li>
+        <li><strong>FunSearch</strong> found new constructions for the cap set problem, which Terence Tao
+          once called his favorite open question.</li>
+      </ul>
+
+      <h3><strong>Materials, climate, and energy</strong></h3>
+
+      <ul>
+        <li><strong>GNoME</strong> discovered 381,000 new stable crystal materials, equivalent to nearly 800
+          years of accumulated human knowledge. Among them: 528 potential lithium-ion conductors (25x more
+          than all previous studies combined) for next-generation batteries.<sup><a href="#fn10">[10]</a></sup></li>
+        <li><strong>GenCast</strong> is more accurate than the world's best traditional weather system on
+          97.2% of evaluated targets. It generates 15-day ensemble forecasts in 8 minutes on a single TPU.
+          The U.S. National Hurricane Center is evaluating it for real-world forecasting.</li>
+        <li>DeepMind partnered with <strong>Commonwealth Fusion Systems</strong> to apply deep reinforcement
+          learning to plasma control in fusion reactors. Their TORAX simulator enables millions of virtual
+          experiments. SPARC is targeting net-positive fusion energy in late 2026.</li>
+        <li>DeepMind announced the UK's first <strong>fully automated AI research lab</strong> in December
+          2025, integrating Gemini with robotics to synthesize hundreds of new materials per day, targeting
+          room-temperature superconductors, advanced batteries, and next-gen solar cells.</li>
+      </ul>
+
+      <h3><strong>Biology beyond proteins</strong></h3>
+
+      <ul>
+        <li><strong>AlphaProteo</strong> designs novel protein binders from scratch with 3x to 300x better
+          binding affinities than existing methods. In collaboration with the Francis Crick Institute, its
+          binders for SARS-CoV-2 were confirmed to block infection in human cells.</li>
+        <li><strong>AlphaGenome</strong>, published in Nature in January 2026, predicts the function of DNA's
+          "dark matter" (non-coding regions) at up to 1 million base pairs at a time. Nearly 3,000 scientists
+          in 160 countries are using it to pinpoint driver mutations in cancer genomes.</li>
+      </ul>
+
+      <p>
+        None of this replaces a software engineer's job. It cures cancer. Achieves fusion. Discovers
+        superconductors. Decodes the genome. Demis Hassabis said at the India AI Summit in February 2026
+        that we're approaching <em>"a new golden era of discovery, a new renaissance"</em> defined by
+        "radical abundance." That's a different vocabulary than "AI coworkers" and "onboarding agents."
+      </p>
+
+      <!-- Diagram: LaborMaxxing vs KnowledgeMaxxing -->
+      <svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arrowWarn2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrowOk2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-ok-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Headers -->
+        <text x="190" y="28" text-anchor="middle" class="diagram-text diagram-title diagram-warn">LaborMaxxing</text>
+        <text x="190" y="48" text-anchor="middle" class="diagram-text diagram-small">OpenAI + Anthropic</text>
+        <text x="570" y="28" text-anchor="middle" class="diagram-text diagram-title diagram-ok">KnowledgeMaxxing</text>
+        <text x="570" y="48" text-anchor="middle" class="diagram-text diagram-small">Google DeepMind</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="15" x2="380" y2="390" class="diagram-divider"/>
+
+        <!-- Left column: LaborMaxxing -->
+        <rect x="60" y="65" width="260" height="42" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="84" text-anchor="middle" class="diagram-text diagram-label">Optimize: Task Completion</text>
+        <text x="190" y="100" text-anchor="middle" class="diagram-text diagram-small">SWE-Bench, HumanEval</text>
+
+        <line x1="190" y1="107" x2="190" y2="125" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn2)"/>
+
+        <rect x="60" y="125" width="260" height="42" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="144" text-anchor="middle" class="diagram-text diagram-label">Product: Agentic Tools</text>
+        <text x="190" y="160" text-anchor="middle" class="diagram-text diagram-small">Operator, Claude Code, Frontier</text>
+
+        <line x1="190" y1="167" x2="190" y2="185" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn2)"/>
+
+        <rect x="60" y="185" width="260" height="42" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="204" text-anchor="middle" class="diagram-text diagram-label">Market: Human Labor</text>
+        <text x="190" y="220" text-anchor="middle" class="diagram-text diagram-small">$TAM = global wages</text>
+
+        <line x1="190" y1="227" x2="190" y2="245" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#arrowWarn2)"/>
+
+        <rect x="60" y="245" width="260" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="190" y="264" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Outcome: Zero-Sum</text>
+        <text x="190" y="280" text-anchor="middle" class="diagram-text diagram-small">every agent sale = a job lost</text>
+
+        <!-- Right column: KnowledgeMaxxing -->
+        <rect x="440" y="65" width="260" height="42" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="84" text-anchor="middle" class="diagram-text diagram-label">Optimize: Reasoning Depth</text>
+        <text x="570" y="100" text-anchor="middle" class="diagram-text diagram-small">SciCode, GPQA, ARC-AGI</text>
+
+        <line x1="570" y1="107" x2="570" y2="125" class="diagram-ok-stroke" stroke-width="1.5" marker-end="url(#arrowOk2)"/>
+
+        <rect x="440" y="125" width="260" height="42" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="144" text-anchor="middle" class="diagram-text diagram-label">Product: Discovery Tools</text>
+        <text x="570" y="160" text-anchor="middle" class="diagram-text diagram-small">AlphaFold, Deep Think, Co-Scientist</text>
+
+        <line x1="570" y1="167" x2="570" y2="185" class="diagram-ok-stroke" stroke-width="1.5" marker-end="url(#arrowOk2)"/>
+
+        <rect x="440" y="185" width="260" height="42" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="204" text-anchor="middle" class="diagram-text diagram-label">Market: Unsolved Problems</text>
+        <text x="570" y="220" text-anchor="middle" class="diagram-text diagram-small">$TAM = new knowledge</text>
+
+        <line x1="570" y1="227" x2="570" y2="245" class="diagram-ok-stroke" stroke-width="1.5" marker-end="url(#arrowOk2)"/>
+
+        <rect x="440" y="245" width="260" height="42" rx="4" class="diagram-box-ok diagram-bg-ok"/>
+        <text x="570" y="264" text-anchor="middle" class="diagram-text diagram-label diagram-ok">Outcome: Positive-Sum</text>
+        <text x="570" y="280" text-anchor="middle" class="diagram-text diagram-small">every discovery = new pie</text>
+
+        <!-- Bottom summary -->
+        <text x="190" y="320" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Redistributes existing value</text>
+        <text x="570" y="320" text-anchor="middle" class="diagram-text diagram-small diagram-ok">Creates new value</text>
+
+        <text x="380" y="370" text-anchor="middle" class="diagram-text diagram-small">One mogged the labor market. The other mogged ignorance.</text>
+      </svg>
+
+      <h2><strong>The Marxist critique: why LaborMaxxing is deflationary</strong></h2>
+
+      <p>
+        Marx had a term for what happens when capital relentlessly pursues labor displacement: the
+        <em>tendency of the rate of profit to fall</em>. Every company uses AI to eliminate labor costs.
+        Margins expand. But labor is also demand. Workers are consumers. Kill wages and you kill the
+        purchasing power that sustains the market for your products.
+      </p>
+
+      <p>
+        LaborMaxxing is this dynamic on fast-forward. If OpenAI's Frontier can replace a $150K/year knowledge
+        worker with a $20K/month AI agent, that's a 72% cost reduction for the employer. Multiply that across
+        millions of knowledge workers and you get a massive deflationary shock. Wages collapse. Demand
+        contracts. The companies selling AI agents discover that their customers' customers can no longer
+        afford to buy anything. The surplus value extracted by replacing labor has no one left to consume it.
+      </p>
+
+      <!-- Diagram: The Deflationary Spiral -->
+      <svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="spiralArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title diagram-warn">The LaborMaxxing Deflationary Spiral</text>
+
+        <!-- Circular flow -->
+        <rect x="260" y="50" width="240" height="40" rx="4" class="diagram-box-warn"/>
+        <text x="380" y="75" text-anchor="middle" class="diagram-text diagram-label">AI replaces labor</text>
+
+        <!-- Arrow down-right -->
+        <line x1="500" y1="70" x2="580" y2="120" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#spiralArrow)"/>
+
+        <rect x="480" y="120" width="240" height="40" rx="4" class="diagram-box-warn"/>
+        <text x="600" y="145" text-anchor="middle" class="diagram-text diagram-label">Wages collapse</text>
+
+        <!-- Arrow down-left -->
+        <line x1="600" y1="160" x2="600" y2="190" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#spiralArrow)"/>
+
+        <rect x="480" y="190" width="240" height="40" rx="4" class="diagram-box-warn"/>
+        <text x="600" y="215" text-anchor="middle" class="diagram-text diagram-label">Demand contracts</text>
+
+        <!-- Arrow left -->
+        <line x1="480" y1="210" x2="280" y2="210" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#spiralArrow)"/>
+
+        <rect x="40" y="190" width="240" height="40" rx="4" class="diagram-box-warn"/>
+        <text x="160" y="215" text-anchor="middle" class="diagram-text diagram-label">Revenue shrinks</text>
+
+        <!-- Arrow up -->
+        <line x1="160" y1="190" x2="160" y2="160" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#spiralArrow)"/>
+
+        <rect x="40" y="120" width="240" height="40" rx="4" class="diagram-box-warn"/>
+        <text x="160" y="145" text-anchor="middle" class="diagram-text diagram-label">More AI to cut costs</text>
+
+        <!-- Arrow back up-right to start -->
+        <line x1="160" y1="120" x2="260" y2="75" class="diagram-warn-stroke" stroke-width="1.5" marker-end="url(#spiralArrow)" stroke-dasharray="5,3"/>
+
+        <!-- Center label -->
+        <rect x="240" y="135" width="280" height="50" rx="8" class="diagram-bg-warn" style="stroke:none;"/>
+        <text x="380" y="158" text-anchor="middle" class="diagram-text diagram-title diagram-warn">repeat until</text>
+        <text x="380" y="176" text-anchor="middle" class="diagram-text diagram-title diagram-warn">there's no one left to sell to</text>
+
+        <!-- Bottom note -->
+        <text x="380" y="270" text-anchor="middle" class="diagram-text diagram-small">Marx called it the tendency of the rate of profit to fall.</text>
+        <text x="380" y="290" text-anchor="middle" class="diagram-text diagram-small">Silicon Valley calls it "efficiency gains."</text>
+        <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Same energy. Same outcome.</text>
+      </svg>
+
+      <p>
+        The game theory is ugly too. LaborMaxxing is a prisoner's dilemma. Every individual company is
+        rationally incentivized to adopt AI agents and cut headcount. But when <em>everyone</em> does it
+        simultaneously, the aggregate result is a demand crisis. No single company can afford not to play.
+        The collective outcome is worse than the starting position.
+      </p>
+
+      <p>
+        Sam Altman himself acknowledged this at the India AI Impact Summit on February 19th: <em>"There is some
+        real displacement by AI of different kinds of jobs."</em> He's not wrong. He's describing the natural
+        consequence of the strategy his company is pursuing.<sup><a href="#fn6">[6]</a></sup>
+      </p>
+
+      <p>
+        The LaborMaxxing playbook treats global wages as total addressable market. The strategy's success
+        is literally measured by how much human compensation it can absorb. That's not a side effect. It's
+        the pitch deck.
+      </p>
+
+      <h2><strong>Why KnowledgeMaxxing isn't zero-sum</strong></h2>
+
+      <p>
+        Google's approach works differently.
+      </p>
+
+      <p>
+        When Gemini Deep Think settles a decade-old mathematical conjecture, no one loses their job. When
+        AlphaFold predicts a new protein interaction, it doesn't displace a biologist -- it gives biologists
+        a tool they never had. When AI Co-Scientist identifies a drug candidate for liver fibrosis, it creates
+        a treatment pathway that didn't exist yesterday.
+      </p>
+
+      <p>
+        KnowledgeMaxxing is positive-sum. New knowledge creates new industries. Penicillin didn't displace
+        workers. It created the pharmaceutical industry. Semiconductors didn't eliminate jobs. They created
+        the technology sector. Knowledge expansion is the one economic activity that consistently grows the
+        pie instead of re-slicing it.
+      </p>
+
+      <p>
+        Gemini 3.1 Pro leading SciCode at 59.0% isn't just a benchmark number. It's a directional signal. Google
+        is telling you what they're optimizing for: not "can this model write your code for you" but "can this
+        model help solve problems that no human has solved yet." The 1-million-token context window isn't for
+        ingesting your Jira backlog. It's for ingesting entire research corpora.
+      </p>
+
+      <h2><strong>Capitalism's blind spot: the common good has no TAM slide</strong></h2>
+
+      <p>
+        Capitalism is good at allocating resources toward activities that generate private returns. If you can
+        build it, sell it, and capture the margin, capital will find you. LaborMaxxing is a perfect capitalist
+        product. "Pay us X, save Y on headcount." It fits on a slide deck. It survives a board meeting. It
+        has unit economics.
+      </p>
+
+      <p>
+        KnowledgeMaxxing does not. Discovering that silmitasertib combined with interferon makes cold tumors
+        visible to the immune system might be one of the most important oncology findings this decade. But
+        there's no SaaS pricing model for it. AlphaGenome helping 3,000 scientists pinpoint cancer mutations
+        doesn't have a monthly recurring revenue line item. GNoME discovering 528 new lithium-ion conductors
+        doesn't have a customer success team.
+      </p>
+
+      <p>
+        This is the mismatch. Markets price labor displacement efficiently because the savings are immediate
+        and capturable by a single firm. Markets price knowledge creation terribly because the benefits are
+        diffuse, slow, and accrue to everyone. An economist calls these positive externalities. A Marxist
+        calls it the contradiction between private accumulation and social production.
+      </p>
+
+      <p>
+        Capital flows toward LaborMaxxing because the returns are legible. Curing diseases, achieving
+        fusion, discovering superconductors -- huge value to humanity, but illegible value to a quarterly
+        earnings report. The most important work AI could do is the work that capitalism is structurally
+        least equipped to fund.
+      </p>
+
+      <p>
+        The numbers make it concrete. OpenAI is valued at $300B. Anthropic at $60B+. These valuations are
+        based on projected revenue from selling AI labor. AlphaFold is used by 3 million researchers and has
+        accelerated drug discovery at every major pharmaceutical company on Earth. What is that worth? No
+        one knows. But Isomorphic Labs, the entity actually trying to monetize it, raised $600M. The market
+        values labor displacement at 500x knowledge creation. That ratio tells you everything about
+        capitalism's priorities and nothing about humanity's.
+      </p>
+
+      <!-- Diagram: What Markets Value vs What Humanity Needs -->
+      <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">What Markets Value vs What Humanity Needs</text>
+
+        <!-- Left bar: Market Value -->
+        <text x="180" y="60" text-anchor="middle" class="diagram-text diagram-label">Market Valuation</text>
+
+        <!-- OpenAI bar -->
+        <rect x="60" y="80" width="240" height="30" rx="3" class="diagram-bg-warn" style="stroke:none;"/>
+        <rect x="60" y="80" width="240" height="30" rx="3" class="diagram-box-warn"/>
+        <text x="180" y="100" text-anchor="middle" class="diagram-text diagram-small diagram-warn">OpenAI: ~$300B</text>
+
+        <!-- Anthropic bar -->
+        <rect x="60" y="118" width="48" height="30" rx="3" class="diagram-bg-warn" style="stroke:none;"/>
+        <rect x="60" y="118" width="48" height="30" rx="3" class="diagram-box-warn"/>
+        <text x="180" y="138" text-anchor="middle" class="diagram-text diagram-small">Anthropic: ~$60B</text>
+
+        <!-- Isomorphic bar (tiny) -->
+        <rect x="60" y="156" width="5" height="30" rx="2" class="diagram-bg-ok" style="stroke:none;"/>
+        <rect x="60" y="156" width="5" height="30" rx="2" class="diagram-box-ok"/>
+        <text x="180" y="176" text-anchor="middle" class="diagram-text diagram-small">Isomorphic Labs: ~$600M raised</text>
+
+        <!-- AlphaFold (no bar -- priceless) -->
+        <rect x="60" y="194" width="0" height="30" rx="2"/>
+        <text x="180" y="214" text-anchor="middle" class="diagram-text diagram-small diagram-dim">AlphaFold: open-source / Nobel Prize</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="55" x2="380" y2="250" class="diagram-divider"/>
+
+        <!-- Right: Human Impact -->
+        <text x="570" y="60" text-anchor="middle" class="diagram-text diagram-label">Impact on Humanity</text>
+
+        <!-- OpenAI -->
+        <rect x="440" y="80" width="50" height="30" rx="3" class="diagram-box-warn"/>
+        <text x="570" y="100" text-anchor="middle" class="diagram-text diagram-small">Faster code completion</text>
+
+        <!-- Anthropic -->
+        <rect x="440" y="118" width="40" height="30" rx="3" class="diagram-box-warn"/>
+        <text x="570" y="138" text-anchor="middle" class="diagram-text diagram-small">Automated email triage</text>
+
+        <!-- Isomorphic -->
+        <rect x="440" y="156" width="200" height="30" rx="3" class="diagram-bg-ok" style="stroke:none;"/>
+        <rect x="440" y="156" width="200" height="30" rx="3" class="diagram-box-ok"/>
+        <text x="570" y="176" text-anchor="middle" class="diagram-text diagram-small diagram-ok">AI-designed drugs for cancer</text>
+
+        <!-- AlphaFold -->
+        <rect x="440" y="194" width="260" height="30" rx="3" class="diagram-bg-ok" style="stroke:none;"/>
+        <rect x="440" y="194" width="260" height="30" rx="3" class="diagram-box-ok"/>
+        <text x="570" y="214" text-anchor="middle" class="diagram-text diagram-small diagram-ok">3M researchers, 190+ countries</text>
+
+        <!-- Bottom label -->
+        <text x="380" y="268" text-anchor="middle" class="diagram-text diagram-small">The market values labor displacement at 500x knowledge creation.</text>
+        <text x="380" y="288" text-anchor="middle" class="diagram-text diagram-small diagram-warn">That ratio is the bug, not the feature.</text>
+      </svg>
+
+      <p>
+        This isn't new. Public goods have always been under-provisioned by markets. That's why governments
+        fund basic research, why the NIH exists, why CERN was built by a consortium of nations rather than
+        a startup. What's new is the <em>scale</em>. We have tools that could compress decades of scientific
+        discovery into years. And the dominant economic incentive is to use them to automate expense reports.
+      </p>
+
+      <p>
+        AlphaFold doesn't have a pricing page. TxGemma is on Hugging Face for free. AlphaGenome has no
+        paywall. Google is giving away tools that advance human health while OpenAI charges $200/month for
+        a chatbot and $20,000/month for an AI coworker. One of these strategies will matter in fifty years.
+      </p>
+
+      <h2><strong>Why Google can afford to play this game</strong></h2>
+
+      <p>
+        If KnowledgeMaxxing is so great, why isn't everyone doing it?
+      </p>
+
+      <p>
+        Because it doesn't pay the bills directly.
+      </p>
+
+      <p>
+        Google can KnowledgeMaxx because they don't need AI to be the product. They need AI to make their
+        <em>existing</em> products better. Search, Ads, Cloud, Android, YouTube, Workspace. Google has 4.6
+        billion users across its ecosystem. Gemini doesn't need to sell API seats to survive. It needs to
+        make Search more useful, make Workspace stickier, and make Cloud more attractive. The business model
+        is indirect monetization through ecosystem value.
+      </p>
+
+      <p>
+        OpenAI and Anthropic don't have this luxury. They are AI-native companies. AI <em>is</em> the product.
+        They need to demonstrate immediate, measurable ROI to enterprise customers to justify their valuations.
+        And the fastest path to measurable ROI is labor displacement. "We replaced three engineers with one
+        Claude Code license" is a story that sells. "We expanded the frontier of human knowledge" is a story
+        that wins Nobel Prizes. Only one of these stories closes deals.
+      </p>
+
+      <p>
+        Google can burn cash on fundamental research because the research compounds into ecosystem value over
+        decades. AlphaFold doesn't have a pricing page. It has a Nobel Prize. TxGemma is open-source. The AI
+        for Math Initiative is a partnership with research institutions, not a revenue center. Google can afford
+        to play the infinite game because they already won a finite one.
+      </p>
+
+      <p>
+        Not altruism. Strategy. But the externalities happen to be positive for humanity, which is more than
+        you can say for "we automated your job and charged your employer $20K/month for the privilege."
+      </p>
+
+      <h2><strong>The open-source wildcard</strong></h2>
+
+      <p>
+        There's a third path that might mog both. Open-source models.
+      </p>
+
+      <p>
+        OpenClaw itself is going to an independent foundation. Steinberger open-sourced the most capable
+        autonomous agent framework and it hit 200K GitHub stars before any company could capture it. Meta's
+        Llama. Mistral. DeepSeek. The open-source ecosystem is producing models that compete with
+        closed-source offerings at a fraction of the cost.
+      </p>
+
+      <p>
+        If open-source models get good enough fast enough, the LaborMaxxing playbook breaks down because the
+        margin disappears. You can't charge $20K/month for an AI coworker when someone can run an equivalent
+        agent locally for the cost of electricity. The deflationary pressure that LaborMaxxing applies to
+        the labor market would, ironically, apply to the LaborMaxxers themselves.
+      </p>
+
+      <p>
+        I don't know which model wins. It might be none of the above. But the open-source option is the one
+        that keeps the LaborMaxxers honest, and it's the one most likely to democratize the
+        KnowledgeMaxxing benefits that Google currently has the unique privilege to pursue.
+      </p>
+
+      <h2><strong>The case for KnowledgeMaxxing as the better future</strong></h2>
+
+      <p>
+        I think KnowledgeMaxxing is the better model for the future of humanity. Not because LaborMaxxing
+        won't work -- it will. It's already working. Companies are cutting headcount and citing AI
+        capabilities. The economic incentives are real.
+      </p>
+
+      <p>
+        But "it works" and "it's good" are different claims. Asbestos insulation worked. Leaded gasoline
+        worked. The question isn't whether AI can replace human labor. It obviously can. The question is
+        whether that's the best use of these systems.
+      </p>
+
+      <p>
+        Curing diseases beats automating email triage. Proving mathematical theorems beats writing boilerplate
+        CRUD endpoints. Discovering new materials beats filling out expense reports. We can point these models
+        at the unknown or we can point them at payroll.
+      </p>
+
+      <!-- Diagram: Two Futures -->
+      <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">Two Futures</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="45" x2="380" y2="300" class="diagram-divider"/>
+
+        <!-- Left: LaborMaxxing future -->
+        <text x="190" y="60" text-anchor="middle" class="diagram-text diagram-label diagram-warn">LaborMaxxed Future</text>
+
+        <rect x="50" y="80" width="280" height="32" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="101" text-anchor="middle" class="diagram-text diagram-small">AI does the work humans used to do</text>
+
+        <rect x="50" y="122" width="280" height="32" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="143" text-anchor="middle" class="diagram-text diagram-small">Wages deflate across knowledge work</text>
+
+        <rect x="50" y="164" width="280" height="32" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="185" text-anchor="middle" class="diagram-text diagram-small">Wealth concentrates in model owners</text>
+
+        <rect x="50" y="206" width="280" height="32" rx="4" class="diagram-box-warn"/>
+        <text x="190" y="227" text-anchor="middle" class="diagram-text diagram-small">Same knowledge, fewer people with income</text>
+
+        <rect x="50" y="248" width="280" height="32" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="190" y="269" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Redistribution fight or bust</text>
+
+        <!-- Right: KnowledgeMaxxing future -->
+        <text x="570" y="60" text-anchor="middle" class="diagram-text diagram-label diagram-ok">KnowledgeMaxxed Future</text>
+
+        <rect x="430" y="80" width="280" height="32" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="101" text-anchor="middle" class="diagram-text diagram-small">AI discovers what humans couldn't</text>
+
+        <rect x="430" y="122" width="280" height="32" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="143" text-anchor="middle" class="diagram-text diagram-small">New drugs, materials, theorems, energy</text>
+
+        <rect x="430" y="164" width="280" height="32" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="185" text-anchor="middle" class="diagram-text diagram-small">New industries create new employment</text>
+
+        <rect x="430" y="206" width="280" height="32" rx="4" class="diagram-box-ok"/>
+        <text x="570" y="227" text-anchor="middle" class="diagram-text diagram-small">Humans work on newly possible things</text>
+
+        <rect x="430" y="248" width="280" height="32" rx="4" class="diagram-box-ok diagram-bg-ok"/>
+        <text x="570" y="269" text-anchor="middle" class="diagram-text diagram-small diagram-ok">Bigger pie for everyone</text>
+
+        <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-small">Choose your fighter.</text>
+      </svg>
+
+      <p>
+        Google isn't doing this out of generosity. They can afford to because they don't need to sell
+        AI-as-labor. But motives aside, the externalities matter. A world where AI accelerates scientific
+        discovery is a world where new possibilities emerge. A world where AI primarily accelerates labor
+        displacement is a world where we fight over a shrinking pie.
+      </p>
+
+      <p>
+        The maxxing metaphor lands here too. In the original community, there's softmaxxing (going to the
+        gym, getting a haircut) and hardmaxxing (surgery, starvation, bone-smashing). LaborMaxxing is the
+        hardmaxxing of AI strategy. It produces results. The side effects are the problem.
+      </p>
+
+      <p>
+        KnowledgeMaxxing is the softmaxxing play. Slower. Harder to monetize. The gains compound over
+        years, not quarters. But it leaves the world with more than it started with. That's the only kind
+        of mogging that ages well.
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn1">
+            NBC News - "Mog, maxxing and the other manosphere lingo that has taken over social media" (February 2026).
+            <a href="https://www.nbcnews.com/pop-culture/viral/mog-maxxing-clavicular-take-over-the-internet-rcna258999"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn2">
+            Bloomberg - "OpenAI Unveils Platform to Help Companies Deploy 'AI Coworkers'" (February 2026).
+            <a href="https://www.bloomberg.com/news/articles/2026-02-05/openai-unveils-platform-to-help-companies-deploy-ai-coworkers"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn3">
+            TechCrunch - "OpenClaw creator Peter Steinberger joins OpenAI" (February 2026).
+            <a href="https://techcrunch.com/2026/02/15/openclaw-creator-peter-steinberger-joins-openai/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn4">
+            Anthropic - Claude Opus 4 and Claude Code.
+            <a href="https://www.anthropic.com/claude"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn5">
+            Google Blog - "Gemini 3.1 Pro: A smarter model for your most complex tasks" (February 2026).
+            <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-1-pro/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn6">
+            Fortune - "Sam Altman confirms AI-driven job displacement" (February 2026).
+            <a href="https://fortune.com/2026/02/19/sam-altman-confirms-ai-washing-job-displacement-layoffs/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn7">
+            Nature - "'An AlphaFold 4': scientists marvel at DeepMind drug spin-off's exclusive new AI" (February 2026).
+            <a href="https://www.nature.com/articles/d41586-026-00365-7"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn8">
+            Google Blog - "Google Gemma AI Cancer Therapy Discovery" (October 2025).
+            <a href="https://blog.google/innovation-and-ai/products/google-gemma-ai-cancer-therapy-discovery/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn9">
+            Google DeepMind - "AlphaEvolve: A Gemini-powered coding agent for designing advanced algorithms" (May 2025).
+            <a href="https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn10">
+            Nature - "Scaling deep learning for materials discovery" (November 2023).
+            <a href="https://www.nature.com/articles/s41586-023-06735-9"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+
+</html>
