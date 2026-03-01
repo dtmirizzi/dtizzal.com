@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - pi-governance: The Harness You Can Actually Install</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .my-image {
+        width: 100%;
+        max-width: 800px;
+      }
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+
+    /* SVG theme-aware styles */
+    .diagram-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+    .diagram-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+    .diagram-label { font-size: 13px; }
+    .diagram-small { font-size: 11px; fill: #999999; }
+    .diagram-accent { fill: #2dc7ff; }
+    .diagram-accent-stroke { stroke: #2dc7ff; }
+    .diagram-dim { fill: #888888; }
+    .diagram-dim-stroke { stroke: #555555; }
+    .diagram-warn { fill: #ff6b6b; }
+    .diagram-warn-stroke { stroke: #ff6b6b; }
+    .diagram-ok { fill: #51cf66; }
+    .diagram-ok-stroke { stroke: #51cf66; }
+    .diagram-box { fill: none; stroke: #555; stroke-width: 1.5; }
+    .diagram-box-accent { fill: none; stroke: #2dc7ff; stroke-width: 1.5; }
+    .diagram-box-warn { fill: none; stroke: #ff6b6b; stroke-width: 1.5; }
+    .diagram-box-ok { fill: none; stroke: #51cf66; stroke-width: 1.5; }
+    .diagram-bg-accent { fill: rgba(45,199,255,0.08); }
+    .diagram-bg-warn { fill: rgba(255,107,107,0.08); }
+    .diagram-bg-ok { fill: rgba(81,207,102,0.08); }
+    .diagram-divider { stroke: #333; stroke-width: 1; stroke-dasharray: 6,4; }
+
+    /* Light mode SVG overrides */
+    body.light-mode .diagram-text { fill: #1a1a1a; }
+    body.light-mode .diagram-title { fill: #1a1a1a; }
+    body.light-mode .diagram-small { fill: #666666; }
+    body.light-mode .diagram-accent { fill: #0E8AC8; }
+    body.light-mode .diagram-accent-stroke { stroke: #0E8AC8; }
+    body.light-mode .diagram-dim { fill: #888888; }
+    body.light-mode .diagram-dim-stroke { stroke: #aaaaaa; }
+    body.light-mode .diagram-warn { fill: #d63031; }
+    body.light-mode .diagram-warn-stroke { stroke: #d63031; }
+    body.light-mode .diagram-ok { fill: #2d8a3e; }
+    body.light-mode .diagram-ok-stroke { stroke: #2d8a3e; }
+    body.light-mode .diagram-box { stroke: #aaaaaa; }
+    body.light-mode .diagram-box-accent { stroke: #0E8AC8; }
+    body.light-mode .diagram-box-warn { stroke: #d63031; }
+    body.light-mode .diagram-box-ok { stroke: #2d8a3e; }
+    body.light-mode .diagram-bg-accent { fill: rgba(14,138,200,0.08); }
+    body.light-mode .diagram-bg-warn { fill: rgba(214,48,49,0.08); }
+    body.light-mode .diagram-bg-ok { fill: rgba(45,138,62,0.08); }
+    body.light-mode .diagram-divider { stroke: #cccccc; }
+
+    blockquote {
+      border-left: 3px solid #2dc7ff;
+      margin: 1.5em 0;
+      padding: 0.5em 1em;
+      font-style: italic;
+      color: #bbb;
+    }
+
+    body.light-mode blockquote {
+      border-left-color: #0E8AC8;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      color: #ffffff;
+      font-weight: 700;
+      border-bottom: 2px solid #555;
+    }
+
+    body.light-mode th {
+      color: #1a1a1a;
+      border-bottom-color: #aaa;
+    }
+
+    body.light-mode td {
+      border-bottom-color: #ccc;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    body.light-mode code {
+      background: rgba(0,0,0,0.06);
+    }
+
+    pre {
+      background: rgba(255,255,255,0.05);
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.5;
+      border: 1px solid #333;
+    }
+
+    body.light-mode pre {
+      background: rgba(0,0,0,0.04);
+      border-color: #ccc;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+  </style>
+
+  <meta name="title" content="DT Mirizzi" />
+  <meta name="description" content="pi-governance: The Harness You Can Actually Install. Enterprise-grade RBAC, DLP, audit, and governance for AI coding agents, shipped as a single extension." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="pi-governance: The Harness You Can Actually Install" />
+  <meta property="og:description"
+    content="I wrote two posts about why harness engineering matters and why the harness is the security layer. Then I built the thing. Here's what it does and how to use it." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="pi-governance: The Harness You Can Actually Install" />
+  <meta property="twitter:description"
+    content="I wrote two posts about why harness engineering matters and why the harness is the security layer. Then I built the thing. Here's what it does and how to use it." />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <a href="/blog.html">&#x27F5; back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>pi-governance: The Harness You Can Actually Install</strong></h1>
+
+      <p>
+        I wrote two posts about this problem. The <a href="/blog-posts/14-harness-engineering/harness-engineering.html">first</a>
+        argued that harness engineering is replacing writing code as the core discipline of software. The
+        <a href="/blog-posts/13-harness-is-the-security-layer/harness-is-the-security-layer.html">second</a> argued that
+        the harness is where security enforcement actually belongs: not in prompts, not in model weights, not in
+        sandboxes, but in the control plane sitting between the agent and the world.
+      </p>
+
+      <p>
+        The feedback I kept getting was the same: "Great, but what do I install?" Every team was building governance
+        from scratch. Custom hooks, bespoke YAML, one-off audit scripts. The theory was clear. The tooling didn't exist.
+      </p>
+
+      <p>
+        So I built it. <a href="https://github.com/Grwnd-AI/pi-governance" target="_blank" rel="noopener">pi-governance</a>
+        is an open-source extension for <a href="https://grwnd-ai.github.io/pi-governance/" target="_blank" rel="noopener">Pi coding agents</a>
+        that ships enterprise-grade RBAC, DLP, bash command classification, human-in-the-loop approvals, and
+        structured audit logging as a single <code>pi install</code>. It intercepts every tool call and enforces
+        policy before execution. No custom hooks. No bespoke scripts. One extension, zero configuration to start,
+        full customization when you need it.
+      </p>
+
+      <h2><strong>Why this exists</strong></h2>
+
+      <p>
+        AI coding agents have unrestricted access to your terminal, filesystem, and secrets. Without governance, an
+        agent can run <code>rm -rf /</code>, read your <code>.env</code> files, pipe your AWS keys into a curl
+        command, or exfiltrate API tokens through tool call outputs. There is no audit trail. There is no access
+        control. There is no policy enforcement. The agent has root-equivalent permissions by default.
+      </p>
+
+      <p>
+        The previous posts framed this theoretically. The harness is the kernel; the model is a userspace process.
+        Security belongs in the kernel. But kernels need to be built. pi-governance is the kernel implementation:
+        a control plane that sits between the agent and every tool it tries to use, enforcing deterministic policy
+        at every invocation.
+      </p>
+
+      <h2><strong>The OpenClaw security "crisis" is a harness problem</strong></h2>
+
+      <p>
+        OpenClaw has become the poster child for insecure AI agents. The headlines are brutal. CVE-2026-25253
+        (CVSS 8.8) allows total gateway compromise if an agent visits a malicious site. Censys tracked growth
+        from 1,000 to over 21,000 publicly exposed instances in a single week. An independent study found
+        42,665 exposed instances, 5,194 actively verified as vulnerable, with 93.4% exhibiting authentication
+        bypass conditions. The ClawHavoc campaign discovered 341 malicious skills in ClawHub (12% of the
+        registry), later revised to over 800 (approximately 20%).<sup><a href="#fn-oc1">[1]</a></sup><sup><a href="#fn-oc2">[2]</a></sup><sup><a href="#fn-oc3">[3]</a></sup>
+      </p>
+
+      <p>
+        Gartner called OpenClaw "a dangerous preview of agentic AI, demonstrating high utility but exposing
+        enterprises to 'insecure by default' risks like plaintext credential storage." Microsoft published
+        guidance on running OpenClaw safely. CrowdStrike, Cisco, and Kaspersky all published warnings.
+        The consensus is clear: OpenClaw is insecure.<sup><a href="#fn-oc4">[4]</a></sup><sup><a href="#fn-oc5">[5]</a></sup><sup><a href="#fn-oc6">[6]</a></sup>
+      </p>
+
+      <p>
+        The consensus is also wrong. Or rather, it's misdirected.
+      </p>
+
+      <p>
+        OpenClaw isn't insecure because the concept of an AI agent gateway is flawed. It's insecure because
+        it ships without a harness. No RBAC. No DLP. No audit trail. No tool call interception. No bash
+        classification. No human-in-the-loop. The agent gets credentials, tools, and network access with
+        no governance layer between it and the world. Every vulnerability in the CVE list, every exposed
+        instance, every supply chain attack follows the same pattern: an agent with unrestricted permissions
+        doing something it should never have been allowed to do.
+      </p>
+
+      <!-- Diagram: OpenClaw Vulnerabilities as Harness Gaps -->
+      <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="gapArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">OpenClaw "Vulnerabilities" Are Harness Gaps</text>
+
+        <!-- Left column: The vulnerability -->
+        <text x="170" y="55" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Reported Vulnerability</text>
+
+        <rect x="30" y="70" width="280" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="170" y="88" text-anchor="middle" class="diagram-text diagram-small">Credential exfiltration via</text>
+        <text x="170" y="103" text-anchor="middle" class="diagram-text diagram-small diagram-warn">prompt injection (CVE-2026-25253)</text>
+
+        <rect x="30" y="125" width="280" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="170" y="143" text-anchor="middle" class="diagram-text diagram-small">Plaintext credential storage</text>
+        <text x="170" y="158" text-anchor="middle" class="diagram-text diagram-small diagram-warn">accessible to agent</text>
+
+        <rect x="30" y="180" width="280" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="170" y="198" text-anchor="middle" class="diagram-text diagram-small">Malicious skills executing</text>
+        <text x="170" y="213" text-anchor="middle" class="diagram-text diagram-small diagram-warn">arbitrary code (ClawHavoc)</text>
+
+        <rect x="30" y="235" width="280" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="170" y="253" text-anchor="middle" class="diagram-text diagram-small">No audit trail for</text>
+        <text x="170" y="268" text-anchor="middle" class="diagram-text diagram-small diagram-warn">agent actions</text>
+
+        <rect x="30" y="290" width="280" height="42" rx="4" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="170" y="308" text-anchor="middle" class="diagram-text diagram-small">Authentication bypass on</text>
+        <text x="170" y="323" text-anchor="middle" class="diagram-text diagram-small diagram-warn">93.4% of exposed instances</text>
+
+        <!-- Right column: The harness solution -->
+        <text x="590" y="55" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Harness Solution</text>
+
+        <rect x="450" y="70" width="280" height="42" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="88" text-anchor="middle" class="diagram-text diagram-small">DLP input scanning blocks</text>
+        <text x="590" y="103" text-anchor="middle" class="diagram-text diagram-small diagram-accent">credentials before tool execution</text>
+
+        <rect x="450" y="125" width="280" height="42" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="143" text-anchor="middle" class="diagram-text diagram-small">Path scoping + role-based access</text>
+        <text x="590" y="158" text-anchor="middle" class="diagram-text diagram-small diagram-accent">makes secrets structurally unreachable</text>
+
+        <rect x="450" y="180" width="280" height="42" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="198" text-anchor="middle" class="diagram-text diagram-small">Bash classifier + tool allowlists</text>
+        <text x="590" y="213" text-anchor="middle" class="diagram-text diagram-small diagram-accent">block unauthorized execution</text>
+
+        <rect x="450" y="235" width="280" height="42" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="253" text-anchor="middle" class="diagram-text diagram-small">17-event structured audit</text>
+        <text x="590" y="268" text-anchor="middle" class="diagram-text diagram-small diagram-accent">with multi-sink logging</text>
+
+        <rect x="450" y="290" width="280" height="42" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="308" text-anchor="middle" class="diagram-text diagram-small">Identity chain + RBAC</text>
+        <text x="590" y="323" text-anchor="middle" class="diagram-text diagram-small diagram-accent">enforces auth before any action</text>
+
+        <!-- Arrows -->
+        <line x1="310" y1="91" x2="450" y2="91" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#gapArrow)"/>
+        <line x1="310" y1="146" x2="450" y2="146" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#gapArrow)"/>
+        <line x1="310" y1="201" x2="450" y2="201" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#gapArrow)"/>
+        <line x1="310" y1="256" x2="450" y2="256" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#gapArrow)"/>
+        <line x1="310" y1="311" x2="450" y2="311" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#gapArrow)"/>
+
+        <!-- Bottom -->
+        <text x="380" y="365" text-anchor="middle" class="diagram-text diagram-small">The concept isn't broken. The control plane is missing.</text>
+      </svg>
+
+      <p>
+        Look at CVE-2026-25253: an agent visits a malicious site, the primary auth token leaks, and the
+        attacker gets full admin control. With pi-governance, DLP input scanning would catch the token
+        pattern before it ever reaches the outbound tool call. Even if the prompt injection succeeds at
+        the model level, the deterministic gate at the harness level blocks the exfiltration. The attack
+        fails not because the model refused, but because the path doesn't exist.
+      </p>
+
+      <p>
+        Look at ClawHavoc: 800+ malicious skills in the registry executing arbitrary code. With
+        pi-governance, every bash command goes through the 60-pattern classifier. Dangerous commands are
+        blocked. Suspicious commands require human approval. The malicious skill can request
+        <code>curl | bash</code> all it wants; the classifier denies it before execution.
+      </p>
+
+      <p>
+        Look at the 93.4% authentication bypass rate on exposed instances. With pi-governance, every
+        session starts with identity resolution. No identity means analyst role: read-only, supervised,
+        no bash, no write access. The agent can't do anything dangerous because the default is locked down.
+      </p>
+
+      <p>
+        The security community is framing this as "OpenClaw is insecure" when the accurate framing is
+        "OpenClaw ships without a harness." These aren't the same claim. The first implies the architecture
+        is fundamentally broken. The second implies it's missing a layer that should be standard. Every web
+        framework was "insecure" before OWASP, WAFs, and CSP became standard. The framework didn't change.
+        The ecosystem around it matured. Agent platforms need the same maturation: not better prompts, not
+        bigger sandboxes, but governance infrastructure in the control plane.
+      </p>
+
+      <p>
+        pi-governance works with OpenClaw through a companion plugin (<code>@grwnd/openclaw-governance</code>)
+        that bridges channel identity to governance roles. WhatsApp users, Discord users, Slack users each
+        map to roles via YAML. The governance extension intercepts every MCP tool call flowing through the
+        Pi runtime, regardless of which channel originated it. Same RBAC, same DLP, same audit, same HITL.
+        The agent gateway becomes a governed agent gateway.
+      </p>
+
+      <pre><code># Install for OpenClaw deployments
+openclaw plugins install @grwnd/openclaw-governance</code></pre>
+
+      <!-- Diagram: The Problem -->
+      <svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arrowWarn1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+          <marker id="arrowOk1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">Before vs After pi-governance</text>
+
+        <!-- Divider -->
+        <line x1="380" y1="45" x2="380" y2="310" class="diagram-divider"/>
+
+        <!-- Left: Before -->
+        <text x="190" y="60" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Without Governance</text>
+
+        <rect x="115" y="80" width="150" height="40" rx="5" class="diagram-box"/>
+        <text x="190" y="105" text-anchor="middle" class="diagram-text diagram-small">AI Agent</text>
+
+        <line x1="190" y1="120" x2="190" y2="155" class="diagram-warn-stroke" stroke-width="2" marker-end="url(#arrowWarn1)"/>
+        <text x="250" y="143" text-anchor="start" class="diagram-text diagram-small diagram-warn">unrestricted</text>
+
+        <rect x="90" y="155" width="200" height="120" rx="5" class="diagram-box-warn diagram-bg-warn"/>
+        <text x="190" y="180" text-anchor="middle" class="diagram-text diagram-small">rm -rf /</text>
+        <text x="190" y="198" text-anchor="middle" class="diagram-text diagram-small">cat .env | curl ...</text>
+        <text x="190" y="216" text-anchor="middle" class="diagram-text diagram-small">sudo chmod 777</text>
+        <text x="190" y="234" text-anchor="middle" class="diagram-text diagram-small">git push --force</text>
+        <text x="190" y="258" text-anchor="middle" class="diagram-text diagram-small diagram-warn">no logs, no policy, no trail</text>
+
+        <!-- Right: After -->
+        <text x="570" y="60" text-anchor="middle" class="diagram-text diagram-label diagram-accent">With pi-governance</text>
+
+        <rect x="495" y="80" width="150" height="40" rx="5" class="diagram-box"/>
+        <text x="570" y="105" text-anchor="middle" class="diagram-text diagram-small">AI Agent</text>
+
+        <line x1="570" y1="120" x2="570" y2="155" class="diagram-accent-stroke" stroke-width="2" marker-end="url(#arrowOk1)"/>
+
+        <rect x="460" y="155" width="220" height="55" rx="5" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="570" y="175" text-anchor="middle" class="diagram-text diagram-small diagram-accent">pi-governance</text>
+        <text x="570" y="195" text-anchor="middle" class="diagram-text diagram-small">RBAC + DLP + Audit + HITL</text>
+
+        <line x1="570" y1="210" x2="570" y2="235" class="diagram-accent-stroke" stroke-width="2" marker-end="url(#arrowOk1)"/>
+
+        <rect x="460" y="235" width="220" height="45" rx="5" class="diagram-box-ok diagram-bg-ok"/>
+        <text x="570" y="255" text-anchor="middle" class="diagram-text diagram-small diagram-ok">only allowed, logged actions</text>
+        <text x="570" y="270" text-anchor="middle" class="diagram-text diagram-small">pass through</text>
+
+        <!-- Bottom -->
+        <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-small">Every tool call intercepted. Every decision logged. Every policy enforced.</text>
+      </svg>
+
+      <h2><strong>Install</strong></h2>
+
+      <p>
+        One command:
+      </p>
+
+      <pre><code>pi install npm:@grwnd/pi-governance</code></pre>
+
+      <p>
+        That's it. Out of the box, you get:
+      </p>
+
+      <ul>
+        <li>Role defaults to <code>analyst</code> (read-only) if no identity is set</li>
+        <li>Bash classification active: 60+ patterns classified as safe, dangerous, or needs-review</li>
+        <li>DLP active: 15+ secret patterns blocked on input, 5+ PII patterns masked on output</li>
+        <li>Audit logging to <code>~/.pi/agent/audit.jsonl</code></li>
+        <li>Supervised execution mode: every action requires approval</li>
+      </ul>
+
+      <p>
+        Zero configuration gives you a locked-down default. You open permissions up from there, not the other way
+        around. This is the principle of least privilege applied to agent onboarding.
+      </p>
+
+      <h2><strong>Set your identity</strong></h2>
+
+      <p>
+        The extension resolves identity from environment variables, a local users file, or (coming soon) OIDC/SSO:
+      </p>
+
+      <pre><code>export GRWND_USER=alice
+export GRWND_ROLE=project_lead
+export GRWND_ORG_UNIT=engineering
+pi</code></pre>
+
+      <p>
+        Or use the interactive config wizard to set everything up through a browser UI:
+      </p>
+
+      <pre><code>/governance init</code></pre>
+
+      <h2><strong>The four pillars</strong></h2>
+
+      <p>
+        pi-governance implements four capabilities that map directly to the harness security architecture from the
+        previous posts. Each one addresses a specific failure mode that prompts, model weights, and sandboxes
+        cannot handle.
+      </p>
+
+      <!-- Diagram: Four Pillars -->
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title diagram-accent">The Four Pillars of Agent Governance</text>
+
+        <!-- Pillar 1: RBAC -->
+        <rect x="30" y="55" width="165" height="220" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="112" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-accent">RBAC</text>
+        <text x="112" y="100" text-anchor="middle" class="diagram-text diagram-small">Who can do what</text>
+        <line x1="50" y1="112" x2="175" y2="112" class="diagram-dim-stroke" stroke-width="0.5"/>
+        <text x="112" y="132" text-anchor="middle" class="diagram-text diagram-small">4 built-in roles</text>
+        <text x="112" y="150" text-anchor="middle" class="diagram-text diagram-small">tool allowlists</text>
+        <text x="112" y="168" text-anchor="middle" class="diagram-text diagram-small">path scoping</text>
+        <text x="112" y="186" text-anchor="middle" class="diagram-text diagram-small">token budgets</text>
+        <text x="112" y="204" text-anchor="middle" class="diagram-text diagram-small">org-unit overrides</text>
+        <text x="112" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-accent">deterministic</text>
+        <text x="112" y="248" text-anchor="middle" class="diagram-text diagram-small diagram-accent">access control</text>
+
+        <!-- Pillar 2: DLP -->
+        <rect x="210" y="55" width="165" height="220" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="292" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-accent">DLP</text>
+        <text x="292" y="100" text-anchor="middle" class="diagram-text diagram-small">What data leaks</text>
+        <line x1="230" y1="112" x2="355" y2="112" class="diagram-dim-stroke" stroke-width="0.5"/>
+        <text x="292" y="132" text-anchor="middle" class="diagram-text diagram-small">15+ secret patterns</text>
+        <text x="292" y="150" text-anchor="middle" class="diagram-text diagram-small">5+ PII patterns</text>
+        <text x="292" y="168" text-anchor="middle" class="diagram-text diagram-small">block / mask / audit</text>
+        <text x="292" y="186" text-anchor="middle" class="diagram-text diagram-small">input + output scan</text>
+        <text x="292" y="204" text-anchor="middle" class="diagram-text diagram-small">custom patterns</text>
+        <text x="292" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-accent">data loss</text>
+        <text x="292" y="248" text-anchor="middle" class="diagram-text diagram-small diagram-accent">prevention</text>
+
+        <!-- Pillar 3: Audit -->
+        <rect x="390" y="55" width="165" height="220" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="472" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-accent">Audit</text>
+        <text x="472" y="100" text-anchor="middle" class="diagram-text diagram-small">What happened</text>
+        <line x1="410" y1="112" x2="535" y2="112" class="diagram-dim-stroke" stroke-width="0.5"/>
+        <text x="472" y="132" text-anchor="middle" class="diagram-text diagram-small">17 event types</text>
+        <text x="472" y="150" text-anchor="middle" class="diagram-text diagram-small">JSONL / webhook /</text>
+        <text x="472" y="168" text-anchor="middle" class="diagram-text diagram-small">Postgres sinks</text>
+        <text x="472" y="186" text-anchor="middle" class="diagram-text diagram-small">session summaries</text>
+        <text x="472" y="204" text-anchor="middle" class="diagram-text diagram-small">SIEM integration</text>
+        <text x="472" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-accent">complete</text>
+        <text x="472" y="248" text-anchor="middle" class="diagram-text diagram-small diagram-accent">observability</text>
+
+        <!-- Pillar 4: HITL -->
+        <rect x="570" y="55" width="165" height="220" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="652" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-accent">HITL</text>
+        <text x="652" y="100" text-anchor="middle" class="diagram-text diagram-small">Who approves</text>
+        <line x1="590" y1="112" x2="715" y2="112" class="diagram-dim-stroke" stroke-width="0.5"/>
+        <text x="652" y="132" text-anchor="middle" class="diagram-text diagram-small">CLI approval</text>
+        <text x="652" y="150" text-anchor="middle" class="diagram-text diagram-small">webhook approval</text>
+        <text x="652" y="168" text-anchor="middle" class="diagram-text diagram-small">per-tool config</text>
+        <text x="652" y="186" text-anchor="middle" class="diagram-text diagram-small">timeout + deny</text>
+        <text x="652" y="204" text-anchor="middle" class="diagram-text diagram-small">3 execution modes</text>
+        <text x="652" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-accent">human-in-the</text>
+        <text x="652" y="248" text-anchor="middle" class="diagram-text diagram-small diagram-accent">-loop control</text>
+
+        <!-- Bottom -->
+        <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-small">Each pillar is a deterministic gate. Not a suggestion. Not a disposition.</text>
+        <text x="380" y="330" text-anchor="middle" class="diagram-text diagram-small diagram-accent">A pure function that returns false.</text>
+      </svg>
+
+      <h2><strong>Pillar 1: RBAC</strong></h2>
+
+      <p>
+        Four built-in roles ship out of the box, each with scoped permissions:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Tools</th>
+            <th>Execution</th>
+            <th>Budget</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Analyst</strong></td>
+            <td>read, grep, find, ls</td>
+            <td>supervised</td>
+            <td>100K</td>
+          </tr>
+          <tr>
+            <td><strong>Project Lead</strong></td>
+            <td>read, write, edit, bash, grep, find, ls</td>
+            <td>supervised</td>
+            <td>500K</td>
+          </tr>
+          <tr>
+            <td><strong>Admin</strong></td>
+            <td>all</td>
+            <td>autonomous</td>
+            <td>unlimited</td>
+          </tr>
+          <tr>
+            <td><strong>Auditor</strong></td>
+            <td>read, grep, find, ls</td>
+            <td>dry_run</td>
+            <td>50K</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        The analyst role is the default. If no identity is configured, the agent gets read-only access with
+        supervised execution. This is the opposite of how most tools ship: wide open by default, security
+        bolted on later. pi-governance starts locked and opens on explicit configuration.
+      </p>
+
+      <p>
+        Roles control three things: which tools the agent can invoke, which file paths it can access (via glob
+        patterns with <code>{{project_path}}</code> substitution), and how many invocations it gets per day.
+        When a project lead tries to access files outside their org unit's scope, the policy engine denies it
+        before the tool ever executes. When the budget runs out, the session ends. No prompt engineering
+        required; the path doesn't exist.
+      </p>
+
+      <p>
+        For teams that need more than YAML, pi-governance supports
+        <a href="https://www.osohq.com/" target="_blank" rel="noopener">Oso/Polar</a> as an alternative policy
+        engine. Polar is a declarative authorization language that handles complex relational policies:
+        multi-tenant access, cross-org-unit permissions, dynamic attribute-based rules. The YAML engine handles
+        90% of use cases. Polar handles the rest.
+      </p>
+
+      <h2><strong>Pillar 2: DLP</strong></h2>
+
+      <p>
+        Data loss prevention scans in two directions. On input, it blocks secrets from being passed into tool
+        calls. On output, it masks PII before results reach the user or downstream systems.
+      </p>
+
+      <p>
+        The built-in scanner detects 15+ secret patterns (AWS keys, GitHub PATs, Anthropic/OpenAI API keys,
+        JWTs, private key headers, database connection strings) and 5+ PII patterns (SSNs, credit cards,
+        emails, phone numbers, IP addresses). Each detection can trigger one of three actions:
+      </p>
+
+      <ul>
+        <li><strong>audit</strong>: log the detection, take no action</li>
+        <li><strong>mask</strong>: replace sensitive data with a placeholder, partial reveal, or hash</li>
+        <li><strong>block</strong>: deny the tool call entirely</li>
+      </ul>
+
+      <p>
+        The directional scanning matters. When an agent tries to pass an AWS secret key as a bash command
+        argument, the input scanner blocks it before execution. When a tool returns output containing a
+        customer's email address, the output scanner masks it before the agent or user sees it. These are two
+        different attack surfaces with two different mitigations.
+      </p>
+
+      <pre><code># governance.yaml
+dlp:
+  enabled: true
+  on_input: block      # secrets never reach tool execution
+  on_output: mask      # PII never leaves the session
+  masking:
+    strategy: partial  # show first/last 4 chars
+    placeholder: '***'
+  custom_patterns:
+    - name: internal_api_key
+      pattern: 'grwnd_[a-zA-Z0-9]{32}'
+      severity: critical
+      action: block</code></pre>
+
+      <p>
+        Custom patterns let organizations define their own sensitive data formats. If your company uses
+        <code>acme_sk_</code> prefixed keys, add a pattern. If your compliance team needs to flag internal
+        project codes, add a pattern. The built-in patterns handle the universal cases. Custom patterns
+        handle yours.
+      </p>
+
+      <h2><strong>Pillar 3: Audit</strong></h2>
+
+      <p>
+        Every tool call, every denial, every approval, every DLP detection is logged as a structured event.
+        17 event types cover the full lifecycle:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Events</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Session</td>
+            <td><code>session_start</code>, <code>session_end</code></td>
+          </tr>
+          <tr>
+            <td>Tool Calls</td>
+            <td><code>tool_allowed</code>, <code>tool_denied</code>, <code>tool_dry_run</code>, <code>tool_result</code></td>
+          </tr>
+          <tr>
+            <td>Policy</td>
+            <td><code>bash_denied</code>, <code>path_denied</code>, <code>budget_exceeded</code></td>
+          </tr>
+          <tr>
+            <td>Approval</td>
+            <td><code>approval_requested</code>, <code>approval_granted</code>, <code>approval_denied</code></td>
+          </tr>
+          <tr>
+            <td>DLP</td>
+            <td><code>dlp_blocked</code>, <code>dlp_detected</code>, <code>dlp_masked</code></td>
+          </tr>
+          <tr>
+            <td>Config</td>
+            <td><code>config_reloaded</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Each audit record includes: timestamp, session ID, user, role, org unit, tool name, summarized input,
+        decision, reason, duration, and role-specific metadata. At session end, a summary aggregates all
+        statistics: invocations allowed vs denied, approval counts, DLP detections, budget consumption.
+      </p>
+
+      <p>
+        Audit events flow to one or more sinks:
+      </p>
+
+      <ul>
+        <li><strong>JSONL</strong> (default): local file at <code>~/.pi/agent/audit.jsonl</code></li>
+        <li><strong>Webhook</strong>: HTTP POST to your SIEM, Splunk, or compliance system with retry logic</li>
+        <li><strong>Postgres</strong>: direct database logging for centralized audit storage and querying</li>
+      </ul>
+
+      <p>
+        This is the audit trail that doesn't exist without a harness. When a compliance team asks "what did
+        the AI agent do in production last Tuesday," the answer is a structured query against the audit log,
+        not a shrug.
+      </p>
+
+      <h2><strong>Pillar 4: Human-in-the-loop</strong></h2>
+
+      <p>
+        Three execution modes control how much autonomy the agent gets:
+      </p>
+
+      <ul>
+        <li><strong>autonomous</strong>: agent executes without approval (admin role)</li>
+        <li><strong>supervised</strong>: specific tools require human approval before execution</li>
+        <li><strong>dry_run</strong>: all tool calls are logged but none execute (auditor role)</li>
+      </ul>
+
+      <p>
+        In supervised mode, when a project lead's agent tries to run a bash command, the CLI prompts for
+        approval with a configurable timeout (default: 5 minutes). If the timeout expires, the action is
+        denied. For teams that need async approval flows, webhook mode sends an HTTP POST to an external
+        system (Slack bot, Jira automation, custom approval service) and waits for a response.
+      </p>
+
+      <p>
+        The key insight: HITL is not about blocking every action. It's about requiring human judgment for
+        the actions where the cost of failure is high. An analyst reading files doesn't need approval. A
+        project lead running <code>git push --force</code> does. The granularity is per-tool, per-role.
+      </p>
+
+      <h2><strong>Bash classification</strong></h2>
+
+      <p>
+        The bash classifier is where the rubber meets the road for agent security. Every bash command the
+        agent tries to execute is classified against 60+ regex patterns into three categories:
+      </p>
+
+      <ul>
+        <li><strong>safe</strong>: file viewing, directory listing, git status, text search, system info</li>
+        <li><strong>dangerous</strong>: <code>rm -rf</code>, <code>sudo</code>, disk operations, remote code
+          execution, network modification, privilege escalation</li>
+        <li><strong>needs_review</strong>: commands that are context-dependent and require human judgment</li>
+      </ul>
+
+      <p>
+        The classifier handles multi-command inputs correctly. Pipes, semicolons, <code>&&</code> and
+        <code>||</code> operators are parsed while respecting quoted strings. A command like
+        <code>echo "rm -rf" | grep pattern</code> is classified as safe because the <code>rm -rf</code>
+        is inside quotes, not an actual execution. But <code>echo hello && rm -rf /</code> is classified
+        as dangerous because the second command is real.
+      </p>
+
+      <p>
+        Roles can override patterns. An admin might need <code>sudo</code> for legitimate infrastructure
+        tasks while a project lead should never have it. The base classification provides the floor; role
+        overrides provide the customization.
+      </p>
+
+      <h2><strong>How it maps to the theory</strong></h2>
+
+      <p>
+        In <a href="/blog-posts/13-harness-is-the-security-layer/harness-is-the-security-layer.html">The Harness Is the Security Layer</a>,
+        I laid out five harness security components. Here's how pi-governance implements each:
+      </p>
+
+      <!-- Diagram: Theory to Implementation -->
+      <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="mapArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">Theory to Implementation</text>
+
+        <!-- Left column: Theory -->
+        <text x="170" y="55" text-anchor="middle" class="diagram-text diagram-label diagram-dim">Harness Concept</text>
+
+        <rect x="40" y="70" width="260" height="38" rx="4" class="diagram-box"/>
+        <text x="170" y="94" text-anchor="middle" class="diagram-text diagram-small">Deterministic Gates</text>
+
+        <rect x="40" y="120" width="260" height="38" rx="4" class="diagram-box"/>
+        <text x="170" y="144" text-anchor="middle" class="diagram-text diagram-small">Context as Least Privilege</text>
+
+        <rect x="40" y="170" width="260" height="38" rx="4" class="diagram-box"/>
+        <text x="170" y="194" text-anchor="middle" class="diagram-text diagram-small">Architectural Constraints</text>
+
+        <rect x="40" y="220" width="260" height="38" rx="4" class="diagram-box"/>
+        <text x="170" y="244" text-anchor="middle" class="diagram-text diagram-small">Feedback Loop / Audit Trail</text>
+
+        <rect x="40" y="270" width="260" height="38" rx="4" class="diagram-box"/>
+        <text x="170" y="294" text-anchor="middle" class="diagram-text diagram-small">Continuous Compliance</text>
+
+        <!-- Right column: Implementation -->
+        <text x="590" y="55" text-anchor="middle" class="diagram-text diagram-label diagram-accent">pi-governance</text>
+
+        <rect x="460" y="70" width="260" height="38" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="94" text-anchor="middle" class="diagram-text diagram-small diagram-accent">RBAC + Bash Classifier + DLP</text>
+
+        <rect x="460" y="120" width="260" height="38" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="144" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Role-scoped Tool + Path Access</text>
+
+        <rect x="460" y="170" width="260" height="38" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="194" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Path Boundaries + Org Units</text>
+
+        <rect x="460" y="220" width="260" height="38" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="244" text-anchor="middle" class="diagram-text diagram-small diagram-accent">17-Event Audit + Multi-Sink</text>
+
+        <rect x="460" y="270" width="260" height="38" rx="4" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="590" y="294" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Config Hot-Reload + Budgets</text>
+
+        <!-- Arrows -->
+        <line x1="300" y1="89" x2="460" y2="89" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#mapArrow)"/>
+        <line x1="300" y1="139" x2="460" y2="139" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#mapArrow)"/>
+        <line x1="300" y1="189" x2="460" y2="189" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#mapArrow)"/>
+        <line x1="300" y1="239" x2="460" y2="239" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#mapArrow)"/>
+        <line x1="300" y1="289" x2="460" y2="289" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#mapArrow)"/>
+
+        <!-- Bottom -->
+        <text x="380" y="340" text-anchor="middle" class="diagram-text diagram-small">Every theoretical component has a concrete implementation.</text>
+        <text x="380" y="358" text-anchor="middle" class="diagram-text diagram-small diagram-accent">The harness isn't a whitepaper. It's an npm install.</text>
+      </svg>
+
+      <p>
+        <strong>Deterministic gates</strong> are RBAC policy checks, bash classification, and DLP scanning.
+        These are pure functions. They don't guess, don't hallucinate, and don't get prompt-injected. A
+        blocked tool stays blocked regardless of what the agent says.
+      </p>
+
+      <p>
+        <strong>Context as least privilege</strong> is role-scoped tool and path access. An analyst can't
+        see write tools. A project lead can't access paths outside their org unit. The agent doesn't need
+        to be told not to touch production; the production path is structurally unreachable.
+      </p>
+
+      <p>
+        <strong>Architectural constraints</strong> are org-unit boundaries and path scoping with glob
+        patterns. These encode your organization's structure into enforceable policy: the compliance team
+        runs in dry_run mode, the platform team gets a longer approval timeout, the infrastructure team
+        gets admin access.
+      </p>
+
+      <p>
+        <strong>The feedback loop</strong> is the audit system. Every denial is a logged, queryable event
+        with a reason. When an agent gets blocked, the audit record tells you exactly why: which policy,
+        which role, which tool, which input. This is security telemetry, not a black box.
+      </p>
+
+      <p>
+        <strong>Continuous compliance</strong> is config hot-reload and budget enforcement. Policy changes
+        apply immediately without restarting sessions. Budget limits enforce daily usage ceilings. The
+        governance posture adapts in real time.
+      </p>
+
+      <h2><strong>How it helps: DLP, audit, governance</strong></h2>
+
+      <p>
+        These three capabilities address different stakeholders with different concerns, but they all
+        share the same enforcement point: the tool call boundary.
+      </p>
+
+      <p>
+        <strong>DLP</strong> is for the security team. Their question: "Can the agent exfiltrate sensitive
+        data?" Without DLP scanning, an agent can read a <code>.env</code> file containing AWS credentials
+        and pass them as arguments to a <code>curl</code> command. The input scanner catches the AWS key
+        pattern and blocks the tool call before execution. The output scanner catches customer PII in tool
+        results and masks it before it enters the agent's context. The security team gets a dashboardable
+        stream of <code>dlp_blocked</code> and <code>dlp_masked</code> events.
+      </p>
+
+      <p>
+        <strong>Audit</strong> is for the compliance team. Their question: "What did the agent do, when, and
+        who authorized it?" Every tool call produces a structured record: user identity, role, tool name,
+        summarized input, decision (allowed/denied/dry_run), reason, timestamp. Session summaries aggregate
+        per-session statistics. These records flow to JSONL files for local analysis, to webhooks for SIEM
+        integration, or to Postgres for centralized querying. When the auditor asks for last quarter's agent
+        activity, the answer is a SQL query, not a forensic investigation.
+      </p>
+
+      <p>
+        <strong>Governance</strong> is for engineering leadership. Their question: "How do we give agents
+        real permissions without losing control?" RBAC provides the access model: who can do what. HITL
+        provides the approval flow: which actions need a human sign-off. Execution modes provide the trust
+        spectrum: from dry_run (observe only) through supervised (approve specific actions) to autonomous
+        (full delegation). Org-unit overrides let different teams operate under different policies. Token
+        budgets prevent runaway agent sessions. The governance posture is codified in YAML, version-controlled,
+        and auditable.
+      </p>
+
+      <h2><strong>Configuration</strong></h2>
+
+      <p>
+        Config files are checked in order: <code>$GRWND_GOVERNANCE_CONFIG</code> (env var),
+        <code>.pi/governance.yaml</code> (project-local), <code>~/.pi/agent/governance.yaml</code>
+        (user-global), then built-in defaults.
+      </p>
+
+      <p>
+        A minimal project config that gives the engineering team project lead access with custom DLP:
+      </p>
+
+      <pre><code># .pi/governance.yaml
+auth:
+  provider: env
+  env:
+    user_var: GRWND_USER
+    role_var: GRWND_ROLE
+    org_unit_var: GRWND_ORG_UNIT
+
+hitl:
+  default_mode: supervised
+  approval_channel: cli
+  timeout_seconds: 300
+
+audit:
+  sinks:
+    - type: jsonl
+      path: ~/.pi/agent/audit.jsonl
+    - type: webhook
+      url: https://audit.yourcompany.com/api/v1/events
+
+dlp:
+  enabled: true
+  on_input: block
+  on_output: mask
+  custom_patterns:
+    - name: company_api_key
+      pattern: 'acme_sk_[a-zA-Z0-9]{40}'
+      severity: critical
+      action: block</code></pre>
+
+      <p>
+        For the full schema reference and advanced options (Oso/Polar policies, Postgres audit sinks,
+        org-unit overrides, webhook approvals), see the
+        <a href="https://grwnd-ai.github.io/pi-governance/" target="_blank" rel="noopener">documentation</a>.
+      </p>
+
+      <h2><strong>The request flow</strong></h2>
+
+      <p>
+        Every tool call goes through the same pipeline:
+      </p>
+
+      <!-- Diagram: Request Flow -->
+      <svg viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="flowArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+          <marker id="flowBlock" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-warn-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="28" text-anchor="middle" class="diagram-text diagram-title">Tool Call Pipeline</text>
+
+        <!-- Step 1 -->
+        <rect x="250" y="45" width="260" height="36" rx="4" class="diagram-box"/>
+        <text x="380" y="68" text-anchor="middle" class="diagram-text diagram-small">1. tool_call event received</text>
+
+        <line x1="380" y1="81" x2="380" y2="95" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 2 -->
+        <rect x="250" y="95" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="118" text-anchor="middle" class="diagram-text diagram-small diagram-accent">2. dry_run check</text>
+        <text x="530" y="118" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if dry_run</text>
+
+        <line x1="380" y1="131" x2="380" y2="145" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 3 -->
+        <rect x="250" y="145" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="168" text-anchor="middle" class="diagram-text diagram-small diagram-accent">3. budget check</text>
+        <text x="530" y="168" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if exhausted</text>
+
+        <line x1="380" y1="181" x2="380" y2="195" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 4 -->
+        <rect x="250" y="195" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="218" text-anchor="middle" class="diagram-text diagram-small diagram-accent">4. RBAC: evaluateTool()</text>
+        <text x="530" y="218" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if denied</text>
+
+        <line x1="380" y1="231" x2="380" y2="245" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 5 -->
+        <rect x="250" y="245" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="268" text-anchor="middle" class="diagram-text diagram-small diagram-accent">5. bash classify (if bash)</text>
+        <text x="530" y="268" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if dangerous</text>
+
+        <line x1="380" y1="281" x2="380" y2="295" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 6 -->
+        <rect x="250" y="295" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="318" text-anchor="middle" class="diagram-text diagram-small diagram-accent">6. path boundary check</text>
+        <text x="530" y="318" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if out-of-scope</text>
+
+        <line x1="380" y1="331" x2="380" y2="345" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 7 -->
+        <rect x="250" y="345" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="368" text-anchor="middle" class="diagram-text diagram-small diagram-accent">7. DLP scan input</text>
+        <text x="530" y="368" text-anchor="start" class="diagram-text diagram-small diagram-warn">block secrets</text>
+
+        <line x1="380" y1="381" x2="380" y2="395" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 8 -->
+        <rect x="250" y="395" width="260" height="36" rx="4" class="diagram-box-accent"/>
+        <text x="380" y="418" text-anchor="middle" class="diagram-text diagram-small diagram-accent">8. HITL approval (if required)</text>
+        <text x="530" y="418" text-anchor="start" class="diagram-text diagram-small diagram-warn">block if denied/timeout</text>
+
+        <line x1="380" y1="431" x2="380" y2="445" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#flowArrow)"/>
+
+        <!-- Step 9 -->
+        <rect x="250" y="445" width="260" height="36" rx="4" class="diagram-box-ok diagram-bg-ok"/>
+        <text x="380" y="468" text-anchor="middle" class="diagram-text diagram-small diagram-ok">9. allow + log + execute</text>
+
+        <!-- Bottom -->
+        <text x="380" y="505" text-anchor="middle" class="diagram-text diagram-small">Eight deterministic checkpoints before any tool executes.</text>
+      </svg>
+
+      <p>
+        After execution, the result goes through DLP output scanning (masking PII) and result logging
+        before being returned. At session end, a summary event captures aggregate statistics.
+      </p>
+
+      <p>
+        Every step that blocks produces an audit event with the specific reason. The agent doesn't just
+        get a generic "denied." It gets "bash_denied: command matches dangerous pattern 'sudo'" or
+        "dlp_blocked: AWS secret key detected in tool input." Diagnostic precision, not opaque rejection.
+      </p>
+
+      <h2><strong>The standardization problem</strong></h2>
+
+      <p>
+        In the <a href="/blog-posts/14-harness-engineering/harness-engineering.html">harness engineering</a>
+        post, I flagged standardization as an unsolved problem: "Every team is building harnesses from
+        scratch. There's no shared framework, no standard toolchain, no common vocabulary."
+      </p>
+
+      <p>
+        pi-governance is a direct response to that. It provides:
+      </p>
+
+      <ul>
+        <li>A standard vocabulary (roles, policies, audit events, DLP patterns)</li>
+        <li>A standard configuration format (governance.yaml + governance-rules.yaml)</li>
+        <li>A standard audit schema (17 event types, consistent field structure)</li>
+        <li>A standard extension point (custom patterns, Oso/Polar for advanced policies)</li>
+        <li>Example configurations for common scenarios (startup, enterprise, compliance, SaaS)</li>
+      </ul>
+
+      <p>
+        The "service template" problem Bockeler identified -- where harness templates get forked and
+        diverge -- is addressed through the config hierarchy. Organizations maintain a global
+        <code>~/.pi/agent/governance.yaml</code> for baseline policy, then layer project-specific
+        overrides via <code>.pi/governance.yaml</code> in each repository. The base policy stays in sync.
+        The project customizations live where they should: next to the code.
+      </p>
+
+      <h2><strong>What's next</strong></h2>
+
+      <p>
+        pi-governance v1.7.0 ships everything described here. The roadmap includes:
+      </p>
+
+      <ul>
+        <li><strong>OIDC/SSO identity</strong>: Okta, Google, Auth0 integration for enterprise identity resolution</li>
+        <li><strong>Sandboxed bash execution</strong>: firejail/bubblewrap containment for approved commands</li>
+        <li><strong>Slack bot approvals</strong>: webhook-based HITL through Slack for async team workflows</li>
+        <li><strong>Policy analytics dashboard</strong>: visualize denial patterns, DLP detections, role usage</li>
+        <li><strong>Agent-to-agent governance</strong>: policy propagation when agents spawn sub-agents</li>
+      </ul>
+
+      <p>
+        The extension is open source under Apache-2.0. Install it, try the defaults, customize the YAML,
+        and read the audit logs. The harness isn't a theoretical concept anymore. It's a thing you can
+        install and point at your agent today.
+      </p>
+
+      <pre><code>pi install npm:@grwnd/pi-governance</code></pre>
+
+      <p>
+        <a href="https://github.com/Grwnd-AI/pi-governance" target="_blank" rel="noopener">GitHub</a> |
+        <a href="https://grwnd-ai.github.io/pi-governance/" target="_blank" rel="noopener">Documentation</a> |
+        <a href="https://www.npmjs.com/package/@grwnd/pi-governance" target="_blank" rel="noopener">npm</a>
+      </p>
+
+      <div class="footnotes" id="footnotes">
+        <h3><strong>Sources</strong></h3>
+        <ol>
+          <li id="fn-oc1">
+            Bitsight -- "OpenClaw Security: Risks of Exposed AI Agents Explained" (2026).
+            <a href="https://www.bitsight.com/blog/openclaw-ai-security-risks-exposed-instances"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn-oc2">
+            Adversa AI -- "OpenClaw Security Guide 2026: CVE-2026-25253, Moltbook Breach & Hardening" (2026).
+            <a href="https://adversa.ai/blog/openclaw-security-101-vulnerabilities-hardening-2026/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn-oc3">
+            Giskard -- "OpenClaw security issues include data leakage & prompt injection" (2026).
+            <a href="https://www.giskard.ai/knowledge/openclaw-security-vulnerabilities-include-data-leakage-and-prompt-injection-risks"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn-oc4">
+            Microsoft Security Blog -- "Running OpenClaw safely: identity, isolation, and runtime risk" (February 2026).
+            <a href="https://www.microsoft.com/en-us/security/blog/2026/02/19/running-openclaw-safely-identity-isolation-runtime-risk/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn-oc5">
+            CrowdStrike -- "What Security Teams Need to Know About OpenClaw, the AI Super Agent" (2026).
+            <a href="https://www.crowdstrike.com/en-us/blog/what-security-teams-need-to-know-about-openclaw-ai-super-agent/"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+          <li id="fn-oc6">
+            Cisco Blogs -- "Personal AI Agents like OpenClaw Are a Security Nightmare" (2026).
+            <a href="https://blogs.cisco.com/ai/personal-ai-agents-like-openclaw-are-a-security-nightmare"
+              target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+
+        <h3><strong>Related posts</strong></h3>
+        <ol>
+          <li>
+            <a href="/blog-posts/14-harness-engineering/harness-engineering.html">Harness Engineering: The Discipline That Replaces Writing Code</a>
+            -- Defines harness engineering and its three components: context engineering, architectural constraints, and garbage collection.
+          </li>
+          <li>
+            <a href="/blog-posts/13-harness-is-the-security-layer/harness-is-the-security-layer.html">The Harness Is the Security Layer</a>
+            -- Argues that security enforcement belongs in the harness control plane, not prompts, model weights, or sandboxes.
+          </li>
+          <li>
+            <a href="/blog-posts/11-ai-eats-cybersecurity/ai-eats-cybersecurity.html">AI Will Eat Cybersecurity</a>
+            -- Market analysis of how AI reasoning capabilities are displacing legacy security vendors.
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+</body>
+
+</html>
