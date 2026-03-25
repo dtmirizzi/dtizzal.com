@@ -4,11 +4,24 @@
 (function () {
     'use strict';
 
-    const MODEL_ID = 'Qwen3-0.6B-q4f16_1-MLC';
-    const MAX_HISTORY = 10; // max conversation turns to keep in context
     const WEBLLM_VERSION = '0.2.82'; // pinned version — includes Qwen3 support
 
+    // ─── Model Catalog ───────────────────────────────────────────
+
+    const MODELS = [
+        { id: 'SmolLM2-360M-Instruct-q4f16_1-MLC',   label: 'SmolLM2 360M',  brand: 'HuggingFace', vram: '~376MB',  size: '~200MB', mobile: true },
+        { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',    label: 'Llama 3.2 1B',  brand: 'Meta',        vram: '~879MB',  size: '~500MB', mobile: true },
+        { id: 'Qwen3-0.6B-q4f16_1-MLC',               label: 'Qwen3 0.6B',    brand: 'Alibaba',     vram: '~1.4GB',  size: '~300MB', mobile: true },
+        { id: 'gemma-2-2b-it-q4f16_1-MLC',            label: 'Gemma 2 2B',    brand: 'Google',      vram: '~1.9GB',  size: '~1.2GB', mobile: false },
+        { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false },
+    ];
+
+    const DEFAULT_MODEL_ID = 'Qwen3-0.6B-q4f16_1-MLC';
+    const MAX_HISTORY = 10;
+
+    let currentModelId = DEFAULT_MODEL_ID;
     let engine = null;
+    let webllmModule = null;
     let isLoading = false;
     let isGenerating = false;
     let chatHistory = [];
@@ -18,6 +31,15 @@
     function isMobileDevice() {
         return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
             || (window.innerWidth <= 768 && 'ontouchstart' in window);
+    }
+
+    function getModel(id) {
+        return MODELS.find(m => m.id === id);
+    }
+
+    function getAvailableModels() {
+        if (isMobileDevice()) return MODELS.filter(m => m.mobile);
+        return MODELS;
     }
 
     // ─── DOM Creation ───────────────────────────────────────────
@@ -40,7 +62,7 @@
                 <div id="ghost-output"></div>
                 <div id="ghost-input-row">
                     <span class="ghost-input-prompt">$&nbsp;</span>
-                    <input type="text" id="ghost-input" placeholder="ask the ghost something..." autocomplete="off" spellcheck="false" />
+                    <input type="text" id="ghost-input" placeholder="ask the ghost something... (type /model for options)" autocomplete="off" spellcheck="false" />
                 </div>
             </div>
         `;
@@ -53,7 +75,6 @@
 
     function bindEvents() {
         const bar = document.getElementById('ghost-bar');
-        const panel = document.getElementById('ghost-panel');
         const input = document.getElementById('ghost-input');
         const resizeHandle = document.getElementById('ghost-resize-handle');
 
@@ -193,6 +214,7 @@
         printLine("│                                       │", 'ghost-system');
         printLine("│  Powered by in-browser AI (WebLLM)   │", 'ghost-system');
         printLine("│  Everything runs locally. No servers. │", 'ghost-system');
+        printLine("│  Type /model to switch models.        │", 'ghost-system');
         printLine("└──────────────────────────────────────┘", 'ghost-system');
         printLine('', 'ghost-system');
 
@@ -202,6 +224,52 @@
             printLine("  For best experience, use desktop.", 'ghost-loading');
             printLine('', 'ghost-system');
         }
+    }
+
+    // ─── /model Command ─────────────────────────────────────────
+
+    function handleModelCommand(args) {
+        const available = getAvailableModels();
+
+        // /model with no args — list models
+        if (!args) {
+            printLine('Available models:', 'ghost-system');
+            printLine('', 'ghost-system');
+            available.forEach(function (m, i) {
+                const active = m.id === currentModelId ? ' ◀ active' : '';
+                printLine('  ' + (i + 1) + ') ' + m.label + ' (' + m.brand + ') — ' + m.vram + ' VRAM, ~' + m.size + ' download' + active, 'ghost-system');
+            });
+            printLine('', 'ghost-system');
+            printLine('Usage: /model <number>  e.g. /model 3', 'ghost-loading');
+            printLine('', 'ghost-system');
+            return;
+        }
+
+        // /model <number> — switch model
+        const idx = parseInt(args, 10);
+        if (isNaN(idx) || idx < 1 || idx > available.length) {
+            printLine('Invalid model number. Type /model to see the list.', 'ghost-error');
+            return;
+        }
+
+        const selected = available[idx - 1];
+        if (selected.id === currentModelId && engine) {
+            printLine('Already using ' + selected.label + '.', 'ghost-system');
+            return;
+        }
+
+        // Unload current engine
+        if (engine) {
+            printLine('Unloading ' + (getModel(currentModelId)?.label || currentModelId) + '...', 'ghost-loading');
+            try { engine.unload?.(); } catch (_) { /* ignore */ }
+            engine = null;
+        }
+
+        currentModelId = selected.id;
+        chatHistory = [];
+        printLine('Switched to ' + selected.label + ' (' + selected.brand + ').', 'ghost-system');
+        printLine('Model will load on your next message.', 'ghost-loading');
+        printLine('', 'ghost-system');
     }
 
     // ─── WebLLM Engine ──────────────────────────────────────────
@@ -219,12 +287,17 @@
         }
 
         isLoading = true;
-        const statusLine = printLine('Loading model... (first time downloads ~300MB)', 'ghost-loading');
+        const model = getModel(currentModelId);
+        const label = model ? model.label : currentModelId;
+        const dlSize = model ? model.size : '?';
+        const statusLine = printLine('Loading ' + label + '... (first time downloads ' + dlSize + ')', 'ghost-loading');
 
         try {
-            const webllm = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
+            if (!webllmModule) {
+                webllmModule = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
+            }
 
-            engine = await webllm.CreateMLCEngine(MODEL_ID, {
+            engine = await webllmModule.CreateMLCEngine(currentModelId, {
                 initProgressCallback: (progress) => {
                     if (progress.text) {
                         statusLine.textContent = progress.text;
@@ -233,14 +306,14 @@
                 }
             });
 
-            statusLine.textContent = 'Model loaded. Ready.';
+            statusLine.textContent = label + ' loaded. Ready.';
             statusLine.className = 'ghost-line ghost-system';
             printLine('', 'ghost-system');
             isLoading = false;
             return true;
         } catch (err) {
             isLoading = false;
-            statusLine.textContent = 'Failed to load model.';
+            statusLine.textContent = 'Failed to load ' + label + '.';
             statusLine.className = 'ghost-line ghost-error';
             printLine('Error: ' + err.message, 'ghost-error');
             printLine('', 'ghost-system');
@@ -261,6 +334,35 @@
         if (!query || isGenerating) return;
 
         input.value = '';
+
+        // Check for /model command
+        if (query.startsWith('/model')) {
+            printHTML('<span class="ghost-prompt-echo">$ </span>' + escapeHTML(query), 'ghost-user-line');
+            const args = query.slice(6).trim() || null;
+            handleModelCommand(args);
+            return;
+        }
+
+        // Check for /help command
+        if (query === '/help') {
+            printHTML('<span class="ghost-prompt-echo">$ </span>' + escapeHTML(query), 'ghost-user-line');
+            printLine('Commands:', 'ghost-system');
+            printLine('  /model         — list available models', 'ghost-system');
+            printLine('  /model <n>     — switch to model #n', 'ghost-system');
+            printLine('  /clear         — clear chat history', 'ghost-system');
+            printLine('  /help          — show this help', 'ghost-system');
+            printLine('', 'ghost-system');
+            return;
+        }
+
+        // Check for /clear command
+        if (query === '/clear') {
+            printHTML('<span class="ghost-prompt-echo">$ </span>' + escapeHTML(query), 'ghost-user-line');
+            chatHistory = [];
+            printLine('Chat history cleared.', 'ghost-system');
+            printLine('', 'ghost-system');
+            return;
+        }
 
         // Echo user input
         printHTML('<span class="ghost-prompt-echo">$ </span>' + escapeHTML(query), 'ghost-user-line');
