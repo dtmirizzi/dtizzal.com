@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const BLOG_DIR = path.join(__dirname, '..', 'blog-posts');
+const RESUME_FILE = path.join(__dirname, '..', 'resume', 'resume.qmd');
 const OUTPUT_FILE = path.join(__dirname, '..', 'data', 'blog-index.json');
 
 // Target ~200-300 tokens per chunk (~150-250 words)
@@ -171,7 +172,121 @@ function buildIndex() {
         console.log(`  [${meta.number}] ${meta.title}: ${sections.length} sections, ${chunks.filter(c => c.postIndex === postIndex).length} chunks`);
     }
 
+    // ─── Resume ──────────────────────────────────────────────
+    if (fs.existsSync(RESUME_FILE)) {
+        const resumeSections = parseResume(fs.readFileSync(RESUME_FILE, 'utf-8'));
+        const postIndex = posts.length;
+        posts.push({
+            number: 0,
+            slug: 'resume',
+            title: 'DT Mirizzi — Resume',
+            url: '/resume/resume.pdf'
+        });
+
+        for (const section of resumeSections) {
+            const sectionChunks = chunkText(section.text, section.heading);
+            for (const chunk of sectionChunks) {
+                chunks.push({
+                    id: chunkId++,
+                    postIndex: postIndex,
+                    section: chunk.section,
+                    text: chunk.text
+                });
+            }
+        }
+
+        console.log(`  [R] Resume: ${resumeSections.length} sections, ${chunks.filter(c => c.postIndex === postIndex).length} chunks`);
+    } else {
+        console.warn('WARNING: Resume file not found at ' + RESUME_FILE);
+    }
+
     return { posts, chunks };
+}
+
+// ─── Resume Parser (Quarto/LaTeX .qmd) ──────────────────────
+
+function parseResume(qmd) {
+    const sections = [];
+
+    // Strip YAML frontmatter
+    qmd = qmd.replace(/^---[\s\S]*?---\n*/m, '');
+
+    // Remove tikzpicture blocks and minipage wrappers before parsing
+    qmd = qmd.replace(/\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/g, '');
+    qmd = qmd.replace(/\\begin\{minipage\}[^]*?\\end\{minipage\}/g, function (block) {
+        // Keep minipage content but strip the wrapper
+        return block.replace(/\\begin\{minipage\}[^\n]*\n?/, '').replace(/\\end\{minipage\}/, '');
+    });
+
+    // Strip LaTeX commands but keep text content
+    function stripLatex(text) {
+        // Remove \begin{...} and \end{...}
+        text = text.replace(/\\(?:begin|end)\{[^}]*\}/g, '');
+        // Remove layout/formatting commands with arguments
+        text = text.replace(/\\(?:vspace|hfill|centering|par|rule|clip|node|includegraphics|fontsize|selectfont|bfseries|texttt|footnotesize)(?:\[[^\]]*\])?\{[^}]*\}/g, '');
+        text = text.replace(/\\(?:vspace|hfill|centering|par)\b[^{}\n]*/g, '');
+        // Extract text from \textbf{...}, \color{...}{text}, \texttt{...}
+        text = text.replace(/\\textbf\{([^}]*)\}/g, '$1');
+        text = text.replace(/\\texttt\{([^}]*)\}/g, '$1');
+        text = text.replace(/\\color\{[^}]*\}\s*/g, '');
+        // Extract text from \faIcon{...} — replace with empty
+        text = text.replace(/\\faIcon\{[^}]*\}/g, '');
+        // Extract tech stack
+        text = text.replace(/\\techstack\{([^}]*)\}/g, 'Tech: $1');
+        // Extract \jobtitle{role}{company}{dates}{location}{url}
+        text = text.replace(/\\jobtitle\{([^}]*)\}\{([^}]*)\}\{([^}]*)\}\{([^}]*)\}\{([^}]*)\}/g, '$1 at $2. $3. $4');
+        // Remove remaining backslash commands, keeping their argument text
+        text = text.replace(/\\[a-zA-Z]+(?:\[[^\]]*\])?\{([^}]*)\}/g, '$1');
+        text = text.replace(/\\[a-zA-Z]+/g, '');
+        // Clean up braces, brackets, extra spaces
+        text = text.replace(/[{}\[\]]/g, '');
+        text = text.replace(/[ \t]+/g, ' ');
+        text = text.replace(/\n{3,}/g, '\n\n');
+        return text.trim();
+    }
+
+    // Split by \sectionheading{...}
+    const sectionRegex = /\\sectionheading\{([^}]+)\}/g;
+    let lastIndex = 0;
+    let currentHeading = 'Header';
+    let match;
+
+    while ((match = sectionRegex.exec(qmd)) !== null) {
+        const before = stripLatex(qmd.slice(lastIndex, match.index));
+        if (before.trim()) {
+            sections.push({ heading: currentHeading, text: before.trim() });
+        }
+        currentHeading = match[1];
+        lastIndex = match.index + match[0].length;
+    }
+
+    const remaining = stripLatex(qmd.slice(lastIndex));
+    if (remaining.trim()) {
+        sections.push({ heading: currentHeading, text: remaining.trim() });
+    }
+
+    // Also split EXPERIENCE by \jobtitle entries for finer granularity
+    const expandedSections = [];
+    for (const section of sections) {
+        if (section.heading === 'EXPERIENCE') {
+            // Split by job entries (lines starting with role titles)
+            const jobRegex = /(?:^|\n)([A-Z][A-Za-z &]+(?:,\s*[A-Za-z .]+)*\s*[-–—]\s*.+)/g;
+            let parts = section.text.split(/\n(?=[A-Z][A-Za-z &]+(?:,\s*[A-Za-z .]+)*\s*[-–—])/);
+            if (parts.length > 1) {
+                for (const part of parts) {
+                    if (part.trim()) {
+                        expandedSections.push({ heading: 'Experience', text: part.trim() });
+                    }
+                }
+            } else {
+                expandedSections.push(section);
+            }
+        } else {
+            expandedSections.push(section);
+        }
+    }
+
+    return expandedSections;
 }
 
 // Run

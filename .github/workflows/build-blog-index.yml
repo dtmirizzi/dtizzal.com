@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - 'blog-posts/**/*.html'
+      - 'resume/resume.qmd'
       - 'scripts/build-blog-index.js'
 
 jobs:
