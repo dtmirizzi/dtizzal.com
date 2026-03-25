@@ -2,7 +2,7 @@ name: Build Blog Search Index
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'blog-posts/**/*.html'
       - 'scripts/build-blog-index.js'
