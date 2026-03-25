@@ -30,15 +30,6 @@
                 </button>
             </div>
             <div id="ghost-panel" class="ghost-hidden">
-                <div id="ghost-titlebar">
-                    <div class="ghost-titlebar-dots">
-                        <span class="ghost-dot ghost-dot-red"></span>
-                        <span class="ghost-dot ghost-dot-yellow"></span>
-                        <span class="ghost-dot ghost-dot-green"></span>
-                    </div>
-                    <span class="ghost-titlebar-text">ghost@dtizzal.com — ask-dt</span>
-                    <button id="ghost-close-btn" aria-label="Close chat">&#x2715;</button>
-                </div>
                 <div id="ghost-resize-handle"></div>
                 <div id="ghost-output"></div>
                 <div id="ghost-input-row">
@@ -58,14 +49,9 @@
         const bar = document.getElementById('ghost-bar');
         const panel = document.getElementById('ghost-panel');
         const input = document.getElementById('ghost-input');
-        const closeBtn = document.getElementById('ghost-close-btn');
         const resizeHandle = document.getElementById('ghost-resize-handle');
 
         bar.addEventListener('click', togglePanel);
-        closeBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            collapsePanel();
-        });
 
         input.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
