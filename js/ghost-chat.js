@@ -19,7 +19,8 @@
         { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false, toolCalling: false },
     ];
 
-    const DEFAULT_MODEL_ID = 'Qwen3-0.6B-q4f16_1-MLC';
+    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3-0.6B-q4f16_1-MLC';
+    const DEFAULT_MODEL_ID_MOBILE  = 'SmolLM2-360M-Instruct-q4f16_1-MLC';
     const MAX_HISTORY = 10;
 
     // Tool definition for search_blog (OpenAI-compatible format)
@@ -41,7 +42,7 @@
         }
     };
 
-    let currentModelId = DEFAULT_MODEL_ID;
+    let currentModelId = isMobileDevice() ? DEFAULT_MODEL_ID_MOBILE : DEFAULT_MODEL_ID_DESKTOP;
     let engine = null;
     let webllmModule = null;
     let isLoading = false;
@@ -355,6 +356,10 @@
         return !!navigator.gpu;
     }
 
+    function isEngineReady() {
+        return engine != null;
+    }
+
     async function initEngine() {
         if (engine || isLoading) return;
         if (!checkWebGPU()) {
@@ -471,6 +476,38 @@
         return { messages: messages, results: allResults };
     }
 
+    // ─── Safe Streaming Helper ─────────────────────────────────
+
+    async function streamResponse(generator, responseLine, spinnerEl) {
+        let fullResponse = '';
+        try {
+            for await (const chunk of generator) {
+                if (!isEngineReady()) throw new Error('Engine disposed during generation');
+                const delta = chunk.choices[0]?.delta?.content || '';
+                if (delta && spinnerEl && spinnerEl.parentNode) {
+                    spinnerEl.remove();
+                    responseLine.style.display = '';
+                }
+                fullResponse += delta;
+                fullResponse = stripThinkTags(fullResponse);
+                responseLine.innerHTML = linkifyResponse(fullResponse);
+                scrollOutput();
+            }
+        } catch (streamErr) {
+            // If we already have partial content, keep it and surface the error gracefully
+            if (fullResponse.trim()) {
+                fullResponse = stripThinkTags(fullResponse);
+                responseLine.innerHTML = linkifyResponse(fullResponse + ' [interrupted]');
+            }
+            throw streamErr; // re-throw so the outer catch handles cleanup
+        }
+        if (spinnerEl && spinnerEl.parentNode) {
+            spinnerEl.remove();
+            responseLine.style.display = '';
+        }
+        return fullResponse;
+    }
+
     // ─── Chat Submit ────────────────────────────────────────────
 
     async function handleSubmit() {
@@ -526,7 +563,7 @@
 
         // On mobile, keep less history to reduce memory pressure
         const mobile = isMobileDevice();
-        const maxTurns = mobile ? 3 : MAX_HISTORY;
+        const maxTurns = mobile ? 2 : MAX_HISTORY;
         while (chatHistory.length > maxTurns * 2) {
             chatHistory.shift();
         }
@@ -546,6 +583,11 @@
             const topK = mobile ? 2 : 3;
             let systemPrompt;
 
+            // Guard: engine may have been disposed during search
+            if (!isEngineReady()) {
+                throw new Error('Engine was disposed before generation could start');
+            }
+
             if (useToolCalling) {
                 // Path A: Tool calling — let the model decide when to search
                 systemPrompt = window.buildGhostSystemPrompt
@@ -561,7 +603,7 @@
                 const firstCompletion = await engine.chat.completions.create({
                     messages: messages,
                     temperature: 0.7,
-                    max_tokens: mobile ? 192 : 512,
+                    max_tokens: mobile ? 128 : 512,
                     tools: [SEARCH_BLOG_TOOL],
                     tool_choice: 'auto',
                     stream: false,
@@ -579,26 +621,11 @@
                     const streamCompletion = await engine.chat.completions.create({
                         messages: toolResult.messages,
                         temperature: 0.7,
-                        max_tokens: mobile ? 192 : 512,
+                        max_tokens: mobile ? 128 : 512,
                         stream: true,
                     });
 
-                    for await (const chunk of streamCompletion) {
-                        const delta = chunk.choices[0]?.delta?.content || '';
-                        if (delta && finalSpinner.parentNode) {
-                            finalSpinner.remove();
-                            responseLine.style.display = '';
-                        }
-                        fullResponse += delta;
-                        fullResponse = stripThinkTags(fullResponse);
-                        responseLine.innerHTML = linkifyResponse(fullResponse);
-                        scrollOutput();
-                    }
-
-                    if (finalSpinner.parentNode) {
-                        finalSpinner.remove();
-                        responseLine.style.display = '';
-                    }
+                    fullResponse = await streamResponse(streamCompletion, responseLine, finalSpinner);
                 } else {
                     // No tool call — use the direct response
                     if (spinnerLine.parentNode) {
@@ -643,26 +670,11 @@
                 const asyncChunkGenerator = await engine.chat.completions.create({
                     messages: messages,
                     temperature: 0.7,
-                    max_tokens: mobile ? 192 : 512,
+                    max_tokens: mobile ? 128 : 512,
                     stream: true,
                 });
 
-                for await (const chunk of asyncChunkGenerator) {
-                    const delta = chunk.choices[0]?.delta?.content || '';
-                    if (delta && newSpinner.parentNode) {
-                        newSpinner.remove();
-                        responseLine.style.display = '';
-                    }
-                    fullResponse += delta;
-                    fullResponse = stripThinkTags(fullResponse);
-                    responseLine.innerHTML = linkifyResponse(fullResponse);
-                    scrollOutput();
-                }
-
-                if (newSpinner.parentNode) {
-                    newSpinner.remove();
-                    responseLine.style.display = '';
-                }
+                fullResponse = await streamResponse(asyncChunkGenerator, responseLine, newSpinner);
             }
 
             // Clean up: strip any remaining partial think tags
@@ -686,7 +698,7 @@
             responseLine.className = 'ghost-line ghost-error';
 
             // On memory-related errors, try to recover by clearing history and resetting engine
-            if (mobile || /memory|oom|abort|lost|destroyed/i.test(msg)) {
+            if (mobile || /memory|oom|abort|lost|destroy|disposed|gpu/i.test(msg)) {
                 chatHistory = [];
                 if (engine) {
                     try { engine.unload?.(); } catch (_) { /* ignore */ }
