@@ -255,6 +255,19 @@
         block.innerHTML = lines.join('\n');
         output.appendChild(block);
         scrollOutput();
+        return block;
+    }
+
+    function dismissToolBlock(block) {
+        if (!block || !block.parentNode) return;
+        // Update footer to show completion, then fade out
+        var footer = block.querySelector('.ghost-tool-footer');
+        if (footer) footer.textContent = '\u2514\u2500 done';
+        block.classList.add('ghost-tool-done');
+        setTimeout(function () {
+            if (block.parentNode) block.remove();
+            scrollOutput();
+        }, 600);
     }
 
     // ─── Link Rendering ─────────────────────────────────────────
@@ -461,7 +474,7 @@
                 if (spinnerLine && spinnerLine.parentNode) {
                     spinnerLine.remove();
                 }
-                printToolCall('search_blog', searchQuery, results);
+                var toolBlock = printToolCall('search_blog', searchQuery, results);
 
                 // Add tool result to messages
                 var contextStr = window.ghostSearch ? window.ghostSearch.format(results) : '';
@@ -473,7 +486,7 @@
             }
         }
 
-        return { messages: messages, results: allResults };
+        return { messages: messages, results: allResults, toolBlock: toolBlock };
     }
 
     // ─── Safe Streaming Helper ─────────────────────────────────
@@ -612,7 +625,8 @@
                 var toolResult = await handleToolCallResponse(firstCompletion, messages, spinnerLine);
 
                 if (toolResult) {
-                    // Tool was called — now stream the final response
+                    // Tool was called — dismiss tool block and stream the final response
+                    dismissToolBlock(toolResult.toolBlock);
                     if (spinnerLine.parentNode) {
                         spinnerLine.remove();
                     }
@@ -640,13 +654,14 @@
             } else {
                 // Path B: Auto-search fallback — search before every query
                 var searchResults = await performSearch(query, topK);
+                var toolBlock = null;
 
                 if (searchResults.length > 0) {
                     // Show search visualization
                     if (spinnerLine.parentNode) {
                         spinnerLine.remove();
                     }
-                    printToolCall('search_blog', query, searchResults);
+                    toolBlock = printToolCall('search_blog', query, searchResults);
                 }
 
                 var searchContext = window.ghostSearch
@@ -660,6 +675,9 @@
                     { role: 'system', content: systemPrompt },
                     ...chatHistory
                 ];
+
+                // Dismiss tool block now that context is injected
+                dismissToolBlock(toolBlock);
 
                 // Update spinner if still visible
                 if (spinnerLine.parentNode) {
