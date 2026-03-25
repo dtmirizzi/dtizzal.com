@@ -752,9 +752,15 @@ body.light-mode .legend-percent {
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
     z-index: 9999;
     font-family: 'Courier Prime', 'Courier New', monospace;
     font-size: 14px;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ─── Bottom Bar (Collapsed State) ──────────────────────────── */
