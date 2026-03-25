@@ -1,0 +1,38 @@
+name: Build Blog Search Index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'blog-posts/**/*.html'
+      - 'scripts/build-blog-index.js'
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build blog search index
+        run: node scripts/build-blog-index.js
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --quiet data/blog-index.json && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit updated index
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/blog-index.json
+          git commit -m "chore: auto-update blog search index"
+          git push
