@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    const MODEL_ID = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
+    const MODEL_ID = 'Qwen3-0.6B-q4f16_1-MLC';
     const MAX_HISTORY = 10; // max conversation turns to keep in context
-    const WEBLLM_VERSION = '0.2.78'; // pinned version for stability
+    const WEBLLM_VERSION = '0.2.82'; // pinned version — includes Qwen3 support
 
     let engine = null;
     let isLoading = false;
@@ -219,7 +219,7 @@
         }
 
         isLoading = true;
-        const statusLine = printLine('Loading model... (first time downloads ~500MB)', 'ghost-loading');
+        const statusLine = printLine('Loading model... (first time downloads ~300MB)', 'ghost-loading');
 
         try {
             const webllm = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
