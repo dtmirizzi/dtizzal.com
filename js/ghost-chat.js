@@ -9,12 +9,14 @@
 
     // ─── Model Catalog ───────────────────────────────────────────
 
+    // Note: WebLLM 0.2.82 only supports tool calling for Hermes models.
+    // All models here use the auto-search fallback path (search before every query).
     const MODELS = [
         { id: 'SmolLM2-360M-Instruct-q4f16_1-MLC',   label: 'SmolLM2 360M',  brand: 'HuggingFace', vram: '~376MB',  size: '~200MB', mobile: true,  toolCalling: false },
-        { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',    label: 'Llama 3.2 1B',  brand: 'Meta',        vram: '~879MB',  size: '~500MB', mobile: true,  toolCalling: true  },
-        { id: 'Qwen3-0.6B-q4f16_1-MLC',               label: 'Qwen3 0.6B',    brand: 'Alibaba',     vram: '~1.4GB',  size: '~300MB', mobile: true,  toolCalling: true  },
+        { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',    label: 'Llama 3.2 1B',  brand: 'Meta',        vram: '~879MB',  size: '~500MB', mobile: true,  toolCalling: false },
+        { id: 'Qwen3-0.6B-q4f16_1-MLC',               label: 'Qwen3 0.6B',    brand: 'Alibaba',     vram: '~1.4GB',  size: '~300MB', mobile: true,  toolCalling: false },
         { id: 'gemma-2-2b-it-q4f16_1-MLC',            label: 'Gemma 2 2B',    brand: 'Google',      vram: '~1.9GB',  size: '~1.2GB', mobile: false, toolCalling: false },
-        { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false, toolCalling: true  },
+        { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false, toolCalling: false },
     ];
 
     const DEFAULT_MODEL_ID = 'Qwen3-0.6B-q4f16_1-MLC';
