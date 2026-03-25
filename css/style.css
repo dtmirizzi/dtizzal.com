@@ -744,3 +744,332 @@ body.light-mode .legend-item {
 body.light-mode .legend-percent {
     color: #1a1a1a;
 }
+
+/* ─── Ghost Terminal Chat Widget ─────────────────────────────── */
+
+#ghost-terminal {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* ─── Bottom Bar (Collapsed State) ──────────────────────────── */
+
+#ghost-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10, 10, 10, 0.95);
+    border-top: 1px solid #333;
+    padding: 8px 16px;
+    cursor: pointer;
+    user-select: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+#ghost-bar:hover {
+    background: rgba(20, 20, 20, 0.98);
+}
+
+.ghost-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.ghost-user { color: #4ec9b0; }
+.ghost-at { color: #888; }
+.ghost-host { color: #569cd6; }
+.ghost-sep { color: #888; }
+.ghost-cmd { color: #dcdcaa; }
+
+.ghost-cursor {
+    color: #c0c0c0;
+    animation: ghost-blink 1s step-end infinite;
+    font-size: 12px;
+    margin-left: 2px;
+}
+
+@keyframes ghost-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.ghost-hint {
+    color: #666;
+    font-size: 12px;
+    flex: 1;
+    text-align: right;
+    margin-right: 12px;
+}
+
+#ghost-expand-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+#ghost-expand-btn:hover { color: #ccc; }
+
+.ghost-chevron { font-size: 10px; }
+
+/* ─── Panel (Expanded State) ────────────────────────────────── */
+
+#ghost-panel {
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+    background: rgba(10, 10, 10, 0.97);
+    border-top: 1px solid #444;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+#ghost-panel.ghost-hidden {
+    display: none;
+}
+
+/* ─── Title Bar ─────────────────────────────────────────────── */
+
+#ghost-titlebar {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: rgba(30, 30, 30, 0.9);
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.ghost-titlebar-dots {
+    display: flex;
+    gap: 6px;
+    margin-right: 12px;
+}
+
+.ghost-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.ghost-dot-red { background: #ff5f57; }
+.ghost-dot-yellow { background: #ffbd2e; }
+.ghost-dot-green { background: #28c840; }
+
+.ghost-titlebar-text {
+    flex: 1;
+    color: #888;
+    font-size: 12px;
+    text-align: center;
+}
+
+#ghost-close-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    line-height: 1;
+}
+
+#ghost-close-btn:hover { color: #fff; }
+
+/* ─── Resize Handle ─────────────────────────────────────────── */
+
+#ghost-resize-handle {
+    height: 4px;
+    cursor: ns-resize;
+    background: transparent;
+    flex-shrink: 0;
+    position: relative;
+}
+
+#ghost-resize-handle::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 2px;
+    background: #444;
+    border-radius: 1px;
+}
+
+#ghost-resize-handle:hover::after {
+    background: #888;
+}
+
+/* ─── Output Area ───────────────────────────────────────────── */
+
+#ghost-output {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    line-height: 1.6;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+}
+
+#ghost-output::-webkit-scrollbar {
+    width: 6px;
+}
+
+#ghost-output::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#ghost-output::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+
+.ghost-line {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 0;
+    min-height: 1em;
+}
+
+.ghost-system {
+    color: #666;
+}
+
+.ghost-user-line {
+    color: #4ec9b0;
+}
+
+.ghost-prompt-echo {
+    color: #888;
+}
+
+.ghost-response {
+    color: #d4d4d4;
+}
+
+.ghost-loading {
+    color: #dcdcaa;
+}
+
+.ghost-error {
+    color: #f44747;
+}
+
+/* ─── Input Row ─────────────────────────────────────────────── */
+
+#ghost-input-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px 12px;
+    border-top: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.ghost-input-prompt {
+    color: #4ec9b0;
+    flex-shrink: 0;
+}
+
+#ghost-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #d4d4d4;
+    font-family: 'Courier Prime', 'Courier New', monospace;
+    font-size: 14px;
+    caret-color: #c0c0c0;
+    padding: 0;
+}
+
+#ghost-input::placeholder {
+    color: #555;
+}
+
+#ghost-input:disabled {
+    opacity: 0.5;
+}
+
+/* ─── Light Mode Overrides ──────────────────────────────────── */
+
+body.light-mode #ghost-bar {
+    background: rgba(240, 240, 240, 0.95);
+    border-top-color: #ccc;
+}
+
+body.light-mode #ghost-bar:hover {
+    background: rgba(230, 230, 230, 0.98);
+}
+
+body.light-mode .ghost-user { color: #0e7a5a; }
+body.light-mode .ghost-host { color: #0E8AC8; }
+body.light-mode .ghost-sep { color: #999; }
+body.light-mode .ghost-cmd { color: #795e26; }
+body.light-mode .ghost-cursor { color: #333; }
+body.light-mode .ghost-hint { color: #999; }
+body.light-mode #ghost-expand-btn { color: #999; }
+body.light-mode #ghost-expand-btn:hover { color: #333; }
+
+body.light-mode #ghost-panel {
+    background: rgba(250, 250, 250, 0.97);
+    border-top-color: #ccc;
+}
+
+body.light-mode #ghost-titlebar {
+    background: rgba(230, 230, 230, 0.9);
+    border-bottom-color: #ccc;
+}
+
+body.light-mode .ghost-titlebar-text { color: #888; }
+body.light-mode #ghost-close-btn { color: #888; }
+body.light-mode #ghost-close-btn:hover { color: #333; }
+
+body.light-mode #ghost-resize-handle::after { background: #ccc; }
+body.light-mode #ghost-resize-handle:hover::after { background: #999; }
+
+body.light-mode #ghost-output {
+    scrollbar-color: #ccc transparent;
+}
+
+body.light-mode #ghost-output::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+
+body.light-mode .ghost-system { color: #999; }
+body.light-mode .ghost-user-line { color: #0e7a5a; }
+body.light-mode .ghost-prompt-echo { color: #999; }
+body.light-mode .ghost-response { color: #333; }
+body.light-mode .ghost-loading { color: #795e26; }
+body.light-mode .ghost-error { color: #d32f2f; }
+
+body.light-mode #ghost-input-row {
+    border-top-color: #ccc;
+}
+
+body.light-mode .ghost-input-prompt { color: #0e7a5a; }
+
+body.light-mode #ghost-input {
+    color: #333;
+    caret-color: #333;
+}
+
+body.light-mode #ghost-input::placeholder { color: #aaa; }
+
+/* ─── Mobile Adjustments ────────────────────────────────────── */
+
+@media (max-width: 600px) {
+    #ghost-terminal { font-size: 13px; }
+    #ghost-bar { padding: 6px 12px; }
+    #ghost-panel { height: 50vh; }
+    .ghost-hint { display: none; }
+}
