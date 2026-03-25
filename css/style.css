@@ -1050,6 +1050,74 @@ body.light-mode #ghost-input {
 
 body.light-mode #ghost-input::placeholder { color: rgba(0, 0, 0, 0.2); }
 
+/* ─── Tool Call Visualization ──────────────────────────────── */
+
+.ghost-tool-block {
+    margin: 4px 0;
+    padding: 6px 10px;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ghost-tool-header {
+    display: block;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ghost-tool-body {
+    display: block;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.ghost-tool-footer {
+    display: block;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Ghost Links ─────────────────────────────────────────── */
+
+.ghost-link {
+    color: rgba(130, 180, 255, 0.8);
+    text-decoration: underline;
+    text-decoration-color: rgba(130, 180, 255, 0.3);
+}
+
+.ghost-link:hover {
+    color: rgba(160, 200, 255, 1);
+    text-decoration-color: rgba(160, 200, 255, 0.6);
+}
+
+/* ─── Light Mode: Tool Call & Links ───────────────────────── */
+
+body.light-mode .ghost-tool-block {
+    border-left-color: rgba(0, 0, 0, 0.12);
+}
+
+body.light-mode .ghost-tool-header {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+body.light-mode .ghost-tool-body {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+body.light-mode .ghost-tool-footer {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+body.light-mode .ghost-link {
+    color: rgba(40, 100, 200, 0.8);
+    text-decoration-color: rgba(40, 100, 200, 0.3);
+}
+
+body.light-mode .ghost-link:hover {
+    color: rgba(30, 80, 180, 1);
+    text-decoration-color: rgba(30, 80, 180, 0.6);
+}
+
 /* ─── Mobile Adjustments ────────────────────────────────────── */
 
 @media (max-width: 600px) {
@@ -1057,4 +1125,5 @@ body.light-mode #ghost-input::placeholder { color: rgba(0, 0, 0, 0.2); }
     #ghost-bar { padding: 6px 12px; }
     #ghost-panel { height: 50vh; }
     .ghost-hint { display: none; }
+    .ghost-tool-block { font-size: 11px; }
 }
