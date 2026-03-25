@@ -763,17 +763,17 @@ body.light-mode .legend-percent {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(40, 40, 40, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 15, 15, 0.65);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     padding: 8px 16px;
     cursor: pointer;
     user-select: none;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 #ghost-bar:hover {
-    background: rgba(50, 50, 50, 0.8);
+    background: rgba(20, 20, 20, 0.72);
 }
 
 .ghost-prompt {
@@ -827,10 +827,10 @@ body.light-mode .legend-percent {
     display: flex;
     flex-direction: column;
     height: 380px;
-    background: rgba(30, 30, 30, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10, 10, 10, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 #ghost-panel.ghost-hidden {
@@ -919,6 +919,39 @@ body.light-mode .legend-percent {
     color: rgba(255, 120, 120, 0.7);
 }
 
+/* ─── Ghost Spinner ────────────────────────────────────────── */
+
+.ghost-spinner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.ghost-spinner::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: ghost-spin 0.8s linear infinite;
+}
+
+@keyframes ghost-spin {
+    to { transform: rotate(360deg); }
+}
+
+body.light-mode .ghost-spinner {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+body.light-mode .ghost-spinner::before {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-top-color: rgba(0, 0, 0, 0.45);
+}
+
 /* ─── Input Row ─────────────────────────────────────────────── */
 
 #ghost-input-row {
@@ -957,12 +990,12 @@ body.light-mode .legend-percent {
 /* ─── Light Mode Overrides ──────────────────────────────────── */
 
 body.light-mode #ghost-bar {
-    background: rgba(200, 200, 200, 0.6);
-    border-top-color: rgba(0, 0, 0, 0.08);
+    background: rgba(160, 160, 160, 0.5);
+    border-top-color: rgba(0, 0, 0, 0.06);
 }
 
 body.light-mode #ghost-bar:hover {
-    background: rgba(190, 190, 190, 0.7);
+    background: rgba(150, 150, 150, 0.58);
 }
 
 body.light-mode .ghost-user { color: rgba(0, 0, 0, 0.4); }
@@ -976,8 +1009,8 @@ body.light-mode #ghost-expand-btn { color: rgba(0, 0, 0, 0.25); }
 body.light-mode #ghost-expand-btn:hover { color: rgba(0, 0, 0, 0.5); }
 
 body.light-mode #ghost-panel {
-    background: rgba(220, 220, 220, 0.7);
-    border-top-color: rgba(0, 0, 0, 0.08);
+    background: rgba(180, 180, 180, 0.55);
+    border-top-color: rgba(0, 0, 0, 0.06);
 }
 
 body.light-mode #ghost-resize-handle::after { background: rgba(0, 0, 0, 0.1); }

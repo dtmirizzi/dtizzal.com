@@ -6,6 +6,7 @@
 
     const MODEL_ID = 'Llama-3.2-1B-Instruct-q4f16_1-MLC';
     const MAX_HISTORY = 10; // max conversation turns to keep in context
+    const WEBLLM_VERSION = '0.2.78'; // pinned version for stability
 
     let engine = null;
     let isLoading = false;
@@ -13,6 +14,11 @@
     let chatHistory = [];
     let isExpanded = false;
     let resizeState = null;
+
+    function isMobileDevice() {
+        return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+            || (window.innerWidth <= 768 && 'ontouchstart' in window);
+    }
 
     // ─── DOM Creation ───────────────────────────────────────────
 
@@ -179,6 +185,26 @@
     function printWelcome() {
         const output = document.getElementById('ghost-output');
         output.innerHTML = '';
+
+        if (isMobileDevice()) {
+            printLine("┌──────────────────────────────────────┐", 'ghost-system');
+            printLine("│  ghost@dtizzal.com — digital ghost   │", 'ghost-system');
+            printLine("│                                       │", 'ghost-system');
+            printLine("│  The ghost requires WebGPU + GPU RAM │", 'ghost-system');
+            printLine("│  that most mobile devices lack.       │", 'ghost-system');
+            printLine("│  Visit on desktop Chrome 113+ to     │", 'ghost-system');
+            printLine("│  chat with the ghost.                 │", 'ghost-system');
+            printLine("└──────────────────────────────────────┘", 'ghost-system');
+            printLine('', 'ghost-system');
+            // Disable input on mobile
+            const input = document.getElementById('ghost-input');
+            if (input) {
+                input.disabled = true;
+                input.placeholder = 'desktop only — WebGPU required';
+            }
+            return;
+        }
+
         printLine("┌──────────────────────────────────────┐", 'ghost-system');
         printLine("│  ghost@dtizzal.com — digital ghost   │", 'ghost-system');
         printLine("│  Ask me about DT's blog, ideas,      │", 'ghost-system');
@@ -208,7 +234,7 @@
         const statusLine = printLine('Loading model... (first time downloads ~500MB)', 'ghost-loading');
 
         try {
-            const webllm = await import('https://esm.run/@mlc-ai/web-llm');
+            const webllm = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
 
             engine = await webllm.CreateMLCEngine(MODEL_ID, {
                 initProgressCallback: (progress) => {
@@ -245,6 +271,7 @@
         const input = document.getElementById('ghost-input');
         const query = input.value.trim();
         if (!query || isGenerating) return;
+        if (isMobileDevice()) return;
 
         input.value = '';
 
@@ -274,8 +301,12 @@
             ...chatHistory
         ];
 
-        // Create response line for streaming
+        // Show spinner while waiting for first token
+        const spinnerLine = printHTML('<span class="ghost-spinner">thinking...</span>', '');
+
+        // Create response line for streaming (hidden until first token)
         const responseLine = printLine('', 'ghost-response');
+        responseLine.style.display = 'none';
         let fullResponse = '';
 
         try {
@@ -288,9 +319,19 @@
 
             for await (const chunk of asyncChunkGenerator) {
                 const delta = chunk.choices[0]?.delta?.content || '';
+                if (delta && spinnerLine.parentNode) {
+                    spinnerLine.remove();
+                    responseLine.style.display = '';
+                }
                 fullResponse += delta;
                 responseLine.textContent = fullResponse;
                 scrollOutput();
+            }
+
+            // Clean up spinner if no tokens were generated
+            if (spinnerLine.parentNode) {
+                spinnerLine.remove();
+                responseLine.style.display = '';
             }
 
             if (!fullResponse.trim()) {
