@@ -186,25 +186,6 @@
         const output = document.getElementById('ghost-output');
         output.innerHTML = '';
 
-        if (isMobileDevice()) {
-            printLine("┌──────────────────────────────────────┐", 'ghost-system');
-            printLine("│  ghost@dtizzal.com — digital ghost   │", 'ghost-system');
-            printLine("│                                       │", 'ghost-system');
-            printLine("│  The ghost requires WebGPU + GPU RAM │", 'ghost-system');
-            printLine("│  that most mobile devices lack.       │", 'ghost-system');
-            printLine("│  Visit on desktop Chrome 113+ to     │", 'ghost-system');
-            printLine("│  chat with the ghost.                 │", 'ghost-system');
-            printLine("└──────────────────────────────────────┘", 'ghost-system');
-            printLine('', 'ghost-system');
-            // Disable input on mobile
-            const input = document.getElementById('ghost-input');
-            if (input) {
-                input.disabled = true;
-                input.placeholder = 'desktop only — WebGPU required';
-            }
-            return;
-        }
-
         printLine("┌──────────────────────────────────────┐", 'ghost-system');
         printLine("│  ghost@dtizzal.com — digital ghost   │", 'ghost-system');
         printLine("│  Ask me about DT's blog, ideas,      │", 'ghost-system');
@@ -214,6 +195,13 @@
         printLine("│  Everything runs locally. No servers. │", 'ghost-system');
         printLine("└──────────────────────────────────────┘", 'ghost-system');
         printLine('', 'ghost-system');
+
+        if (isMobileDevice()) {
+            printLine("⚠ Mobile detected — memory is limited.", 'ghost-loading');
+            printLine("  Responses capped to avoid crashes.", 'ghost-loading');
+            printLine("  For best experience, use desktop.", 'ghost-loading');
+            printLine('', 'ghost-system');
+        }
     }
 
     // ─── WebLLM Engine ──────────────────────────────────────────
@@ -271,7 +259,6 @@
         const input = document.getElementById('ghost-input');
         const query = input.value.trim();
         if (!query || isGenerating) return;
-        if (isMobileDevice()) return;
 
         input.value = '';
 
@@ -290,8 +277,10 @@
         // Add to history
         chatHistory.push({ role: 'user', content: query });
 
-        // Trim history to keep context manageable
-        while (chatHistory.length > MAX_HISTORY * 2) {
+        // On mobile, keep less history to reduce memory pressure
+        const mobile = isMobileDevice();
+        const maxTurns = mobile ? 3 : MAX_HISTORY;
+        while (chatHistory.length > maxTurns * 2) {
             chatHistory.shift();
         }
 
@@ -313,7 +302,7 @@
             const asyncChunkGenerator = await engine.chat.completions.create({
                 messages: messages,
                 temperature: 0.7,
-                max_tokens: 512,
+                max_tokens: mobile ? 192 : 512,
                 stream: true,
             });
 
@@ -342,8 +331,24 @@
             // Add assistant response to history
             chatHistory.push({ role: 'assistant', content: fullResponse });
         } catch (err) {
-            responseLine.textContent = 'Error: ' + err.message;
+            if (spinnerLine.parentNode) {
+                spinnerLine.remove();
+                responseLine.style.display = '';
+            }
+            const msg = err.message || String(err);
+            responseLine.textContent = 'Error: ' + msg;
             responseLine.className = 'ghost-line ghost-error';
+
+            // On memory-related errors, try to recover by clearing history and resetting engine
+            if (mobile || /memory|oom|abort|lost|destroyed/i.test(msg)) {
+                chatHistory = [];
+                if (engine) {
+                    try { engine.unload?.(); } catch (_) { /* ignore */ }
+                    engine = null;
+                }
+                printLine('Memory pressure detected — context cleared.', 'ghost-error');
+                printLine('You can try again with a shorter question.', 'ghost-loading');
+            }
         }
 
         // Add blank line after response
