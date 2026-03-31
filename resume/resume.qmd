@@ -28,7 +28,7 @@ format:
 {\color{accentcyan}\rule{\linewidth}{1pt}}\par
 \vspace{4pt}
 {\color{bodytext}\fontsize{10}{12}\selectfont
-CTO and Co-Founder\par
+Principal Software Engineer\par
 \vspace{2pt}
 \color{accentcyan}\faIcon{map-marker-alt}\color{bodytext}\ San Francisco, CA\par
 \color{accentcyan}\faIcon{envelope}\color{bodytext}\ dtmirizzi@gmail.com\par
@@ -42,25 +42,13 @@ CTO and Co-Founder\par
 
 \sectionheading{SUMMARY}
 
-CTO and Co-Founder of Grwnd.ai, pioneering the AI rollup model -- acquiring vertical service businesses and embedding a shared AI operating system to scale them. 9+ years building and scaling security platforms end-to-end. Led cross-functional teams shipping identity, DLP, and threat detection products from zero to production at both startup and enterprise scale. Deep expertise in distributed systems, cloud-native architecture, and fullstack development across Golang, Java, TypeScript, and Python. Early adopter of AI-assisted development -- integrates LLMs into every stage of the workflow from architecture and code generation to testing, code review, and documentation. Conference speaker, open-source contributor, and technical writer. SoCal native living in San Francisco. Active artist and angel investor in the cybersecurity space.
+Advisor at Grwnd.ai, pioneering the AI rollup model -- acquiring vertical service businesses and embedding a shared AI operating system to scale them. 9+ years building and scaling security platforms end-to-end. Led cross-functional teams shipping identity, DLP, and threat detection products from zero to production at both startup and enterprise scale. Deep expertise in distributed systems, cloud-native architecture, and fullstack development across Golang, Java, TypeScript, and Python. Early adopter of AI-assisted development -- integrates LLMs into every stage of the workflow from architecture and code generation to testing, code review, and documentation. Conference speaker, open-source contributor, and technical writer. SoCal native living in San Francisco. Active artist and angel investor in the cybersecurity space.
 
 \vspace{-2pt}
 
 \sectionheading{EXPERIENCE}
 
-\jobtitle{CTO \& Co-Founder}{Grwnd.ai}{Mar 2026 -- Present}{San Francisco, CA}{https://grwnd.ai}
-
-\vspace{-8pt}
-
-- Pioneered the AI rollup strategy: acquiring vertical service businesses and embedding a shared AI operating system to standardize workflows, compound data, and scale capacity across the portfolio
-- Architecting the core platform from scratch -- canonical data model, workflow orchestration engine, and auditable AI runtime that operators trust
-- Designing the acquisition onboarding playbook to collapse time-to-value for each new portfolio company
-- Leading hiring and culture, building a team of product engineers, applied AI engineers, and integration specialists
-- \techstack{Golang, Python, TypeScript, Kubernetes, LLMs}
-
-\vspace{1pt}
-
-\jobtitle{Principal Software Engineer}{Palo Alto Networks}{Nov 2023 -- Mar 2026}{San Francisco, CA}{https://www.paloaltonetworks.com}
+\jobtitle{Principal Software Engineer}{Palo Alto Networks}{Nov 2023 -- Present}{San Francisco, CA}{https://www.paloaltonetworks.com}
 
 \vspace{-8pt}
 
@@ -69,6 +57,18 @@ CTO and Co-Founder of Grwnd.ai, pioneering the AI rollup model -- acquiring vert
 - Own and operate multiple production services in the Data Loss Prevention stack serving enterprise customers at scale
 - Mentor engineers across teams and drive architectural decisions for the broader DLP platform
 - \techstack{Java, Spring, Quarkus, TypeScript, Golang, Python, Kubernetes}
+
+\vspace{1pt}
+
+\jobtitle{Advisor}{Grwnd.ai}{Mar 2026 -- Present}{San Francisco, CA}{https://grwnd.ai}
+
+\vspace{-8pt}
+
+- Pioneered the AI rollup strategy: acquiring vertical service businesses and embedding a shared AI operating system to standardize workflows, compound data, and scale capacity across the portfolio
+- Architecting the core platform from scratch -- canonical data model, workflow orchestration engine, and auditable AI runtime that operators trust
+- Designing the acquisition onboarding playbook to collapse time-to-value for each new portfolio company
+- Leading hiring and culture, building a team of product engineers, applied AI engineers, and integration specialists
+- \techstack{Golang, Python, TypeScript, Kubernetes, LLMs}
 
 \vspace{1pt}
 
