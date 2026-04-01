@@ -3,6 +3,8 @@ format:
   pdf:
     pdf-engine: xelatex
     documentclass: article
+    metadata:
+      keywords: [machine learning, deep learning, natural language processing, NLP, large language models, LLM, generative AI, GenAI, RAG, retrieval augmented generation, prompt engineering, fine-tuning, transformer, neural network, computer vision, MLOps, model deployment, AI infrastructure, embeddings, vector database, agent framework, agentic AI, reinforcement learning, RLHF, diffusion models, inference optimization, AWS, GCP, Azure, cloud architecture, cloud-native, microservices, serverless, infrastructure as code, IaC, Terraform, CI/CD, DevOps, SRE, site reliability engineering, containerization, Docker, Kubernetes, K8s, service mesh, Istio, observability, monitoring, Prometheus, Grafana, load balancing, auto-scaling, distributed computing, data pipeline, ETL, Kafka, event-driven architecture, API gateway, cloud security, IAM, zero trust, SIEM, SOAR, threat detection, DLP, data loss prevention, identity and access management, SaaS security, CASB, endpoint security, vulnerability management, penetration testing, incident response, compliance, SOC2, FedRAMP]
     geometry:
       - margin=0.5in
       - top=0.4in
@@ -42,7 +44,7 @@ Principal Software Engineer\par
 
 \sectionheading{SUMMARY}
 
-Advisor at Grwnd.ai, pioneering the AI rollup model -- acquiring vertical service businesses and embedding a shared AI operating system to scale them. 9+ years building and scaling security platforms end-to-end. Led cross-functional teams shipping identity, DLP, and threat detection products from zero to production at both startup and enterprise scale. Deep expertise in distributed systems, cloud-native architecture, and fullstack development across Golang, Java, TypeScript, and Python. Early adopter of AI-assisted development -- integrates LLMs into every stage of the workflow from architecture and code generation to testing, code review, and documentation. Conference speaker, open-source contributor, and technical writer. SoCal native living in San Francisco. Active artist and angel investor in the cybersecurity space.
+9+ years building and scaling security platforms end-to-end. Led cross-functional teams shipping identity, DLP, and threat detection products from zero to production at both startup and enterprise scale. Deep expertise in distributed systems, cloud-native architecture, and fullstack development across Golang, Java, TypeScript, and Python. Early adopter of AI-assisted engineering - integrates LLMs into every stage of the software lifecycle from architecture and code generation to testing, code review, and documentation. Passionate about the intersection of AI and cybersecurity, building intelligent systems that detect, prevent, and respond to threats at scale. Conference speaker, open-source contributor, and technical writer. SoCal native living in San Francisco.
 
 \vspace{-2pt}
 
@@ -60,19 +62,19 @@ Advisor at Grwnd.ai, pioneering the AI rollup model -- acquiring vertical servic
 
 \vspace{1pt}
 
+\jobtitle{Senior Staff Engineer}{Palo Alto Networks}{Aug 2023 -- Nov 2023}{San Francisco, CA}{https://www.paloaltonetworks.com}
+
+\vspace{1pt}
+
 \jobtitle{Advisor}{Grwnd.ai}{Mar 2026 -- Present}{San Francisco, CA}{https://grwnd.ai}
 
 \vspace{-8pt}
 
 - Pioneered the AI rollup strategy: acquiring vertical service businesses and embedding a shared AI operating system to standardize workflows, compound data, and scale capacity across the portfolio
-- Architecting the core platform from scratch -- canonical data model, workflow orchestration engine, and auditable AI runtime that operators trust
+- Architecting the core platform from scratch - canonical data model, workflow orchestration engine, and auditable AI runtime that operators trust
 - Designing the acquisition onboarding playbook to collapse time-to-value for each new portfolio company
 - Leading hiring and culture, building a team of product engineers, applied AI engineers, and integration specialists
 - \techstack{Golang, Python, TypeScript, Kubernetes, LLMs}
-
-\vspace{1pt}
-
-\jobtitle{Senior Staff Engineer}{Palo Alto Networks}{Aug 2023 -- Nov 2023}{San Francisco, CA}{https://www.paloaltonetworks.com}
 
 \vspace{1pt}
 
@@ -129,13 +131,17 @@ Advisor at Grwnd.ai, pioneering the AI rollup model -- acquiring vertical servic
 \begin{minipage}[t]{0.48\textwidth}
 {\color{accentcyan}\textbf{Languages:}} {\color{bodytext}Golang, Java, Python, TypeScript, SQL}\par
 \vspace{2pt}
-{\color{accentcyan}\textbf{Frameworks:}} {\color{bodytext}Spring, Quarkus, React.js, gRPC}\par
+{\color{accentcyan}\textbf{Frameworks:}} {\color{bodytext}Spring, Quarkus, React.js}\par
+\vspace{2pt}
+{\color{accentcyan}\textbf{AI/ML:}} {\color{bodytext}Claude, OpenAI, Gemini, Llama, Ollama, LangChain, Anthropic SDK, OpenAI SDK}\par
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
 {\color{accentcyan}\textbf{Infrastructure:}} {\color{bodytext}Kubernetes, Docker, Linux, AWS, GCP}\par
 \vspace{2pt}
-{\color{accentcyan}\textbf{Other:}} {\color{bodytext}Distributed Systems, Snowflake, CI/CD, System Design}\par
+{\color{accentcyan}\textbf{AI Agents:}} {\color{bodytext}Claude Code, OpenClaw, Cedar}\par
+\vspace{2pt}
+{\color{accentcyan}\textbf{Other:}} {\color{bodytext}Distributed Systems, gRPC, Snowflake, CI/CD, System Design}\par
 \end{minipage}
 
 \vspace{-2pt}
@@ -147,7 +153,3 @@ Advisor at Grwnd.ai, pioneering the AI rollup model -- acquiring vertical servic
 \vspace{-8pt}
 
 - Computer Science Teaching Assistant (May 2015 -- Apr 2018)
-
-\begin{center}
-{\color{dimtext}\footnotesize Investor: Obsidian Security (Jul 2023 -- Present)}
-\end{center}
