@@ -31,6 +31,7 @@ const POST_META = [
     { number: 13, slug: 'harness-is-the-security-layer',        title: 'The Harness Is the Security Layer' },
     { number: 14, slug: 'harness-engineering',                  title: 'Harness Engineering: The Discipline That Replaces Writing Code' },
     { number: 15, slug: 'pi-governance',                        title: 'pi-governance: The Harness You Can Actually Install' },
+    { number: 16, slug: 'soc2-stamp',                            title: 'The SOC 2 Stamp Used to Mean Something' },
 ];
 
 function stripHTML(html) {
