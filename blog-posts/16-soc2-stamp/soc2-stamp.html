@@ -131,42 +131,49 @@
     <p>The friction was a feature. It forced you to stand up real controls, assign real owners, and operate them over a real observation period. The report was expensive to produce, which meant it was expensive to fake.</p>
 
     <!-- Diagram 1: The Compression of SOC 2 -->
-    <svg viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
-      <text x="380" y="24" text-anchor="middle" class="diagram-text diagram-title">The Compression of SOC 2</text>
-      <text x="380" y="42" text-anchor="middle" class="diagram-text diagram-small">Time, cost, and labor to achieve certification by era</text>
-      <!-- Bar: Pre-2018, 9-12 months, height 162 -->
-      <rect x="70" y="64" width="110" height="162" rx="3" class="diagram-bar-ok"/>
-      <text x="125" y="59" text-anchor="middle" class="diagram-text diagram-small diagram-ok">9-12 months</text>
-      <text x="125" y="240" text-anchor="middle" class="diagram-text diagram-tiny">Pre-2018</text>
-      <text x="125" y="254" text-anchor="middle" class="diagram-text diagram-tiny">Traditional</text>
-      <text x="125" y="270" text-anchor="middle" class="diagram-text diagram-tiny">$100K+</text>
-      <text x="125" y="284" text-anchor="middle" class="diagram-text diagram-tiny">400-600 hrs</text>
-      <!-- Bar: 2019-2024, 4-6 months, height 81 -->
-      <rect x="210" y="145" width="110" height="81" rx="3" class="diagram-bar-gold"/>
-      <text x="265" y="140" text-anchor="middle" class="diagram-text diagram-small diagram-gold">4-6 months</text>
-      <text x="265" y="240" text-anchor="middle" class="diagram-text diagram-tiny">2019-2024</text>
-      <text x="265" y="254" text-anchor="middle" class="diagram-text diagram-tiny">Vanta / Drata</text>
-      <text x="265" y="270" text-anchor="middle" class="diagram-text diagram-tiny">$30K-$75K</text>
-      <text x="265" y="284" text-anchor="middle" class="diagram-text diagram-tiny">100-200 hrs</text>
-      <!-- Bar: 2025, 4-8 weeks, height 27 -->
-      <rect x="350" y="199" width="110" height="27" rx="3" class="diagram-bar-warn"/>
-      <text x="405" y="194" text-anchor="middle" class="diagram-text diagram-small diagram-warn">4-8 weeks</text>
-      <text x="405" y="240" text-anchor="middle" class="diagram-text diagram-tiny">2025</text>
-      <text x="405" y="254" text-anchor="middle" class="diagram-text diagram-tiny">Accelerated</text>
-      <text x="405" y="270" text-anchor="middle" class="diagram-text diagram-tiny">$15K-$30K</text>
-      <text x="405" y="284" text-anchor="middle" class="diagram-text diagram-tiny">40-80 hrs</text>
+    <svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">The Compression of SOC 2</text>
+      <text x="380" y="38" text-anchor="middle" class="diagram-text diagram-small">Time, cost, and labor to achieve certification by era</text>
+
+      <!-- Bar: Pre-2018, 9-12 months, height 150 (tallest) -->
+      <text x="125" y="56" text-anchor="middle" class="diagram-text diagram-small diagram-ok">9-12 months</text>
+      <rect x="70" y="62" width="110" height="150" rx="3" class="diagram-bar-ok"/>
+
+      <!-- Bar: 2019-2024, 4-6 months, height 75 -->
+      <text x="265" y="139" text-anchor="middle" class="diagram-text diagram-small diagram-gold">4-6 months</text>
+      <rect x="210" y="145" width="110" height="67" rx="3" class="diagram-bar-gold"/>
+
+      <!-- Bar: 2025, 4-8 weeks, height 28 -->
+      <text x="405" y="188" text-anchor="middle" class="diagram-text diagram-small diagram-warn">4-8 weeks</text>
+      <rect x="350" y="194" width="110" height="18" rx="3" class="diagram-bar-warn"/>
+
       <!-- Bar: Delve, Days, height 8 -->
-      <rect x="490" y="218" width="110" height="8" rx="2" class="diagram-bar-danger"/>
-      <rect x="508" y="188" width="72" height="22" rx="3" class="diagram-bg-warn diagram-box-warn"/>
-      <text x="544" y="203" text-anchor="middle" class="diagram-text diagram-small diagram-warn">FRAUD</text>
-      <text x="545" y="215" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Days</text>
-      <text x="545" y="240" text-anchor="middle" class="diagram-text diagram-tiny">Delve</text>
-      <text x="545" y="254" text-anchor="middle" class="diagram-text diagram-tiny">494 identical</text>
-      <text x="545" y="268" text-anchor="middle" class="diagram-text diagram-tiny">reports</text>
-      <text x="545" y="284" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">$6K</text>
+      <!-- FRAUD badge above the bar -->
+      <rect x="506" y="160" width="78" height="26" rx="3" class="diagram-bg-warn diagram-box-warn"/>
+      <text x="545" y="178" text-anchor="middle" class="diagram-text diagram-small diagram-warn">FRAUD</text>
+      <!-- connector line from badge to bar -->
+      <line x1="545" y1="186" x2="545" y2="204" class="diagram-warn-stroke" stroke-width="1" stroke-dasharray="3,2"/>
+      <rect x="490" y="204" width="110" height="8" rx="2" class="diagram-bar-danger"/>
+
       <!-- Baseline -->
-      <line x1="50" y1="226" x2="680" y2="226" class="diagram-dim-stroke" stroke-width="0.8"/>
-      <text x="380" y="300" text-anchor="middle" class="diagram-text diagram-tiny">"Speed is not the problem. Removing the humans, the judgment, and the actual controls is."</text>
+      <line x1="50" y1="212" x2="680" y2="212" class="diagram-dim-stroke" stroke-width="0.8"/>
+
+      <!-- Labels below baseline — 16px line spacing, starting at y=228 -->
+      <text x="125" y="228" text-anchor="middle" class="diagram-text diagram-tiny">Pre-2018 Traditional</text>
+      <text x="125" y="244" text-anchor="middle" class="diagram-text diagram-tiny">$100K+  ·  400-600 hrs</text>
+
+      <text x="265" y="228" text-anchor="middle" class="diagram-text diagram-tiny">2019-2024  ·  Vanta / Drata</text>
+      <text x="265" y="244" text-anchor="middle" class="diagram-text diagram-tiny">$30K-$75K  ·  100-200 hrs</text>
+
+      <text x="405" y="228" text-anchor="middle" class="diagram-text diagram-tiny">2025 Accelerated</text>
+      <text x="405" y="244" text-anchor="middle" class="diagram-text diagram-tiny">$15K-$30K  ·  40-80 hrs</text>
+
+      <text x="545" y="228" text-anchor="middle" class="diagram-text diagram-tiny">Delve  ·  494 identical reports</text>
+      <text x="545" y="244" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">$6K  ·  Days</text>
+
+      <!-- Bottom annotation -->
+      <text x="380" y="276" text-anchor="middle" class="diagram-text diagram-tiny">"Speed is not the problem.</text>
+      <text x="380" y="292" text-anchor="middle" class="diagram-text diagram-tiny">Removing the humans, the judgment, and the actual controls is."</text>
     </svg>
 
     <h2>Vanta Creates a Category</h2>
@@ -186,7 +193,7 @@
     <p>The slide from legitimate automation to outright fraud is not a cliff. It is a slope. Each level makes the next easier to rationalize.</p>
 
     <!-- Diagram 2: The SOC 2 Degradation Spectrum -->
-    <svg viewBox="0 0 760 395" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+    <svg viewBox="0 0 760 445" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
       <defs>
         <linearGradient id="spectrumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#51cf66" stop-opacity="0.5"/>
@@ -196,69 +203,82 @@
         </linearGradient>
       </defs>
       <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">The SOC 2 Degradation Spectrum</text>
+
       <!-- Gradient bar -->
       <rect x="30" y="34" width="700" height="8" rx="4" fill="url(#spectrumGrad)"/>
-      <text x="30" y="52" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Real Security</text>
-      <text x="730" y="52" text-anchor="end" class="diagram-text diagram-tiny diagram-warn">Pure Theater</text>
-      <!-- Card 1 -->
-      <rect x="30" y="60" width="158" height="195" rx="5" class="diagram-box-ok diagram-bg-ok"/>
-      <text x="109" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-ok">Level 1</text>
-      <text x="109" y="97" text-anchor="middle" class="diagram-text diagram-small">Legitimate</text>
-      <text x="109" y="112" text-anchor="middle" class="diagram-text diagram-small">Automation</text>
-      <line x1="50" y1="120" x2="168" y2="120" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <text x="109" y="137" text-anchor="middle" class="diagram-text diagram-tiny">Real controls exist</text>
-      <text x="109" y="153" text-anchor="middle" class="diagram-text diagram-tiny">Evidence from live</text>
-      <text x="109" y="168" text-anchor="middle" class="diagram-text diagram-tiny">systems</text>
-      <text x="109" y="184" text-anchor="middle" class="diagram-text diagram-tiny">Independent auditors</text>
-      <text x="109" y="199" text-anchor="middle" class="diagram-text diagram-tiny">exercise judgment</text>
-      <text x="109" y="241" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">Vanta, Drata,</text>
-      <text x="109" y="256" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">done correctly</text>
-      <!-- Card 2 -->
-      <rect x="200" y="60" width="158" height="195" rx="5" class="diagram-box-gold diagram-bg-gold"/>
-      <text x="279" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-gold">Level 2</text>
-      <text x="279" y="97" text-anchor="middle" class="diagram-text diagram-small">Template-Driven</text>
-      <text x="279" y="112" text-anchor="middle" class="diagram-text diagram-small">Compliance</text>
-      <line x1="220" y1="120" x2="338" y2="120" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <text x="279" y="137" text-anchor="middle" class="diagram-text diagram-tiny">Policies adopted,</text>
-      <text x="279" y="153" text-anchor="middle" class="diagram-text diagram-tiny">never operationalized</text>
-      <text x="279" y="168" text-anchor="middle" class="diagram-text diagram-tiny">Dashboard half-full</text>
-      <text x="279" y="184" text-anchor="middle" class="diagram-text diagram-tiny">No control owners</text>
-      <text x="279" y="199" text-anchor="middle" class="diagram-text diagram-tiny">Access reviews overdue</text>
-      <text x="279" y="241" text-anchor="middle" class="diagram-text diagram-tiny diagram-gold">Most common</text>
-      <text x="279" y="256" text-anchor="middle" class="diagram-text diagram-tiny diagram-gold">failure mode</text>
-      <!-- Card 3 -->
-      <rect x="370" y="60" width="158" height="195" rx="5" class="diagram-box-warn diagram-bg-warn"/>
-      <text x="449" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Level 3</text>
-      <text x="449" y="97" text-anchor="middle" class="diagram-text diagram-small">Auditor</text>
-      <text x="449" y="112" text-anchor="middle" class="diagram-text diagram-small">Incentive Rot</text>
-      <line x1="390" y1="120" x2="508" y2="120" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <text x="449" y="137" text-anchor="middle" class="diagram-text diagram-tiny">Rubber-stamp firms</text>
-      <text x="449" y="153" text-anchor="middle" class="diagram-text diagram-tiny">maximize throughput</text>
-      <text x="449" y="168" text-anchor="middle" class="diagram-text diagram-tiny">Rigorous auditors</text>
-      <text x="449" y="184" text-anchor="middle" class="diagram-text diagram-tiny">are slower, costlier</text>
-      <text x="449" y="199" text-anchor="middle" class="diagram-text diagram-tiny">Nobody asks who</text>
-      <text x="449" y="214" text-anchor="middle" class="diagram-text diagram-tiny">audited you</text>
-      <text x="449" y="241" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">Market rewards</text>
-      <text x="449" y="256" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">cheapest path</text>
-      <!-- Card 4 -->
-      <rect x="540" y="60" width="190" height="195" rx="5" class="diagram-box-warn diagram-bg-warn"/>
-      <text x="635" y="80" text-anchor="middle" class="diagram-text diagram-label diagram-warn">Level 4</text>
-      <text x="635" y="97" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Outright Fraud</text>
-      <line x1="560" y1="105" x2="710" y2="105" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <text x="635" y="122" text-anchor="middle" class="diagram-text diagram-tiny">Pre-written auditor</text>
-      <text x="635" y="138" text-anchor="middle" class="diagram-text diagram-tiny">conclusions</text>
-      <text x="635" y="153" text-anchor="middle" class="diagram-text diagram-tiny">Shell CPA firms</text>
-      <text x="635" y="168" text-anchor="middle" class="diagram-text diagram-tiny">Auto-generated</text>
-      <text x="635" y="183" text-anchor="middle" class="diagram-text diagram-tiny">evidence</text>
-      <text x="635" y="198" text-anchor="middle" class="diagram-text diagram-tiny">494 identical reports</text>
-      <text x="635" y="241" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Delve</text>
-      <!-- Insight box -->
-      <rect x="30" y="272" width="700" height="110" rx="5" class="diagram-bg-neutral diagram-box"/>
-      <text x="380" y="292" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Key Insight</text>
-      <text x="380" y="310" text-anchor="middle" class="diagram-text diagram-tiny">"The jump from Level 1 to Level 4 is not a cliff. It is a slope.</text>
-      <text x="380" y="326" text-anchor="middle" class="diagram-text diagram-tiny">When nobody reads the report, why not template it?</text>
-      <text x="380" y="342" text-anchor="middle" class="diagram-text diagram-tiny">When the templates are identical, who notices?</text>
-      <text x="380" y="358" text-anchor="middle" class="diagram-text diagram-tiny">The system rewards the shortcut at every step."</text>
+      <text x="30"  y="52" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Real Security</text>
+      <text x="730" y="52" text-anchor="end"   class="diagram-text diagram-tiny diagram-warn">Pure Theater</text>
+
+      <!-- Cards: y=60, height=230, bottom=290 -->
+
+      <!-- Card 1: Legitimate Automation -->
+      <rect x="30" y="60" width="158" height="230" rx="5" class="diagram-box-ok diagram-bg-ok"/>
+      <text x="109" y="82"  text-anchor="middle" class="diagram-text diagram-label diagram-ok">Level 1</text>
+      <text x="109" y="100" text-anchor="middle" class="diagram-text diagram-small">Legitimate</text>
+      <text x="109" y="116" text-anchor="middle" class="diagram-text diagram-small">Automation</text>
+      <line x1="48" y1="126" x2="170" y2="126" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="109" y="144" text-anchor="middle" class="diagram-text diagram-tiny">Real controls exist</text>
+      <text x="109" y="160" text-anchor="middle" class="diagram-text diagram-tiny">Evidence from live</text>
+      <text x="109" y="176" text-anchor="middle" class="diagram-text diagram-tiny">systems</text>
+      <text x="109" y="192" text-anchor="middle" class="diagram-text diagram-tiny">Independent auditors</text>
+      <text x="109" y="208" text-anchor="middle" class="diagram-text diagram-tiny">exercise judgment</text>
+      <line x1="48" y1="220" x2="170" y2="220" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="109" y="238" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">Vanta, Drata,</text>
+      <text x="109" y="254" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">done correctly</text>
+
+      <!-- Card 2: Template-Driven -->
+      <rect x="200" y="60" width="158" height="230" rx="5" class="diagram-box-gold diagram-bg-gold"/>
+      <text x="279" y="82"  text-anchor="middle" class="diagram-text diagram-label diagram-gold">Level 2</text>
+      <text x="279" y="100" text-anchor="middle" class="diagram-text diagram-small">Template-Driven</text>
+      <text x="279" y="116" text-anchor="middle" class="diagram-text diagram-small">Compliance</text>
+      <line x1="218" y1="126" x2="340" y2="126" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="279" y="144" text-anchor="middle" class="diagram-text diagram-tiny">Policies adopted,</text>
+      <text x="279" y="160" text-anchor="middle" class="diagram-text diagram-tiny">never operationalized</text>
+      <text x="279" y="176" text-anchor="middle" class="diagram-text diagram-tiny">Dashboard half-full</text>
+      <text x="279" y="192" text-anchor="middle" class="diagram-text diagram-tiny">No control owners</text>
+      <text x="279" y="208" text-anchor="middle" class="diagram-text diagram-tiny">Access reviews overdue</text>
+      <line x1="218" y1="220" x2="340" y2="220" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="279" y="238" text-anchor="middle" class="diagram-text diagram-tiny diagram-gold">Most common</text>
+      <text x="279" y="254" text-anchor="middle" class="diagram-text diagram-tiny diagram-gold">failure mode</text>
+
+      <!-- Card 3: Auditor Incentive Rot -->
+      <rect x="370" y="60" width="158" height="230" rx="5" class="diagram-box-warn diagram-bg-warn"/>
+      <text x="449" y="82"  text-anchor="middle" class="diagram-text diagram-label diagram-warn">Level 3</text>
+      <text x="449" y="100" text-anchor="middle" class="diagram-text diagram-small">Auditor</text>
+      <text x="449" y="116" text-anchor="middle" class="diagram-text diagram-small">Incentive Rot</text>
+      <line x1="388" y1="126" x2="510" y2="126" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="449" y="144" text-anchor="middle" class="diagram-text diagram-tiny">Rubber-stamp firms</text>
+      <text x="449" y="160" text-anchor="middle" class="diagram-text diagram-tiny">maximize throughput</text>
+      <text x="449" y="176" text-anchor="middle" class="diagram-text diagram-tiny">Rigorous auditors</text>
+      <text x="449" y="192" text-anchor="middle" class="diagram-text diagram-tiny">are slower, costlier</text>
+      <text x="449" y="208" text-anchor="middle" class="diagram-text diagram-tiny">Nobody asks who</text>
+      <text x="449" y="222" text-anchor="middle" class="diagram-text diagram-tiny">audited you</text>
+      <line x1="388" y1="232" x2="510" y2="232" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="449" y="249" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">Market rewards</text>
+      <text x="449" y="265" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">cheapest path</text>
+
+      <!-- Card 4: Outright Fraud -->
+      <rect x="540" y="60" width="190" height="230" rx="5" class="diagram-box-warn diagram-bg-warn"/>
+      <text x="635" y="82"  text-anchor="middle" class="diagram-text diagram-label diagram-warn">Level 4</text>
+      <text x="635" y="100" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Outright Fraud</text>
+      <line x1="558" y1="110" x2="712" y2="110" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="635" y="128" text-anchor="middle" class="diagram-text diagram-tiny">Pre-written auditor</text>
+      <text x="635" y="144" text-anchor="middle" class="diagram-text diagram-tiny">conclusions</text>
+      <text x="635" y="160" text-anchor="middle" class="diagram-text diagram-tiny">Shell CPA firms</text>
+      <text x="635" y="176" text-anchor="middle" class="diagram-text diagram-tiny">Auto-generated</text>
+      <text x="635" y="192" text-anchor="middle" class="diagram-text diagram-tiny">evidence</text>
+      <text x="635" y="208" text-anchor="middle" class="diagram-text diagram-tiny">494 identical reports</text>
+      <line x1="558" y1="220" x2="712" y2="220" class="diagram-dim-stroke" stroke-width="0.5"/>
+      <text x="635" y="238" text-anchor="middle" class="diagram-text diagram-small diagram-warn">Delve</text>
+      <text x="635" y="256" text-anchor="middle" class="diagram-text diagram-tiny diagram-warn">$32M raised  ·  $6K/report</text>
+
+      <!-- Insight box: y=305, height=126, bottom=431 -->
+      <rect x="30" y="305" width="700" height="126" rx="5" class="diagram-bg-neutral diagram-box"/>
+      <text x="380" y="326" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Key Insight</text>
+      <text x="380" y="346" text-anchor="middle" class="diagram-text diagram-tiny">"The jump from Level 1 to Level 4 is not a cliff. It is a slope.</text>
+      <text x="380" y="362" text-anchor="middle" class="diagram-text diagram-tiny">When nobody reads the report, why not template it?</text>
+      <text x="380" y="378" text-anchor="middle" class="diagram-text diagram-tiny">When the templates are identical, who notices?</text>
+      <text x="380" y="394" text-anchor="middle" class="diagram-text diagram-tiny">The system rewards the shortcut at every step."</text>
     </svg>
 
     <p><strong>Level 1</strong> is where platforms like Vanta and Drata operate when used correctly. Real controls exist, evidence is pulled from live systems, and independent auditors exercise judgment. But roughly 40 to 60 percent of SOC 2 controls require human processes, ownership, and operational cadence that no platform handles. When that gap is not addressed, you slide into Level 2.</p>
@@ -306,54 +326,68 @@
     <p>If the stamp is free, you need something that cannot be faked. Three properties matter.</p>
 
     <!-- Diagram 3: What Should Replace the Annual Stamp -->
-    <svg viewBox="0 0 760 430" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+    <svg viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
       <defs>
         <marker id="shiftArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
           <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
         </marker>
       </defs>
-      <text x="380" y="24" text-anchor="middle" class="diagram-text diagram-title">What Should Replace the Annual Stamp</text>
-      <!-- Shift 1 -->
-      <rect x="30" y="40" width="700" height="108" rx="5" class="diagram-box diagram-bg-neutral"/>
-      <text x="50" y="60" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 1 - Point-in-Time to Continuous Monitoring</text>
-      <line x1="30" y1="68" x2="730" y2="68" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <rect x="45" y="75" width="300" height="62" rx="3" class="diagram-bg-warn diagram-box-warn"/>
-      <text x="60" y="93" text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">What Should Replace the Annual Stamp</text>
+
+      <!-- Shift 1: Point-in-Time → Continuous Monitoring -->
+      <rect x="30" y="36" width="700" height="120" rx="5" class="diagram-box diagram-bg-neutral"/>
+      <text x="50" y="56" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 1 — Point-in-Time to Continuous Monitoring</text>
+      <line x1="38" y1="65" x2="722" y2="65" class="diagram-dim-stroke" stroke-width="0.5"/>
+
+      <rect x="45" y="73" width="300" height="74" rx="3" class="diagram-bg-warn diagram-box-warn"/>
+      <text x="60" y="91"  text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
       <text x="60" y="109" text-anchor="start" class="diagram-text diagram-tiny">Annual audit windows. Controls tested once.</text>
-      <text x="60" y="125" text-anchor="start" class="diagram-text diagram-tiny">Non-compliant the morning after.</text>
-      <line x1="354" y1="106" x2="374" y2="106" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
-      <rect x="384" y="75" width="335" height="62" rx="3" class="diagram-bg-ok diagram-box-ok"/>
-      <text x="399" y="93" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
-      <text x="399" y="109" text-anchor="start" class="diagram-text diagram-tiny">Real-time control telemetry from live systems.</text>
-      <text x="399" y="125" text-anchor="start" class="diagram-text diagram-tiny">Drift detected in minutes. Audit becomes a formality.</text>
-      <!-- Shift 2 -->
-      <rect x="30" y="160" width="700" height="108" rx="5" class="diagram-box diagram-bg-neutral"/>
-      <text x="50" y="180" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 2 - Evidence Collection to Compliance as Code</text>
-      <line x1="30" y1="188" x2="730" y2="188" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <rect x="45" y="195" width="300" height="62" rx="3" class="diagram-bg-warn diagram-box-warn"/>
-      <text x="60" y="213" text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
-      <text x="60" y="229" text-anchor="start" class="diagram-text diagram-tiny">Screenshots. Manual uploads. Evidence collected</text>
-      <text x="60" y="245" text-anchor="start" class="diagram-text diagram-tiny">after the fact. AI can author all of it.</text>
-      <line x1="354" y1="226" x2="374" y2="226" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
-      <rect x="384" y="195" width="335" height="62" rx="3" class="diagram-bg-ok diagram-box-ok"/>
-      <text x="399" y="213" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
-      <text x="399" y="229" text-anchor="start" class="diagram-text diagram-tiny">Policies in OPA/Rego enforced in CI/CD.</text>
-      <text x="399" y="245" text-anchor="start" class="diagram-text diagram-tiny">Git repo = evidence. Versioned, immutable.</text>
-      <!-- Shift 3 -->
-      <rect x="30" y="280" width="700" height="108" rx="5" class="diagram-box diagram-bg-neutral"/>
-      <text x="50" y="300" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 3 - Binary Gate to Transparent Trust</text>
-      <line x1="30" y1="308" x2="730" y2="308" class="diagram-dim-stroke" stroke-width="0.5"/>
-      <rect x="45" y="315" width="300" height="62" rx="3" class="diagram-bg-warn diagram-box-warn"/>
-      <text x="60" y="333" text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
-      <text x="60" y="349" text-anchor="start" class="diagram-text diagram-tiny">Yes/No SOC 2 question. Nobody evaluates</text>
-      <text x="60" y="365" text-anchor="start" class="diagram-text diagram-tiny">audit quality or reads the report.</text>
-      <line x1="354" y1="346" x2="374" y2="346" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
-      <rect x="384" y="315" width="335" height="62" rx="3" class="diagram-bg-ok diagram-box-ok"/>
-      <text x="399" y="333" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
-      <text x="399" y="349" text-anchor="start" class="diagram-text diagram-tiny">Live dashboards: control pass rate, exceptions,</text>
-      <text x="399" y="365" text-anchor="start" class="diagram-text diagram-tiny">MTTR, auditor identity - queryable at point of sale.</text>
-      <!-- Bottom -->
-      <text x="380" y="412" text-anchor="middle" class="diagram-text diagram-tiny">"The goal is not faster audits. It is making the audit a formality because the data already speaks for itself."</text>
+      <text x="60" y="127" text-anchor="start" class="diagram-text diagram-tiny">Non-compliant the morning after.</text>
+
+      <line x1="353" y1="110" x2="373" y2="110" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
+
+      <rect x="383" y="73" width="337" height="74" rx="3" class="diagram-bg-ok diagram-box-ok"/>
+      <text x="398" y="91"  text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
+      <text x="398" y="109" text-anchor="start" class="diagram-text diagram-tiny">Real-time control telemetry from live systems.</text>
+      <text x="398" y="127" text-anchor="start" class="diagram-text diagram-tiny">Drift detected in minutes. Audit becomes a formality.</text>
+
+      <!-- Shift 2: Evidence Collection → Compliance as Code -->
+      <rect x="30" y="170" width="700" height="120" rx="5" class="diagram-box diagram-bg-neutral"/>
+      <text x="50" y="190" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 2 — Evidence Collection to Compliance as Code</text>
+      <line x1="38" y1="199" x2="722" y2="199" class="diagram-dim-stroke" stroke-width="0.5"/>
+
+      <rect x="45" y="207" width="300" height="74" rx="3" class="diagram-bg-warn diagram-box-warn"/>
+      <text x="60" y="225" text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
+      <text x="60" y="243" text-anchor="start" class="diagram-text diagram-tiny">Screenshots. Manual uploads. Evidence collected</text>
+      <text x="60" y="261" text-anchor="start" class="diagram-text diagram-tiny">after the fact. AI can author all of it.</text>
+
+      <line x1="353" y1="244" x2="373" y2="244" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
+
+      <rect x="383" y="207" width="337" height="74" rx="3" class="diagram-bg-ok diagram-box-ok"/>
+      <text x="398" y="225" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
+      <text x="398" y="243" text-anchor="start" class="diagram-text diagram-tiny">Policies in OPA/Rego enforced in CI/CD.</text>
+      <text x="398" y="261" text-anchor="start" class="diagram-text diagram-tiny">Git repo = evidence. Versioned, immutable.</text>
+
+      <!-- Shift 3: Binary Gate → Transparent Trust -->
+      <rect x="30" y="304" width="700" height="120" rx="5" class="diagram-box diagram-bg-neutral"/>
+      <text x="50" y="324" text-anchor="start" class="diagram-text diagram-small diagram-accent">Shift 3 — Binary Gate to Transparent Trust</text>
+      <line x1="38" y1="333" x2="722" y2="333" class="diagram-dim-stroke" stroke-width="0.5"/>
+
+      <rect x="45" y="341" width="300" height="74" rx="3" class="diagram-bg-warn diagram-box-warn"/>
+      <text x="60" y="359" text-anchor="start" class="diagram-text diagram-tiny diagram-warn">Today</text>
+      <text x="60" y="377" text-anchor="start" class="diagram-text diagram-tiny">Yes/No SOC 2 checkbox. Nobody evaluates</text>
+      <text x="60" y="395" text-anchor="start" class="diagram-text diagram-tiny">audit quality or reads the report.</text>
+
+      <line x1="353" y1="378" x2="373" y2="378" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#shiftArrow)"/>
+
+      <rect x="383" y="341" width="337" height="74" rx="3" class="diagram-bg-ok diagram-box-ok"/>
+      <text x="398" y="359" text-anchor="start" class="diagram-text diagram-tiny diagram-ok">Future</text>
+      <text x="398" y="377" text-anchor="start" class="diagram-text diagram-tiny">Live dashboards: control pass rate, exceptions,</text>
+      <text x="398" y="395" text-anchor="start" class="diagram-text diagram-tiny">MTTR, auditor identity — queryable at point of sale.</text>
+
+      <!-- Bottom annotation -->
+      <text x="380" y="438" text-anchor="middle" class="diagram-text diagram-tiny">"The goal is not faster audits.</text>
+      <text x="380" y="452" text-anchor="middle" class="diagram-text diagram-tiny">It is making the audit a formality because the data already speaks for itself."</text>
     </svg>
 
     <h3>Shift 1: From Point-in-Time to Continuous Monitoring</h3>
