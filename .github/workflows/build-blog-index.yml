@@ -1,4 +1,4 @@
-name: Build Blog Index & Sitemap
+name: Build Blog Index, Sitemap & LLMs.txt
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - 'resume/resume.qmd'
       - 'scripts/build-blog-index.js'
       - 'scripts/build-sitemap.js'
+      - 'scripts/build-llms-txt.js'
       - '*.html'
 
 jobs:
@@ -31,16 +32,19 @@ jobs:
       - name: Build sitemap
         run: node scripts/build-sitemap.js
 
+      - name: Build llms.txt
+        run: node scripts/build-llms-txt.js
+
       - name: Check for changes
         id: diff
         run: |
-          git diff --quiet data/blog-index.json sitemap.xml 2>/dev/null && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+          git diff --quiet data/blog-index.json sitemap.xml llms.txt 2>/dev/null && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Commit updated assets
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/blog-index.json sitemap.xml
-          git commit -m "chore: auto-update blog search index and sitemap"
+          git add data/blog-index.json sitemap.xml llms.txt
+          git commit -m "chore: auto-update blog search index, sitemap, and llms.txt"
           git push
