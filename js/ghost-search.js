@@ -129,10 +129,19 @@
         ensureInitialized();
     }
 
+    /**
+     * Get all indexed posts (available after init).
+     * @returns {Array|null}
+     */
+    function getPosts() {
+        return indexData ? indexData.posts : null;
+    }
+
     // Export globally
     window.ghostSearch = {
         search: searchBlog,
         format: formatSearchContext,
-        preload: preloadSearch
+        preload: preloadSearch,
+        getPosts: getPosts
     };
 })();
