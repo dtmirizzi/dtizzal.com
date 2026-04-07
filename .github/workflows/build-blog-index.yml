@@ -1,4 +1,4 @@
-name: Build Blog Search Index
+name: Build Blog Index & Sitemap
 
 on:
   push:
@@ -7,15 +7,19 @@ on:
       - 'blog-posts/**/*.html'
       - 'resume/resume.qmd'
       - 'scripts/build-blog-index.js'
+      - 'scripts/build-sitemap.js'
+      - '*.html'
 
 jobs:
-  build-index:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history needed for git log dates in sitemap
 
       - uses: actions/setup-node@v4
         with:
@@ -24,16 +28,19 @@ jobs:
       - name: Build blog search index
         run: node scripts/build-blog-index.js
 
+      - name: Build sitemap
+        run: node scripts/build-sitemap.js
+
       - name: Check for changes
         id: diff
         run: |
-          git diff --quiet data/blog-index.json && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+          git diff --quiet data/blog-index.json sitemap.xml 2>/dev/null && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Commit updated index
+      - name: Commit updated assets
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/blog-index.json
-          git commit -m "chore: auto-update blog search index"
+          git add data/blog-index.json sitemap.xml
+          git commit -m "chore: auto-update blog search index and sitemap"
           git push
