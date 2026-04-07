@@ -925,6 +925,13 @@ body.light-mode .legend-percent {
     color: rgba(255, 120, 120, 0.7);
 }
 
+.ghost-think {
+    display: block;
+    color: rgba(255, 255, 255, 0.2);
+    font-style: italic;
+    margin-bottom: 0.4em;
+}
+
 /* ─── Ghost Spinner ────────────────────────────────────────── */
 
 .ghost-spinner {
@@ -1036,6 +1043,7 @@ body.light-mode .ghost-prompt-echo { color: rgba(0, 0, 0, 0.3); }
 body.light-mode .ghost-response { color: rgba(0, 0, 0, 0.6); }
 body.light-mode .ghost-loading { color: rgba(0, 0, 0, 0.4); }
 body.light-mode .ghost-error { color: rgba(180, 50, 50, 0.7); }
+body.light-mode .ghost-think { color: rgba(0, 0, 0, 0.2); }
 
 body.light-mode #ghost-input-row {
     border-top-color: rgba(0, 0, 0, 0.08);

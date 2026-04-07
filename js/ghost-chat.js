@@ -272,23 +272,42 @@
 
     // ─── Link Rendering ─────────────────────────────────────────
 
-    function linkifyResponse(text) {
-        // Escape HTML first, then convert blog URLs to clickable links
-        var escaped = escapeHTML(text);
-        // Match dtizzal.com blog URLs
+    // ─── Qwen3 Think Tag Handling & Response Rendering ─────────
+
+    function renderResponse(text) {
+        // 1. Style completed <think>...</think> blocks as faded italic spans
+        // 2. Hide any incomplete <think> block (still streaming, no closing tag)
+        // 3. Escape remaining HTML, then linkify URLs
+
+        // Extract and style completed think blocks, replacing with placeholders
+        var placeholders = [];
+        var processed = text.replace(/<think>([\s\S]*?)<\/think>/g, function (_, content) {
+            var idx = placeholders.length;
+            placeholders.push('<span class="ghost-think">' + escapeHTML(content.trim()) + '</span>');
+            return '\x00THINK' + idx + '\x00';
+        });
+
+        // Hide any incomplete/open think tag (still streaming)
+        processed = processed.replace(/<think>[\s\S]*$/, '');
+
+        // Escape HTML and linkify
+        var escaped = escapeHTML(processed);
         escaped = escaped.replace(
             /https:\/\/dtizzal\.com\/blog-posts\/[^\s<)"']+/g,
             function (url) {
                 return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="ghost-link">' + url + '</a>';
             }
         );
+
+        // Restore think block placeholders
+        for (var i = 0; i < placeholders.length; i++) {
+            escaped = escaped.replace('\x00THINK' + i + '\x00', placeholders[i]);
+        }
+
         return escaped;
     }
 
-    // ─── Qwen3 Think Tag Stripping ──────────────────────────────
-
     function stripThinkTags(text) {
-        // Qwen3 models emit <think>...</think> blocks for chain-of-thought
         return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
     }
 
@@ -502,15 +521,13 @@
                     responseLine.style.display = '';
                 }
                 fullResponse += delta;
-                fullResponse = stripThinkTags(fullResponse);
-                responseLine.innerHTML = linkifyResponse(fullResponse);
+                responseLine.innerHTML = renderResponse(fullResponse);
                 scrollOutput();
             }
         } catch (streamErr) {
             // If we already have partial content, keep it and surface the error gracefully
             if (fullResponse.trim()) {
-                fullResponse = stripThinkTags(fullResponse);
-                responseLine.innerHTML = linkifyResponse(fullResponse + ' [interrupted]');
+                responseLine.innerHTML = renderResponse(fullResponse + ' [interrupted]');
             }
             throw streamErr; // re-throw so the outer catch handles cleanup
         }
@@ -647,8 +664,8 @@
                         responseLine.style.display = '';
                     }
                     var content = firstCompletion.choices[0]?.message?.content || '';
-                    fullResponse = stripThinkTags(content);
-                    responseLine.innerHTML = linkifyResponse(fullResponse);
+                    fullResponse = content;
+                    responseLine.innerHTML = renderResponse(fullResponse);
                     scrollOutput();
                 }
             } else {
@@ -695,17 +712,19 @@
                 fullResponse = await streamResponse(asyncChunkGenerator, responseLine, newSpinner);
             }
 
-            // Clean up: strip any remaining partial think tags
-            fullResponse = stripThinkTags(fullResponse);
-            responseLine.innerHTML = linkifyResponse(fullResponse);
+            // Final render pass
+            responseLine.innerHTML = renderResponse(fullResponse);
 
-            if (!fullResponse.trim()) {
+            // Strip think content for history (model shouldn't see its own CoT)
+            var historyResponse = stripThinkTags(fullResponse);
+
+            if (!historyResponse.trim()) {
                 responseLine.textContent = '[no response generated]';
                 responseLine.className = 'ghost-line ghost-error';
             }
 
-            // Add assistant response to history
-            chatHistory.push({ role: 'assistant', content: fullResponse });
+            // Add assistant response to history (stripped of think tags)
+            chatHistory.push({ role: 'assistant', content: historyResponse });
         } catch (err) {
             if (spinnerLine.parentNode) {
                 spinnerLine.remove();
