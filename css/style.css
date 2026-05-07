@@ -2,7 +2,7 @@ body {
     background-color: black;
     color: rgba(255, 255, 255, 0.867);
     text-align: center;
-    font-family: "Courier Prime", serif;
+    font-family: "Courier Prime", "Courier New", Courier, monospace;
 }
 
 h1 {
@@ -95,7 +95,7 @@ p {
     color: #2dc7ff;
     text-decoration: none;
     border-radius: 5px;
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
@@ -184,7 +184,7 @@ video {
 
     max-width: 800px;
     border-radius: 8px;
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
     line-height: 1.7;
 
     /* --- Explicitly set text alignment for the article content --- */
@@ -290,7 +290,7 @@ video {
 
 /* Styles for the calculator - can be moved to your main style.css */
 #article-content {
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
     color: #f0f0f0;
     line-height: 1.7;
 }
@@ -349,7 +349,7 @@ video {
     border: 1px solid #555555;
     background-color: #3a3a3a;
     color: #ffffff;
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
     font-size: 1em;
     box-sizing: border-box;
 }
@@ -577,7 +577,7 @@ label {
     border-radius: 2px;
     text-decoration: none;
     /* Remove default underline */
-    font-family: 'Courier Prime', monospace;
+    font-family: 'Courier Prime', 'Courier New', Courier, monospace;
     /* Match article font */
     font-size: 0.9em;
     transition: background-color 0.3s ease, transform 0.2s ease;
