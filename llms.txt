@@ -1,0 +1,39 @@
+# DT Mirizzi — dtizzal.com
+
+> Personal website and blog of DT Mirizzi — principal software engineer, systems thinker, and builder.
+
+DT Mirizzi is a Principal Software Engineer at Palo Alto Networks based in San Francisco. Background in Golang, Java, Python, Linux, cloud-native development, and cybersecurity. Previously at Obsidian Security. B.S. in Computer Science from California Lutheran University. Also an artist (dt-mirizzi-art.com) and half-frame film photographer.
+
+## Recurring themes
+
+- Specialization over generalization (vertical AI, specialized orchestrators)
+- Control planes as load-bearing architecture (orchestration, security, governance)
+- Critique of hype — challenges simple narratives with structural analysis
+- Intellectual cross-pollination (theology + AI, Marxism + tech strategy)
+- Builder ethos — theory validated through implementation
+
+## Pages
+
+- [Home](https://dtizzal.com/)
+- [Blog](https://dtizzal.com/blog.html)
+- [About](https://dtizzal.com/about.html)
+- [Talks](https://dtizzal.com/talks.html)
+
+## Blog posts
+
+- [Decoding Your Next Career Move: A Software Engineer's Equation for Job Selection](https://dtizzal.com/blog-posts/1-job-helper/job-helper.html): A quantitative framework for evaluating job offers using weighted scoring across compensation, growth, mission, and engineering culture.
+- [Roth IRA Contribution Limits Calculator](https://dtizzal.com/blog-posts/2-ira-cal/ira-cal.html): Interactive calculator for Roth IRA contribution limits based on filing status and income.
+- [A 'Dead' Religious Take on AI and Utopia](https://dtizzal.com/blog-posts/3-gnostic/gnostic.html): Explores parallels between Gnostic theology and AI development — the idea that building intelligence is a spiritual act of liberation from material constraint.
+- [Diptychs Auto-slicer](https://dtizzal.com/blog-posts/4-diptychs-and-triptychs-auto-slicer/diptychs-and-triptychs-auto-slicer.html): A tool for automatically slicing half-frame film photography pairs into diptychs and triptychs.
+- [The AI Revolution is Vertical](https://dtizzal.com/blog-posts/5-vertical-ai/vertical-ai.html): Argues that the real AI opportunity is vertical specialization — domain-specific models that deeply understand one industry — not horizontal general-purpose platforms.
+- [SaaS Sold Us Products. The Next Wave Will Sell Us Outcomes.](https://dtizzal.com/blog-posts/6-vertical-saas/vertical-saas.html): The transition from horizontal SaaS tools to vertical, outcome-oriented platforms that deliver results rather than features.
+- [The Architect's Dilemma: Escaping the Event Horizon of Legacy Orchestration](https://dtizzal.com/blog-posts/7-workflows/workflows.html): Why legacy workflow orchestration systems become black holes of complexity, and how to escape with modern architectural patterns.
+- [Thinking Like a CTO of an AI Powered Rollup](https://dtizzal.com/blog-posts/8-ai-rollup/ai-rollup.html): A framework for evaluating AI-powered rollup strategies from a CTO perspective — what to build, buy, and integrate.
+- [Big Codebase Vibes: Taming the 14M LOC Monorepo](https://dtizzal.com/blog-posts/9-large-codebase-vibes/large-codebase-vibes.html): Practical lessons from navigating and contributing to a 14-million-line-of-code monorepo at scale.
+- [The Blog Post That Wrote Itself](https://dtizzal.com/blog-posts/10-automated-blog-pipeline/automated-blog-pipeline.html): How this blog's CI/CD pipeline was built — automated publishing, search indexing, and an in-browser AI chatbot, all from static files.
+- [AI Will Eat Cybersecurity](https://dtizzal.com/blog-posts/11-ai-eats-cybersecurity/ai-eats-cybersecurity.html): Why AI that reasons about vulnerabilities and attack patterns will reshape the entire cybersecurity industry, and why legacy vendors aren't ready.
+- [LaborMaxxing vs KnowledgeMaxxing: A Marxist Case for Google's AI Strategy](https://dtizzal.com/blog-posts/12-labormaxxing-vs-knowledgemaxxing/labormaxxing-vs-knowledgemaxxing.html): Analyzes Google's AI strategy through a Marxist lens — the tension between automating labor (labormaxxing) and compounding knowledge (knowledgemaxxing).
+- [The Harness Is the Security Layer](https://dtizzal.com/blog-posts/13-harness-is-the-security-layer/harness-is-the-security-layer.html): Why the AI harness — the orchestration layer between models and tools — is the true security control plane, not the model itself.
+- [Harness Engineering: The Discipline That Replaces Writing Code](https://dtizzal.com/blog-posts/14-harness-engineering/harness-engineering.html): Defines harness engineering as the emerging discipline of designing, constraining, and governing AI agent systems rather than writing code directly.
+- [pi-governance: The Harness You Can Actually Install](https://dtizzal.com/blog-posts/15-pi-governance/pi-governance.html): Introduces pi-governance, an open-source tool for governing AI agent harnesses with policy-as-code.
+- [The SOC 2 Stamp Used to Mean Something](https://dtizzal.com/blog-posts/16-soc2-stamp/soc2-stamp.html): Why SOC 2 compliance has become a checkbox exercise that no longer meaningfully signals security posture, and what should replace it.
