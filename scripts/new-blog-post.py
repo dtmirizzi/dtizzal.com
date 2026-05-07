@@ -25,7 +25,6 @@ instead of clobbering.
 """
 import argparse
 import datetime as dt
-import json
 import re
 import sys
 from pathlib import Path
@@ -34,7 +33,8 @@ ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog-posts"
 TEMPLATE = BLOG_DIR / "template.html"
 BLOG_INDEX_HTML = ROOT / "blog.html"
-BLOG_INDEX_JSON = ROOT / "data" / "blog-index.json"
+# Note: data/blog-index.json, sitemap.xml, and llms.txt are auto-generated
+# by .github/workflows/build-blog-index.yml on push, so we don't touch them here.
 
 
 def slugify(s: str) -> str:
@@ -90,32 +90,6 @@ def update_blog_html(title: str, slug: str, num: int, date_str: str, dry_run: bo
         print(f"  updated blog.html (added <li> at top)")
 
 
-def update_blog_index_json(title: str, slug: str, num: int, dry_run: bool):
-    if not BLOG_INDEX_JSON.exists():
-        return
-    try:
-        data = json.loads(BLOG_INDEX_JSON.read_text())
-    except json.JSONDecodeError as e:
-        print(f"  warning: blog-index.json could not be parsed ({e}); skipping")
-        return
-    posts = data.get("posts")
-    if not isinstance(posts, list):
-        print("  warning: blog-index.json has no 'posts' array; skipping")
-        return
-    new_entry = {
-        "number": num,
-        "slug": slug,
-        "title": title,
-        "url": f"/blog-posts/{num}-{slug}/{slug}.html",
-    }
-    posts.append(new_entry)
-    if dry_run:
-        print(f"  would append to blog-index.json: {new_entry}")
-    else:
-        BLOG_INDEX_JSON.write_text(json.dumps(data, indent=None, separators=(",", ":")) + "\n")
-        print(f"  appended to data/blog-index.json")
-
-
 def main():
     ap = argparse.ArgumentParser(description="Scaffold a new blog post")
     ap.add_argument("title", help="Title of the post (use quotes)")
@@ -164,10 +138,10 @@ def main():
         print(f"  wrote {target_html.relative_to(ROOT)}")
 
     update_blog_html(title, slug, num, date_str, args.dry_run)
-    update_blog_index_json(title, slug, num, args.dry_run)
 
     if not args.dry_run:
         print(f"\nDone. Open it: open {target_html}")
+        print("Push to master and the workflow will regenerate llms.txt + sitemap.xml.")
 
     return 0
 
