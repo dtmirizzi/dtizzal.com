@@ -40,6 +40,13 @@ a:hover {
     /* Change color to cyan on hover */
 }
 
+/* Touch targets — ensure at least 44×44 px for nav links on mobile (a11y) */
+ul.inline li.inline a {
+    display: inline-block;
+    padding: 12px 8px;
+    line-height: 1.2;
+}
+
 
 .about {
     display: flex;
@@ -98,8 +105,9 @@ p {
     color: #2dc7ff;
 }
 
-.resume-download-btn .material-symbols-outlined {
-    font-size: 18px;
+.resume-download-btn .icon {
+    width: 18px;
+    height: 18px;
     vertical-align: middle;
 }
 
@@ -131,12 +139,12 @@ video {
     opacity: 0.6;
 }
 
-.material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 4
+/* Inline SVG icons (replaces Material Symbols icon font) */
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
 }
 
 /* Ensure the main container for the video and article is relative */
@@ -687,8 +695,9 @@ body.light-mode .calculator-input-group small {
     background-color: rgba(128, 128, 128, 0.2);
 }
 
-.theme-toggle .material-symbols-outlined {
-    font-size: 24px;
+.theme-toggle .icon {
+    width: 24px;
+    height: 24px;
 }
 
 /* --- Light Mode Quiz Styles --- */

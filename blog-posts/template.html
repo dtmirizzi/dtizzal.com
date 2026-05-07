@@ -2,56 +2,191 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DT Mirizzi - Job Selection Equation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - {{TITLE}}</title>
 
-    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"></noscript>
 
-    <link href="/css/style.css" rel="stylesheet">
-    <!-- Global site tag (gtag.js) - Google Analytics 
-    =================================================== -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-        gtag('config', 'G-Z4WRP0KWGX');
-    </script>
+    h1, h2, h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    blockquote {
+      border-left: 3px solid #2dc7ff;
+      margin: 1.5em 0;
+      padding: 0.5em 1em;
+      font-style: italic;
+      color: #bbb;
+    }
+
+    body.light-mode blockquote {
+      border-left-color: #0E8AC8;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      color: #ffffff;
+      font-weight: 700;
+      border-bottom: 2px solid #555;
+    }
+
+    body.light-mode th {
+      color: #1a1a1a;
+      border-bottom-color: #aaa;
+    }
+
+    body.light-mode td {
+      border-bottom-color: #ccc;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    body.light-mode code {
+      background: rgba(0,0,0,0.06);
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+  </style>
+
+  <meta name="title" content="DT Mirizzi" />
+  <meta name="description" content="{{DESCRIPTION}}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dtizzal.com/" />
+  <meta property="og:title" content="{{TITLE}}" />
+  <meta property="og:description" content="{{DESCRIPTION}}" />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://dtizzal.com/" />
+  <meta property="twitter:title" content="{{TITLE}}" />
+  <meta property="twitter:description" content="{{DESCRIPTION}}" />
+  <meta property="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
 </head>
 
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
-        <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
-    </button>
-    <a href="/blog.html">⟵ back</a>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="theme-icon" id="theme-icon"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" clip-rule="evenodd"/></svg></span>
+  </button>
 
-    <div class="job-helper">
-        <video loop muted autoplay playsinline webkit-playsinline preload="auto">
-            <source src="/img/Background.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+  <a href="/blog.html">&#x27F5; back</a>
 
-        <div id="article-content">
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-            <!--- Article Content! --->
-            <p>hello</p>
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>{{TITLE}}</strong></h1>
 
-        </div>
+      <p>
+        Lede paragraph — the hook.
+      </p>
+
+      <h2><strong>First section</strong></h2>
+
+      <p>Section body.</p>
+
+      <!-- Inline footnote example: <sup><a href="#fn1">[1]</a></sup> -->
+
+      <div class="footnotes">
+        <h3>References</h3>
+        <ol>
+          <li id="fn1">
+            Source title — Author/Publisher (year).
+            <a href="https://example.com/" target="_blank" rel="noopener">Link</a>
+          </li>
+        </ol>
+      </div>
+
     </div>
-    <script src="/js/theme.js"></script>
-    <script src="/js/ghost-search.js"></script>
-    <script src="/js/ghost-context.js"></script>
-    <script src="/js/ghost-chat.js" type="module"></script>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/ghost-search.js"></script>
+  <script src="/js/ghost-context.js"></script>
+  <script src="/js/ghost-chat.js" type="module"></script>
 </body>
 
 </html>
