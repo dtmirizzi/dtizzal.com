@@ -5,7 +5,17 @@
 (function () {
     'use strict';
 
-    const WEBLLM_VERSION = '0.2.82'; // pinned version — includes Qwen3 support
+    const WEBLLM_VERSION = '0.2.83'; // pinned version — includes Qwen3 support
+
+    // Debug logging — set to false to silence. Filter the devtools console
+    // by "[ghost]" to see only this widget's traces.
+    const DEBUG = true;
+    function log() {
+        if (!DEBUG) return;
+        const args = Array.prototype.slice.call(arguments);
+        args.unshift('[ghost]');
+        console.log.apply(console, args);
+    }
 
     // ─── Model Catalog ───────────────────────────────────────────
 
@@ -19,7 +29,7 @@
         { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false, toolCalling: false },
     ];
 
-    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3-0.6B-q4f16_1-MLC';
+    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3-1.7B-q4f16_1-MLC';
     const DEFAULT_MODEL_ID_MOBILE  = 'SmolLM2-360M-Instruct-q4f16_1-MLC';
     const MAX_HISTORY = 10;
 
@@ -272,43 +282,27 @@
 
     // ─── Link Rendering ─────────────────────────────────────────
 
-    // ─── Qwen3 Think Tag Handling & Response Rendering ─────────
+    // ─── Response Rendering ────────────────────────────────────
+    // We send /no_think to Qwen3, but the model still occasionally emits
+    // think tags. Strip them defensively in both render and history paths
+    // so users never see them and the next turn isn't fed CoT.
+
+    function stripThinkTags(text) {
+        return text
+            .replace(/<think>[\s\S]*?<\/think>/g, '')
+            .replace(/<think>[\s\S]*$/, '')
+            .replace(/<\/think>/g, '')
+            .trim();
+    }
 
     function renderResponse(text) {
-        // 1. Style completed <think>...</think> blocks as faded italic spans
-        // 2. Hide any incomplete <think> block (still streaming, no closing tag)
-        // 3. Escape remaining HTML, then linkify URLs
-
-        // Extract and style completed think blocks, replacing with placeholders
-        var placeholders = [];
-        var processed = text.replace(/<think>([\s\S]*?)<\/think>/g, function (_, content) {
-            var idx = placeholders.length;
-            placeholders.push('<span class="ghost-think">' + escapeHTML(content.trim()) + '</span>');
-            return '\x00THINK' + idx + '\x00';
-        });
-
-        // Hide any incomplete/open think tag (still streaming)
-        processed = processed.replace(/<think>[\s\S]*$/, '');
-
-        // Escape HTML and linkify
-        var escaped = escapeHTML(processed);
-        escaped = escaped.replace(
+        var escaped = escapeHTML(stripThinkTags(text));
+        return escaped.replace(
             /https:\/\/dtizzal\.com\/blog-posts\/[^\s<)"']+/g,
             function (url) {
                 return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="ghost-link">' + url + '</a>';
             }
         );
-
-        // Restore think block placeholders
-        for (var i = 0; i < placeholders.length; i++) {
-            escaped = escaped.replace('\x00THINK' + i + '\x00', placeholders[i]);
-        }
-
-        return escaped;
-    }
-
-    function stripThinkTags(text) {
-        return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
     }
 
     function printWelcome() {
@@ -411,9 +405,12 @@
             window.ghostSearch.preload();
         }
 
+        const t0 = performance.now();
+        log('initEngine: starting', { model: currentModelId, webllmVersion: WEBLLM_VERSION });
         try {
             if (!webllmModule) {
                 webllmModule = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
+                log('initEngine: webllm module loaded');
             }
 
             engine = await webllmModule.CreateMLCEngine(currentModelId, {
@@ -425,6 +422,7 @@
                 }
             });
 
+            log('initEngine: ready', { model: currentModelId, ms: Math.round(performance.now() - t0) });
             statusLine.textContent = label + ' loaded. Ready.';
             statusLine.className = 'ghost-line ghost-system';
             printLine('', 'ghost-system');
@@ -432,6 +430,7 @@
             return true;
         } catch (err) {
             isLoading = false;
+            log('initEngine: FAILED', err);
             statusLine.textContent = 'Failed to load ' + label + '.';
             statusLine.className = 'ghost-line ghost-error';
             printLine('Error: ' + err.message, 'ghost-error');
@@ -459,7 +458,7 @@
 
     // ─── Tool Call Handling (for tool-calling models) ────────────
 
-    async function handleToolCallResponse(completion, messages, spinnerLine) {
+    async function handleToolCallResponse(completion, messages, onToolCall) {
         // Non-streaming completion — check for tool calls
         var choice = completion.choices[0];
         if (!choice || !choice.message || !choice.message.tool_calls || choice.message.tool_calls.length === 0) {
@@ -467,35 +466,27 @@
         }
 
         var toolCalls = choice.message.tool_calls;
-        // Add assistant message with tool calls to messages
         messages.push(choice.message);
 
         var allResults = [];
+        var toolBlock = null;
 
         for (var i = 0; i < toolCalls.length; i++) {
             var tc = toolCalls[i];
             if (tc.function.name === 'search_blog') {
                 var args;
-                try {
-                    args = JSON.parse(tc.function.arguments);
-                } catch (e) {
-                    args = { query: tc.function.arguments };
-                }
+                try { args = JSON.parse(tc.function.arguments); }
+                catch (e) { args = { query: tc.function.arguments }; }
 
                 var searchQuery = args.query || '';
                 var mobile = isMobileDevice();
                 var topK = mobile ? 2 : 3;
                 var results = await performSearch(searchQuery, topK);
-
                 allResults = allResults.concat(results);
 
-                // Show tool call visualization
-                if (spinnerLine && spinnerLine.parentNode) {
-                    spinnerLine.remove();
-                }
-                var toolBlock = printToolCall('search_blog', searchQuery, results);
+                if (onToolCall) onToolCall();
+                toolBlock = printToolCall('search_blog', searchQuery, results);
 
-                // Add tool result to messages
                 var contextStr = window.ghostSearch ? window.ghostSearch.format(results) : '';
                 messages.push({
                     role: 'tool',
@@ -508,33 +499,66 @@
         return { messages: messages, results: allResults, toolBlock: toolBlock };
     }
 
+    // ─── Spinner Controller ────────────────────────────────────
+    // Single spinner element with state transitions. Centralizing this
+    // removes the flicker/double-spinner bugs from ad-hoc spinner handling.
+
+    function makeSpinner() {
+        let el = null;
+        return {
+            show: function (text) {
+                if (el && el.parentNode) {
+                    const span = el.querySelector('.ghost-spinner');
+                    if (span) span.textContent = text;
+                } else {
+                    el = printHTML('<span class="ghost-spinner">' + escapeHTML(text) + '</span>', '');
+                }
+                scrollOutput();
+            },
+            hide: function () {
+                if (el && el.parentNode) el.remove();
+                el = null;
+            }
+        };
+    }
+
     // ─── Safe Streaming Helper ─────────────────────────────────
 
-    async function streamResponse(generator, responseLine, spinnerEl) {
+    async function streamResponse(generator, responseLine, spinner) {
         let fullResponse = '';
+        let chunkCount = 0;
+        let firstTokenAt = null;
+        const tStart = performance.now();
         try {
             for await (const chunk of generator) {
                 if (!isEngineReady()) throw new Error('Engine disposed during generation');
                 const delta = chunk.choices[0]?.delta?.content || '';
-                if (delta && spinnerEl && spinnerEl.parentNode) {
-                    spinnerEl.remove();
-                    responseLine.style.display = '';
+                if (delta && firstTokenAt === null) {
+                    firstTokenAt = performance.now();
+                    log('stream: first token', { ttftMs: Math.round(firstTokenAt - tStart) });
                 }
+                chunkCount++;
                 fullResponse += delta;
                 responseLine.innerHTML = renderResponse(fullResponse);
+                // Hide spinner only once user-visible content lands —
+                // renderResponse strips <think> blocks, so during a CoT
+                // burst responseLine.textContent stays empty.
+                if (responseLine.textContent.trim().length > 0) {
+                    spinner.hide();
+                    responseLine.style.display = '';
+                }
                 scrollOutput();
             }
+            log('stream: complete', { chunks: chunkCount, totalLen: fullResponse.length });
         } catch (streamErr) {
-            // If we already have partial content, keep it and surface the error gracefully
+            log('stream: error', { chunks: chunkCount, partialLen: fullResponse.length, err: streamErr });
             if (fullResponse.trim()) {
                 responseLine.innerHTML = renderResponse(fullResponse + ' [interrupted]');
             }
-            throw streamErr; // re-throw so the outer catch handles cleanup
+            throw streamErr;
         }
-        if (spinnerEl && spinnerEl.parentNode) {
-            spinnerEl.remove();
-            responseLine.style.display = '';
-        }
+        spinner.hide();
+        responseLine.style.display = '';
         return fullResponse;
     }
 
@@ -588,18 +612,27 @@
         isGenerating = true;
         input.disabled = true;
 
+        log('turn: start', {
+            query: query,
+            historyLenBefore: chatHistory.length,
+            model: currentModelId,
+        });
+
         // Add to history
         chatHistory.push({ role: 'user', content: query });
 
-        // On mobile, keep less history to reduce memory pressure
+        // On mobile, keep less history to reduce memory pressure.
+        // Splice in pairs so the history always starts on a user message —
+        // shifting one at a time used to leave [assistant, user, ...] which
+        // some chat templates reject.
         const mobile = isMobileDevice();
         const maxTurns = mobile ? 2 : MAX_HISTORY;
         while (chatHistory.length > maxTurns * 2) {
-            chatHistory.shift();
+            chatHistory.splice(0, 2);
         }
 
-        // Show spinner while searching/thinking
-        const spinnerLine = printHTML('<span class="ghost-spinner">searching...</span>', '');
+        const spinner = makeSpinner();
+        spinner.show('searching...');
 
         // Create response line for streaming (hidden until first token)
         const responseLine = document.createElement('div');
@@ -639,15 +672,15 @@
                     stream: false,
                 });
 
-                var toolResult = await handleToolCallResponse(firstCompletion, messages, spinnerLine);
+                var toolResult = await handleToolCallResponse(
+                    firstCompletion,
+                    messages,
+                    function () { spinner.hide(); }
+                );
 
                 if (toolResult) {
-                    // Tool was called — dismiss tool block and stream the final response
                     dismissToolBlock(toolResult.toolBlock);
-                    if (spinnerLine.parentNode) {
-                        spinnerLine.remove();
-                    }
-                    const finalSpinner = printHTML('<span class="ghost-spinner">thinking...</span>', '');
+                    spinner.show('thinking...');
 
                     const streamCompletion = await engine.chat.completions.create({
                         messages: toolResult.messages,
@@ -656,28 +689,28 @@
                         stream: true,
                     });
 
-                    fullResponse = await streamResponse(streamCompletion, responseLine, finalSpinner);
+                    fullResponse = await streamResponse(streamCompletion, responseLine, spinner);
                 } else {
-                    // No tool call — use the direct response
-                    if (spinnerLine.parentNode) {
-                        spinnerLine.remove();
-                        responseLine.style.display = '';
-                    }
-                    var content = firstCompletion.choices[0]?.message?.content || '';
-                    fullResponse = content;
+                    spinner.hide();
+                    responseLine.style.display = '';
+                    fullResponse = firstCompletion.choices[0]?.message?.content || '';
                     responseLine.innerHTML = renderResponse(fullResponse);
                     scrollOutput();
                 }
             } else {
                 // Path B: Auto-search fallback — search before every query
+                const tSearch = performance.now();
                 var searchResults = await performSearch(query, topK);
+                log('search: done', {
+                    query: query,
+                    results: searchResults.length,
+                    titles: searchResults.map(function (r) { return r.postTitle; }),
+                    ms: Math.round(performance.now() - tSearch),
+                });
                 var toolBlock = null;
 
                 if (searchResults.length > 0) {
-                    // Show search visualization
-                    if (spinnerLine.parentNode) {
-                        spinnerLine.remove();
-                    }
+                    spinner.hide();
                     toolBlock = printToolCall('search_blog', query, searchResults);
                 }
 
@@ -693,15 +726,20 @@
                     ...chatHistory
                 ];
 
-                // Dismiss tool block now that context is injected
                 dismissToolBlock(toolBlock);
+                spinner.show('thinking...');
 
-                // Update spinner if still visible
-                if (spinnerLine.parentNode) {
-                    spinnerLine.querySelector('.ghost-spinner').textContent = 'thinking...';
-                }
-                const newSpinner = spinnerLine.parentNode ? spinnerLine : printHTML('<span class="ghost-spinner">thinking...</span>', '');
+                log('engine.create: calling', {
+                    msgCount: messages.length,
+                    roles: messages.map(function (m) { return m.role; }),
+                    systemPromptLen: systemPrompt.length,
+                    systemPromptHasBlogList: systemPrompt.indexOf("DT's blog posts:") !== -1,
+                    historyMessages: chatHistory.map(function (m) {
+                        return { role: m.role, contentLen: (m.content || '').length };
+                    }),
+                });
 
+                const tGen = performance.now();
                 const asyncChunkGenerator = await engine.chat.completions.create({
                     messages: messages,
                     temperature: 0.7,
@@ -709,33 +747,48 @@
                     stream: true,
                 });
 
-                fullResponse = await streamResponse(asyncChunkGenerator, responseLine, newSpinner);
+                fullResponse = await streamResponse(asyncChunkGenerator, responseLine, spinner);
+                log('engine.create: streamed', {
+                    fullResponseLen: fullResponse.length,
+                    ms: Math.round(performance.now() - tGen),
+                });
             }
 
             // Final render pass
             responseLine.innerHTML = renderResponse(fullResponse);
 
-            // Strip think content for history (model shouldn't see its own CoT)
-            var historyResponse = stripThinkTags(fullResponse);
+            const cleanResponse = stripThinkTags(fullResponse);
+            log('turn: response', {
+                fullResponse: fullResponse,
+                cleanResponse: cleanResponse,
+                empty: !cleanResponse,
+            });
 
-            if (!historyResponse.trim()) {
+            if (!cleanResponse) {
+                // CoT-only or empty: show error and roll the user turn back
+                // out of history so the next turn doesn't see a dangling
+                // user msg or get fed unstripped reasoning.
                 responseLine.textContent = '[no response generated]';
                 responseLine.className = 'ghost-line ghost-error';
+                if (chatHistory.length && chatHistory[chatHistory.length - 1].role === 'user') {
+                    chatHistory.pop();
+                }
+            } else {
+                chatHistory.push({ role: 'assistant', content: cleanResponse });
             }
-
-            // Add assistant response to history (stripped of think tags)
-            chatHistory.push({ role: 'assistant', content: historyResponse });
+            log('turn: end', { historyLenAfter: chatHistory.length });
         } catch (err) {
-            if (spinnerLine.parentNode) {
-                spinnerLine.remove();
-            }
+            log('turn: error', err);
+            spinner.hide();
             responseLine.style.display = '';
             const msg = err.message || String(err);
             responseLine.textContent = 'Error: ' + msg;
             responseLine.className = 'ghost-line ghost-error';
 
-            // On memory-related errors, try to recover by clearing history and resetting engine
-            if (mobile || /memory|oom|abort|lost|destroy|disposed|gpu/i.test(msg)) {
+            // Only nuke the engine on errors that actually indicate it's
+            // unusable. The old `mobile ||` clause forced a redownload after
+            // every transient hiccup on phones.
+            if (/memory|oom|abort|lost|destroy|disposed|gpu/i.test(msg)) {
                 chatHistory = [];
                 if (engine) {
                     try { engine.unload?.(); } catch (_) { /* ignore */ }

@@ -5,7 +5,7 @@
     'use strict';
 
     const INDEX_URL = '/data/blog-index.json';
-    const MINISEARCH_CDN = 'https://esm.run/minisearch@7.1.1';
+    const MINISEARCH_CDN = 'https://esm.run/minisearch@7.2.0';
 
     let miniSearchModule = null;
     let searchIndex = null;
@@ -17,6 +17,7 @@
         if (initPromise) return initPromise;
 
         initPromise = (async () => {
+            const t0 = performance.now();
             try {
                 // Load MiniSearch and index data in parallel
                 const [mod, response] = await Promise.all([
@@ -29,6 +30,11 @@
                     throw new Error('Failed to load blog index: ' + response.status);
                 }
                 indexData = await response.json();
+                console.log('[ghost-search] index loaded', {
+                    posts: indexData.posts.length,
+                    chunks: indexData.chunks.length,
+                    ms: Math.round(performance.now() - t0),
+                });
 
                 // Build the search index
                 searchIndex = new miniSearchModule({
@@ -73,9 +79,13 @@
     async function searchBlog(query, topK) {
         topK = topK || 3;
         const ready = await ensureInitialized();
-        if (!ready || !query || !query.trim()) return [];
+        if (!ready || !query || !query.trim()) {
+            console.log('[ghost-search] searchBlog: skipped', { ready: ready, query: query });
+            return [];
+        }
 
         const results = searchIndex.search(query.trim(), { limit: topK * 2 });
+        console.log('[ghost-search] searchBlog: raw matches', { query: query, count: results.length });
 
         // Deduplicate: keep best chunk per post, up to topK
         const seen = {};
