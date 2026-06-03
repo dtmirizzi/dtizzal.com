@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - OpenRouter Is My Primary Subscription Now</title>
+
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"></noscript>
+
+  <style>
+    body {
+      font-family: 'Courier Prime', monospace;
+      line-height: 1.6;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    a {
+      color: #bbbbbb;
+      text-decoration: none;
+      border-bottom: 1px dotted #777;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom: 1px solid #fff;
+    }
+
+    .my-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      filter: brightness(0.9);
+      border-radius: 10px;
+    }
+
+    blockquote {
+      border-left: 3px solid #2dc7ff;
+      margin: 1.5em 0;
+      padding: 0.5em 1em;
+      font-style: italic;
+      color: #bbb;
+    }
+
+    body.light-mode blockquote {
+      border-left-color: #0E8AC8;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+
+    th {
+      color: #ffffff;
+      font-weight: 700;
+      border-bottom: 2px solid #555;
+    }
+
+    body.light-mode th {
+      color: #1a1a1a;
+      border-bottom-color: #aaa;
+    }
+
+    body.light-mode td {
+      border-bottom-color: #ccc;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    body.light-mode code {
+      background: rgba(0,0,0,0.06);
+    }
+
+    pre {
+      background: rgba(255,255,255,0.05);
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.85em;
+      line-height: 1.5;
+      border: 1px solid #333;
+    }
+
+    body.light-mode pre {
+      background: rgba(0,0,0,0.04);
+      border-color: #ccc;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    .footnotes {
+      margin-top: 40px;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      font-size: 0.95rem;
+      color: #cfcfcf;
+    }
+
+    .footnotes ol {
+      padding-left: 20px;
+    }
+
+    .footnotes li {
+      margin: 8px 0;
+    }
+
+    /* SVG theme-aware styles */
+    .diagram-text { font-family: 'Courier Prime', monospace; fill: #e0e0e0; }
+    .diagram-title { font-size: 13px; font-weight: 700; fill: #ffffff; }
+    .diagram-label { font-size: 13px; }
+    .diagram-small { font-size: 11px; fill: #999999; }
+    .diagram-accent { fill: #2dc7ff; }
+    .diagram-accent-stroke { stroke: #2dc7ff; }
+    .diagram-dim { fill: #888888; }
+    .diagram-dim-stroke { stroke: #555555; }
+    .diagram-box { fill: none; stroke: #555; stroke-width: 1.5; }
+    .diagram-box-accent { fill: none; stroke: #2dc7ff; stroke-width: 1.5; }
+    .diagram-bg-accent { fill: rgba(45,199,255,0.08); }
+
+    /* Light mode SVG overrides */
+    body.light-mode .diagram-text { fill: #1a1a1a; }
+    body.light-mode .diagram-title { fill: #1a1a1a; }
+    body.light-mode .diagram-small { fill: #666666; }
+    body.light-mode .diagram-accent { fill: #0E8AC8; }
+    body.light-mode .diagram-accent-stroke { stroke: #0E8AC8; }
+    body.light-mode .diagram-dim { fill: #888888; }
+    body.light-mode .diagram-dim-stroke { stroke: #aaaaaa; }
+    body.light-mode .diagram-box { stroke: #aaaaaa; }
+    body.light-mode .diagram-box-accent { stroke: #0E8AC8; }
+    body.light-mode .diagram-bg-accent { fill: rgba(14,138,200,0.08); }
+  </style>
+
+  <meta name="description" content="Why I dropped my frontier-provider subscriptions for a single OpenRouter account, and the Pi extension I built to get web search, vision, image generation, and audio back." />
+  <link rel="canonical" href="https://dtizzal.com/blog-posts/17-openrouter-primary/openrouter-primary.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://dtizzal.com/blog-posts/17-openrouter-primary/openrouter-primary.html" />
+  <meta property="og:title" content="DT Mirizzi - OpenRouter Is My Primary Subscription Now" />
+  <meta property="og:description" content="Why I dropped my frontier-provider subscriptions for a single OpenRouter account, and the Pi extension I built to get web search, vision, image generation, and audio back." />
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png" />
+  <meta property="og:site_name" content="DT Mirizzi" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://dtizzal.com/blog-posts/17-openrouter-primary/openrouter-primary.html" />
+  <meta name="twitter:title" content="DT Mirizzi - OpenRouter Is My Primary Subscription Now" />
+  <meta name="twitter:description" content="Why I dropped my frontier-provider subscriptions for a single OpenRouter account, and the Pi extension I built to get web search, vision, image generation, and audio back." />
+  <meta name="twitter:image" content="https://dtizzal.com/img/fb.png" />
+
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-Z4WRP0KWGX');
+  </script>
+</head>
+
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="theme-icon" id="theme-icon"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" clip-rule="evenodd"/></svg></span>
+  </button>
+
+  <a href="/blog.html">&#x27F5; back</a>
+
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="job-helper">
+    <div id="article-content">
+      <h1><strong>OpenRouter Is My Primary Subscription Now</strong></h1>
+
+      <p>
+        I cancelled my frontier-provider subscriptions. Not because the models got worse — they didn't — but
+        because paying a fixed monthly fee to one lab, then a second fee to another lab, then living inside
+        whichever chat app happened to wrap the model I wanted, stopped making sense. I route everything through
+        <a href="https://openrouter.ai/" target="_blank" rel="noopener">OpenRouter</a> now. One account, one key,
+        one balance, and a model picker that spans every provider worth using.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <p>
+        The catch is that the moment you leave the first-party apps, you lose everything that wasn't the raw
+        model: web search, vision, image generation, document reading, voice. The chat box stops feeling like a
+        product and starts feeling like a completions endpoint. So I built the missing layer as a Pi extension:
+        <a href="https://github.com/dtmirizzi/pi-openrouter-multimodal" target="_blank" rel="noopener">pi-openrouter-multimodal</a>.
+        Eight tools that give a coding agent the same multimodal surface the consumer apps have, all proxied
+        through the one OpenRouter key I already pay into.<sup><a href="#fn2">[2]</a></sup>
+      </p>
+
+      <h2><strong>Why I left the frontier subscriptions</strong></h2>
+
+      <p>
+        The pitch for a frontier subscription is simple: pay $20–$200 a month, get the best model and the polished
+        app around it. It's a good deal right up until you use more than one lab. Then you're paying two or three
+        subscriptions, none of which talk to each other, each of which silently rate-limits you on the model you
+        actually wanted, and each of which decides for you which model a given feature is allowed to call.
+      </p>
+
+      <p>
+        Three things pushed me over the edge:
+      </p>
+
+      <ul>
+        <li>
+          <strong>The model I want changes weekly.</strong> The frontier is a moving target. Best coding model,
+          best vision model, best cheap-and-fast model, and best long-context model are rarely the same lab in any
+          given month. A subscription locks you to one vendor's release cadence. A credit balance doesn't.
+        </li>
+        <li>
+          <strong>I was paying for capacity I didn't use.</strong> Flat monthly fees are a bet that you'll use
+          enough to come out ahead. For bursty, agent-driven usage, metered credits are almost always cheaper —
+          you pay per token, not per calendar month, and idle weeks cost nothing.
+        </li>
+        <li>
+          <strong>Lock-in lives in the harness, not the weights.</strong> I've
+          <a href="/blog-posts/14-harness-engineering/harness-engineering.html">written</a> about the harness being
+          the real unit of software now. If your tools, prompts, and workflows are wired to one provider's SDK and
+          one app's feature set, switching models means rewriting your harness. Routing through a provider-neutral
+          gateway makes the model a config value, not an architecture decision.
+        </li>
+      </ul>
+
+      <p>
+        OpenRouter is the gateway. It normalizes hundreds of models from dozens of providers behind a single
+        OpenAI-compatible API, handles failover when a provider is down, and bills it all to one balance. The
+        model name is a string you change. That's the whole pitch, and it's enough.<sup><a href="#fn1">[1]</a></sup>
+      </p>
+
+      <h2><strong>The app tax</strong></h2>
+
+      <p>
+        Here's what nobody tells you when you cancel: the subscription was never just the model. It was the model
+        plus a pile of server-side machinery the app quietly called on your behalf. Ask the chat app a question
+        about a current event and it ran a web search. Paste a screenshot and it ran a vision model. Ask for a
+        picture and it called an image model. Drop in a PDF and something parsed it. Talk to it and a
+        speech-to-text model transcribed you.
+      </p>
+
+      <p>
+        Strip that away and a raw completions endpoint can't do any of it. The model has no eyes, no browser, no
+        canvas, no ears. For most of my work — coding inside an agent — that's a real regression. I want my agent
+        to read the docs page I link, look at the failing screenshot, and read the PDF spec without me leaving the
+        terminal. That capability gap is the app tax, and it's the actual reason people feel trapped in the
+        first-party apps.
+      </p>
+
+      <p>
+        The fix isn't to go back. It's to rebuild the capabilities as agent tools, pointed at the same gateway.
+        OpenRouter already exposes the pieces — server-side web search, vision-capable chat completions, image
+        output, audio endpoints. They just need to be wired into the agent as callable tools.
+      </p>
+
+      <h2><strong>pi-openrouter-multimodal</strong></h2>
+
+      <p>
+        <a href="https://github.com/dtmirizzi/pi-openrouter-multimodal" target="_blank" rel="noopener">pi-openrouter-multimodal</a>
+        is a Pi extension that adds eight tools to the agent, every one of them proxied through OpenRouter. One
+        install, one key, and the agent gets its multimodal surface back:
+      </p>
+
+      <pre><code>pi install npm:@dtmirizzi/pi-openrouter-multimodal</code></pre>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>web_search</code></td>
+            <td>Server-side web search with real-time results</td>
+          </tr>
+          <tr>
+            <td><code>web_fetch</code></td>
+            <td>Fetch page content from a URL — web pages, docs, PDFs</td>
+          </tr>
+          <tr>
+            <td><code>image_generate</code></td>
+            <td>Text-to-image generation via chat completions</td>
+          </tr>
+          <tr>
+            <td><code>image_understand</code></td>
+            <td>Analyze images with a vision model</td>
+          </tr>
+          <tr>
+            <td><code>video_understand</code></td>
+            <td>Analyze video (YouTube links work with Gemini)</td>
+          </tr>
+          <tr>
+            <td><code>pdf_read</code></td>
+            <td>Extract and analyze PDF content</td>
+          </tr>
+          <tr>
+            <td><code>tts_speak</code></td>
+            <td>Text-to-speech via the <code>/audio/speech</code> endpoint</td>
+          </tr>
+          <tr>
+            <td><code>stt_transcribe</code></td>
+            <td>Speech-to-text via the <code>/audio/transcriptions</code> endpoint</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Every tool is independently toggleable. If you only want web search and PDF reading, turn the other six
+        off and they never enter the agent's tool list — which keeps the context lean and the agent from reaching
+        for capabilities you didn't sanction. This is the same least-privilege instinct from the
+        <a href="/blog-posts/15-pi-governance/pi-governance.html">governance work</a>: the tools that aren't
+        present can't be misused.
+      </p>
+
+      <!-- Diagram: app tax vs gateway -->
+      <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6" class="diagram-accent-stroke" fill="none" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <text x="380" y="26" text-anchor="middle" class="diagram-text diagram-title">One key, every modality</text>
+
+        <!-- Agent -->
+        <rect x="40" y="150" width="150" height="60" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="115" y="178" text-anchor="middle" class="diagram-text diagram-small diagram-accent">Pi agent</text>
+        <text x="115" y="196" text-anchor="middle" class="diagram-text diagram-small">+ extension</text>
+
+        <!-- Gateway -->
+        <rect x="305" y="150" width="150" height="60" rx="6" class="diagram-box-accent diagram-bg-accent"/>
+        <text x="380" y="178" text-anchor="middle" class="diagram-text diagram-small diagram-accent">OpenRouter</text>
+        <text x="380" y="196" text-anchor="middle" class="diagram-text diagram-small">one key, one balance</text>
+
+        <line x1="190" y1="180" x2="305" y2="180" class="diagram-accent-stroke" stroke-width="1.5" marker-end="url(#arr)"/>
+
+        <!-- Modalities -->
+        <rect x="580" y="40" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="61" text-anchor="middle" class="diagram-text diagram-small">web search / fetch</text>
+        <rect x="580" y="84" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="105" text-anchor="middle" class="diagram-text diagram-small">image generate</text>
+        <rect x="580" y="128" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="149" text-anchor="middle" class="diagram-text diagram-small">image / video vision</text>
+        <rect x="580" y="172" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="193" text-anchor="middle" class="diagram-text diagram-small">pdf read</text>
+        <rect x="580" y="216" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="237" text-anchor="middle" class="diagram-text diagram-small">tts / stt</text>
+        <rect x="580" y="260" width="150" height="32" rx="4" class="diagram-box"/>
+        <text x="655" y="281" text-anchor="middle" class="diagram-text diagram-small">any chat model</text>
+
+        <line x1="455" y1="170" x2="580" y2="56" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="455" y1="174" x2="580" y2="100" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="455" y1="178" x2="580" y2="144" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="455" y1="182" x2="580" y2="188" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="455" y1="186" x2="580" y2="232" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="455" y1="190" x2="580" y2="276" class="diagram-dim-stroke" stroke-width="1.2" marker-end="url(#arr)"/>
+
+        <text x="380" y="335" text-anchor="middle" class="diagram-text diagram-small">The app tax, rebuilt as agent tools — billed to the balance you already have.</text>
+      </svg>
+
+      <h2><strong>How it actually works</strong></h2>
+
+      <p>
+        There's no second account and no second SDK. Every tool resolves the OpenRouter key in priority order, so
+        if your agent already talks to OpenRouter, the extension is configured the moment it installs:
+      </p>
+
+      <ol>
+        <li>the <code>OPENROUTER_API_KEY</code> environment variable</li>
+        <li>Pi's model registry, under the <code>openrouter</code> provider</li>
+        <li><code>~/.pi/agent/models.json</code>, at <code>providers.openrouter.apiKey</code></li>
+      </ol>
+
+      <p>
+        Under the hood, the tools are thin adapters over endpoints OpenRouter already exposes. Search and fetch use
+        server-side tool execution. Image generation rides on chat completions with image output. Vision and video
+        analysis pass media as content blocks to a vision-capable model. PDFs go through a file-parser. TTS and STT
+        hit the dedicated <code>/audio/speech</code> and <code>/audio/transcriptions</code> endpoints. The agent
+        sees eight clean tools; the gateway does the routing.
+      </p>
+
+      <h2><strong>Picking a model per modality</strong></h2>
+
+      <p>
+        The part I care most about: you choose the model for each modality independently. The extension queries
+        OpenRouter for the live model list at startup, so the picker reflects what's actually available right now,
+        not a hardcoded menu that rots. Two interactive overlays drive it:
+      </p>
+
+      <ul>
+        <li><code>/web-tools</code> — toggle tools on or off and configure the search and fetch engines</li>
+        <li><code>/web-models</code> — pick the model for each modality: image generation, vision, video, PDF, the
+          TTS voice, and the STT model</li>
+      </ul>
+
+      <p>
+        So I can point image generation at Gemini Flash Image one week and FLUX.2 the next, run vision on whatever
+        the strongest current model is, and parse PDFs with a free Cloudflare model or Mistral OCR depending on the
+        document. Search and fetch can route through the native engine, Exa, Firecrawl, or parallel. None of those
+        choices touch which model writes my code — they're orthogonal, exactly as they should be.
+      </p>
+
+      <p>
+        These settings persist. They survive session shutdown, context compaction, and tree navigation, so I
+        configure once and the agent keeps the setup across every future session.<sup><a href="#fn2">[2]</a></sup>
+      </p>
+
+      <h2><strong>What this buys me</strong></h2>
+
+      <p>
+        The whole stack is now one mental model: a single balance, a single key, and a model name I treat as a
+        dial. The coding model, the vision model, and the image model can each be the best available option from
+        whichever lab shipped it, with no extra subscription and no second app. When a new model lands on
+        OpenRouter, it shows up in my picker the same day — no waiting for an app to wire it into a feature.
+      </p>
+
+      <p>
+        And it composes with everything else I run on Pi. The
+        <a href="/blog-posts/15-pi-governance/pi-governance.html">governance extension</a> still intercepts every
+        one of these tool calls: <code>web_fetch</code> hitting a sketchy URL, <code>image_generate</code> burning
+        budget, an audio transcription leaking PII on output. Multimodal capability and governance are separate
+        extensions over the same harness, which is the point — capabilities are tools, control is the layer
+        underneath them.
+      </p>
+
+      <h2><strong>The honest tradeoffs</strong></h2>
+
+      <p>
+        This isn't free of friction. Going metered means you watch a balance instead of forgetting a flat fee;
+        a runaway agent loop can spend real money, which is one more reason to run it behind budgets and
+        governance. You give up the consumer-app polish — the streaming UI, the saved chats, the mobile client —
+        in exchange for control. And a gateway adds a hop: you're trusting OpenRouter's routing and uptime, though
+        in practice their failover has been more reliable than any single provider I'd otherwise depend on.
+      </p>
+
+      <p>
+        For agent-driven, multi-model work, those are easy trades. I'd rather own the harness and rent the tokens
+        than rent the whole stack and own none of it.
+      </p>
+
+      <h2><strong>Try it</strong></h2>
+
+      <p>
+        If you're on Pi and you route through OpenRouter, it's one command and you keep your existing key:
+      </p>
+
+      <pre><code>pi install npm:@dtmirizzi/pi-openrouter-multimodal
+# then, inside Pi:
+/web-tools     # toggle the eight tools
+/web-models    # pick a model per modality</code></pre>
+
+      <p>
+        The source, the full tool reference, and the configuration options are on
+        <a href="https://github.com/dtmirizzi/pi-openrouter-multimodal" target="_blank" rel="noopener">GitHub</a>.
+        Issues and PRs welcome — I'm running this as my daily driver, so I'll be shipping fixes either way.
+      </p>
+
+      <div class="footnotes">
+        <h3>References</h3>
+        <ol>
+          <li id="fn1">
+            OpenRouter — a unified API and credit balance across hundreds of models from dozens of providers.
+            <a href="https://openrouter.ai/" target="_blank" rel="noopener">openrouter.ai</a>
+          </li>
+          <li id="fn2">
+            pi-openrouter-multimodal — eight OpenRouter-backed multimodal tools for Pi coding agents (source, tool reference, and configuration).
+            <a href="https://github.com/dtmirizzi/pi-openrouter-multimodal" target="_blank" rel="noopener">github.com/dtmirizzi/pi-openrouter-multimodal</a>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/ghost-search.js"></script>
+  <script src="/js/ghost-context.js"></script>
+  <script src="/js/ghost-chat.js" type="module"></script>
+</body>
+
+</html>
