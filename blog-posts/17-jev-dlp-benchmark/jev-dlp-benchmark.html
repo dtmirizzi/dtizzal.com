@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>DT Mirizzi - Jev Is a General-Purpose Model That Beat Specialized DLP Detectors</title>
+  <meta name="description" content="I benchmarked Jev against Presidio, GLiNER, and regex on 515 DLP samples across 5 categories. The generalist won 4 of 5 categories — here's what that means for rapid prototyping.">
+  <link rel="canonical" href="https://dtizzal.com/blog-posts/17-jev-dlp-benchmark/jev-dlp-benchmark.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://dtizzal.com/blog-posts/17-jev-dlp-benchmark/jev-dlp-benchmark.html">
+  <meta property="og:title" content="DT Mirizzi - Jev Is a General-Purpose Model That Beat Specialized DLP Detectors">
+  <meta property="og:description" content="I benchmarked Jev against Presidio, GLiNER, and regex on 515 DLP samples across 5 categories. The generalist won 4 of 5 categories — here's what that means for rapid prototyping.">
+  <meta property="og:image" content="https://dtizzal.com/img/fb.png">
+  <meta property="og:site_name" content="DT Mirizzi">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://dtizzal.com/blog-posts/17-jev-dlp-benchmark/jev-dlp-benchmark.html">
+  <meta name="twitter:title" content="DT Mirizzi - Jev Is a General-Purpose Model That Beat Specialized DLP Detectors">
+  <meta name="twitter:description" content="I benchmarked Jev against Presidio, GLiNER, and regex on 515 DLP samples across 5 categories. The generalist won 4 of 5 categories — here's what that means for rapid prototyping.">
+  <meta name="twitter:image" content="https://dtizzal.com/img/fb.png">
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"></noscript><link href="/css/style.css" rel="stylesheet" />
+  <style>
+    body { font-family:'Courier Prime',monospace; line-height:1.6; background-color:#1a1a1a; color:#e0e0e0; }
+    h1,h2,h3 { color:#ffffff; font-weight:700; }
+    a { color:#bbbbbb; text-decoration:none; border-bottom:1px dotted #777; }
+    a:hover { color:#ffffff; border-bottom:1px solid #fff; }
+    p { max-width:800px; margin-bottom:1em; }
+    ul,ol { padding-left:20px; margin-bottom:1em; }
+    li { margin-bottom:0.5em; }
+    strong { color:#ffffff; }
+    em { font-style:italic; }
+    hr { border:none; border-top:1px solid #333; margin:40px 0; }
+    .footnotes { margin-top:40px; border-top:1px solid #333; padding-top:20px; font-size:0.95rem; color:#cfcfcf; }
+    .footnotes ol { padding-left:20px; }
+    .footnotes li { margin:8px 0; }
+    blockquote { border-left:3px solid #2dc7ff; margin:1.5em 0; padding:0.5em 1em; font-style:italic; color:#bbb; }
+    body.light-mode blockquote { border-left-color:#0E8AC8; color:#555; }
+    /* Tables (additive — not in SOC2 post) */
+    table { width:100%; border-collapse:collapse; margin:20px 0; font-size:0.85rem; }
+    th, td { padding:8px 10px; text-align:left; border-bottom:1px solid #333; }
+    th { color:#ffffff; font-weight:700; border-bottom:2px solid #555; }
+    body.light-mode th { color:#1a1a1a; border-bottom-color:#aaa; }
+    body.light-mode td { border-bottom-color:#ccc; }
+    tr.highlight { background:rgba(45,199,255,0.06); }
+    body.light-mode tr.highlight { background:rgba(14,138,200,0.04); }
+    .winner { color:#51cf66; font-weight:700; }
+    body.light-mode .winner { color:#2d8a3e; }
+    code { background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:3px; font-size:0.9em; }
+    body.light-mode code { background:rgba(0,0,0,0.06); }
+    /* SVG diagram classes */
+    .diagram-text { font-family:'Courier Prime',monospace; fill:#e0e0e0; }
+    .diagram-title { font-size:13px; font-weight:700; fill:#ffffff; }
+    .diagram-label { font-size:13px; }
+    .diagram-small { font-size:11px; fill:#999999; }
+    .diagram-tiny { font-size:10px; fill:#888888; }
+    .diagram-accent { fill:#2dc7ff; }
+    .diagram-accent-stroke { stroke:#2dc7ff; }
+    .diagram-dim { fill:#888888; }
+    .diagram-dim-stroke { stroke:#555555; }
+    .diagram-warn { fill:#ff6b6b; }
+    .diagram-warn-stroke { stroke:#ff6b6b; }
+    .diagram-ok { fill:#51cf66; }
+    .diagram-ok-stroke { stroke:#51cf66; }
+    .diagram-jev { fill:#58a6ff; }
+    .diagram-jev-stroke { stroke:#58a6ff; }
+    .diagram-pres { fill:#d29922; }
+    .diagram-pres-stroke { stroke:#d29922; }
+    .diagram-glin { fill:#3fb950; }
+    .diagram-glin-stroke { stroke:#3fb950; }
+    .diagram-grey { fill:#8b949e; }
+    .diagram-grey-stroke { stroke:#8b949e; }
+    .diagram-box { fill:none; stroke:#555; stroke-width:1.5; }
+    .diagram-box-jev { fill:none; stroke:#58a6ff; stroke-width:1.5; }
+    .diagram-box-ghost { fill:none; stroke:#333; stroke-width:1; stroke-dasharray:4,3; }
+    .diagram-bg-jev { fill:rgba(88,166,255,0.08); }
+    .diagram-bg-pres { fill:rgba(210,153,34,0.08); }
+    .diagram-bg-glin { fill:rgba(63,185,80,0.08); }
+    .diagram-bg-grey { fill:rgba(139,148,158,0.08); }
+    .diagram-bg-neutral { fill:rgba(255,255,255,0.04); }
+    .diagram-divider { stroke:#333; stroke-width:1; stroke-dasharray:6,4; }
+    .diagram-bar-jev { fill:#58a6ff; opacity:0.85; }
+    .diagram-bar-pres { fill:#d29922; opacity:0.85; }
+    .diagram-bar-glin { fill:#3fb950; opacity:0.85; }
+    .diagram-bar-grey { fill:#8b949e; opacity:0.85; }
+    /* Light mode SVG */
+    body.light-mode .diagram-text { fill:#1a1a1a; }
+    body.light-mode .diagram-title { fill:#1a1a1a; }
+    body.light-mode .diagram-small { fill:#666666; }
+    body.light-mode .diagram-tiny { fill:#777777; }
+    body.light-mode .diagram-accent { fill:#0E8AC8; }
+    body.light-mode .diagram-accent-stroke { stroke:#0E8AC8; }
+    body.light-mode .diagram-dim { fill:#888888; }
+    body.light-mode .diagram-dim-stroke { stroke:#aaaaaa; }
+    body.light-mode .diagram-warn { fill:#d63031; }
+    body.light-mode .diagram-warn-stroke { stroke:#d63031; }
+    body.light-mode .diagram-ok { fill:#2d8a3e; }
+    body.light-mode .diagram-ok-stroke { stroke:#2d8a3e; }
+    body.light-mode .diagram-jev { fill:#1f6feb; }
+    body.light-mode .diagram-pres { fill:#9e6a03; }
+    body.light-mode .diagram-glin { fill:#1a7f37; }
+    body.light-mode .diagram-grey { fill:#656d76; }
+    body.light-mode .diagram-box { stroke:#aaaaaa; }
+    body.light-mode .diagram-box-jev { stroke:#1f6feb; }
+    body.light-mode .diagram-box-ghost { stroke:#cccccc; }
+    body.light-mode .diagram-bg-jev { fill:rgba(31,111,235,0.06); }
+    body.light-mode .diagram-bg-pres { fill:rgba(158,106,3,0.06); }
+    body.light-mode .diagram-bg-glin { fill:rgba(26,127,55,0.06); }
+    body.light-mode .diagram-bg-grey { fill:rgba(101,109,118,0.06); }
+    body.light-mode .diagram-bg-neutral { fill:rgba(0,0,0,0.04); }
+    body.light-mode .diagram-divider { stroke:#cccccc; }
+    body.light-mode .diagram-bar-jev { fill:#1f6feb; opacity:0.85; }
+    body.light-mode .diagram-bar-pres { fill:#9e6a03; opacity:0.85; }
+    body.light-mode .diagram-bar-glin { fill:#1a7f37; opacity:0.85; }
+    body.light-mode .diagram-bar-grey { fill:#656d76; opacity:0.85; }
+    /* Light mode base */
+    body.light-mode { background-color:#fdfdfd; color:#1a1a1a; }
+    body.light-mode h1,body.light-mode h2,body.light-mode h3,body.light-mode strong { color:#1a1a1a; }
+    body.light-mode a { color:#333; border-bottom-color:#aaa; }
+    body.light-mode a:hover { color:#000; border-bottom-color:#000; }
+    /* Theme toggle */
+    .theme-toggle { position:fixed; top:20px; right:20px; background:transparent; border:none; color:inherit; cursor:pointer; z-index:1000; padding:10px; border-radius:50%; transition:background-color 0.3s; }
+    .theme-toggle:hover { background-color:rgba(128,128,128,0.2); }
+    .theme-toggle .material-symbols-outlined { font-size:24px; }
+    .back-link { display:inline-block; margin-bottom:30px; font-size:0.9em; color:#888; border-bottom:none; }
+    .back-link:hover { color:#fff; }
+    body.light-mode .back-link:hover { color:#000; }
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z4WRP0KWGX"></script>
+  <script>
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js',new Date());
+    gtag('config','G-Z4WRP0KWGX');
+  </script>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+    <span class="theme-icon" id="theme-icon"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" clip-rule="evenodd"/></svg></span>
+  </button>
+  <video loop muted autoplay playsinline webkit-playsinline preload="auto">
+    <source src="/img/Background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <a href="/blog.html">&#8592; back</a>
+
+  <div class="job-helper">
+    <div id="article-content">
+
+    <h1>I Ran a DLP Shootout This Weekend and Jev Somehow Won</h1>
+
+    <div style="margin:20px 0;padding:12px 18px;background:rgba(45,199,255,0.06);border:1px solid rgba(45,199,255,0.15);border-radius:8px;">
+      <audio controls style="width:100%;height:36px;" preload="metadata">
+        <source src="audio.mp3" type="audio/mpeg">
+      </audio>
+      <div style="margin-top:6px;color:#8b949e;font-size:11px;">Narrated by Sam Rockwell · 4:08</div>
+    </div>
+
+    <p>TypeSafe shipped this thing called Jev a few weeks ago. It doesn't generate text, won't write you a poem. It's a "System One" decision engine. You hand it text and ask a typed question, and it hands back a probability. Is this document sensitive? <em>0.94, yes.</em> What kind? <em>Credentials.</em> No paragraphs, no hedging, no "it depends." Just a decision.<sup><a href="#fn1">[1]</a></sup></p>
+
+    <p>Weird pitch. But here's what got me: it's general-purpose. You don't train it or fine-tune it. You just ask different questions. So I got curious — if I pointed it at a DLP problem alongside actual specialized tools, would it hold up? Or would it get demolished by models that were literally built for this?</p>
+
+    <p>It won 4 out of 5 categories. But the way it won is more interesting than the fact that it did.</p>
+
+    <h2>What I actually tested</h2>
+
+    <p>I grabbed 515 labeled documents from HuggingFace DLP datasets and a batch I wrote myself. 166 became the test set, split five ways: PII (names, SSNs, emails), financial (credit cards, IBANs, crypto wallets), credentials (API keys, passwords, connection strings), PHI (medical records, prescriptions), and legal/confidential (NDAs, privileged docs, trade secrets).</p>
+
+    <p>Then 87 clean documents. Synthetic emails, code without secrets, meeting notes, news articles. The stuff that shouldn't trigger anything but often does because it looks wrong. A business email to "Sarah Thompson" isn't PII. It's a fake name in synthetic data. Try telling that to a regex engine.<sup><a href="#fn2">[2]</a></sup></p>
+
+    <p>Four detectors, same test set: Jev (via OpenRouter), Microsoft Presidio, GLiNER (a NER model), and a regex engine with hand-rolled patterns.</p>
+
+    <!-- Chart: Binary F1 comparison -->
+    <svg viewBox="0 0 760 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">Binary Detection F1 Score (is anything sensitive?)</text>
+      <!-- Presidio: F1=0.735 → 147px, Prec=0.600 → 120px, Rec=0.949 → 190px -->
+      <rect x="50" y="40" width="140" height="210" rx="4" class="diagram-box"/>
+      <rect x="58" y="63" width="40" height="147" rx="3" class="diagram-bar-pres"/>
+      <rect x="102" y="90" width="40" height="120" rx="3" class="diagram-bar-pres" opacity="0.45"/>
+      <rect x="146" y="60" width="40" height="150" rx="3" class="diagram-bar-pres" opacity="0.20"/>
+      <text x="120" y="225" text-anchor="middle" class="diagram-text diagram-small">F1: 0.735</text>
+      <text x="120" y="243" text-anchor="middle" class="diagram-text diagram-tiny">Prec: 0.600  Rec: 0.949</text>
+      <text x="120" y="262" text-anchor="middle" class="diagram-text diagram-label diagram-pres">Presidio</text>
+      <!-- Jev: F1=0.709 → 142px, Prec=0.609 → 122px, Rec=0.848 → 170px -->
+      <rect x="228" y="40" width="140" height="210" rx="4" class="diagram-box-jev"/>
+      <rect x="236" y="68" width="40" height="142" rx="3" class="diagram-bar-jev"/>
+      <rect x="280" y="88" width="40" height="122" rx="3" class="diagram-bar-jev" opacity="0.45"/>
+      <rect x="324" y="70" width="40" height="140" rx="3" class="diagram-bar-jev" opacity="0.20"/>
+      <text x="298" y="225" text-anchor="middle" class="diagram-text diagram-small">F1: 0.709</text>
+      <text x="298" y="243" text-anchor="middle" class="diagram-text diagram-tiny">Prec: 0.609  Rec: 0.848</text>
+      <text x="298" y="262" text-anchor="middle" class="diagram-text diagram-label diagram-jev">Jev</text>
+      <!-- GLiNER: F1=0.687 → 137px, Prec=0.578 → 116px, Rec=0.848 → 170px -->
+      <rect x="406" y="40" width="140" height="210" rx="4" class="diagram-box"/>
+      <rect x="414" y="73" width="40" height="137" rx="3" class="diagram-bar-glin"/>
+      <rect x="458" y="94" width="40" height="116" rx="3" class="diagram-bar-glin" opacity="0.45"/>
+      <rect x="502" y="70" width="40" height="140" rx="3" class="diagram-bar-glin" opacity="0.20"/>
+      <text x="476" y="225" text-anchor="middle" class="diagram-text diagram-small">F1: 0.687</text>
+      <text x="476" y="243" text-anchor="middle" class="diagram-text diagram-tiny">Prec: 0.578  Rec: 0.848</text>
+      <text x="476" y="262" text-anchor="middle" class="diagram-text diagram-label diagram-glin">GLiNER</text>
+      <!-- Regex: F1=0.592 → 118px, Prec=0.556 → 111px, Rec=0.633 → 127px -->
+      <rect x="584" y="40" width="140" height="210" rx="4" class="diagram-box"/>
+      <rect x="592" y="92" width="40" height="118" rx="3" class="diagram-bar-grey"/>
+      <rect x="636" y="99" width="40" height="111" rx="3" class="diagram-bar-grey" opacity="0.45"/>
+      <rect x="680" y="83" width="40" height="127" rx="3" class="diagram-bar-grey" opacity="0.20"/>
+      <text x="654" y="225" text-anchor="middle" class="diagram-text diagram-small">F1: 0.592</text>
+      <text x="654" y="243" text-anchor="middle" class="diagram-text diagram-tiny">Prec: 0.556  Rec: 0.633</text>
+      <text x="654" y="262" text-anchor="middle" class="diagram-text diagram-label diagram-grey">Regex</text>
+      <!-- Legend -->
+      <rect x="50" y="10" width="12" height="10" rx="2" class="diagram-bar-pres"/>
+      <text x="66" y="19" class="diagram-text diagram-tiny">F1</text>
+      <rect x="90" y="10" width="12" height="10" rx="2" class="diagram-bar-pres" opacity="0.45"/>
+      <text x="106" y="19" class="diagram-text diagram-tiny">Precision</text>
+      <rect x="156" y="10" width="12" height="10" rx="2" class="diagram-bar-pres" opacity="0.20"/>
+      <text x="172" y="19" class="diagram-text diagram-tiny">Recall</text>
+    </svg>
+
+    <!-- Chart: Precision vs Recall quadrant -->
+    <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">Precision vs Recall — Who Balances Best?</text>
+      <text x="380" y="40" text-anchor="middle" class="diagram-text diagram-tiny">Curves show F1 iso-lines. Top-right = better.</text>
+      <!-- Axes -->
+      <line x1="80" y1="290" x2="700" y2="290" class="diagram-dim-stroke" stroke-width="1"/>
+      <line x1="80" y1="290" x2="80" y2="50" class="diagram-dim-stroke" stroke-width="1"/>
+      <!-- X axis labels -->
+      <text x="80" y="310" text-anchor="middle" class="diagram-text diagram-tiny">0.50</text>
+      <text x="235" y="310" text-anchor="middle" class="diagram-text diagram-tiny">0.60</text>
+      <text x="390" y="310" text-anchor="middle" class="diagram-text diagram-tiny">0.70</text>
+      <text x="545" y="310" text-anchor="middle" class="diagram-text diagram-tiny">0.80</text>
+      <text x="700" y="310" text-anchor="middle" class="diagram-text diagram-tiny">0.90</text>
+      <text x="400" y="332" text-anchor="middle" class="diagram-text diagram-tiny">Recall →</text>
+      <!-- Y axis labels -->
+      <text x="70" y="290" text-anchor="end" class="diagram-text diagram-tiny">0.55</text>
+      <text x="70" y="230" text-anchor="end" class="diagram-text diagram-tiny">0.58</text>
+      <text x="70" y="170" text-anchor="end" class="diagram-text diagram-tiny">0.60</text>
+      <text x="70" y="110" text-anchor="end" class="diagram-text diagram-tiny">0.62</text>
+      <text x="70" y="62" text-anchor="end" class="diagram-text diagram-tiny">Precision ↑</text>
+      <!-- Grid lines -->
+      <line x1="80" y1="230" x2="700" y2="230" class="diagram-box-ghost"/>
+      <line x1="80" y1="170" x2="700" y2="170" class="diagram-box-ghost"/>
+      <line x1="80" y1="110" x2="700" y2="110" class="diagram-box-ghost"/>
+      <line x1="235" y1="290" x2="235" y2="50" class="diagram-box-ghost"/>
+      <line x1="390" y1="290" x2="390" y2="50" class="diagram-box-ghost"/>
+      <line x1="545" y1="290" x2="545" y2="50" class="diagram-box-ghost"/>
+      <!-- F1 iso-curves -->
+      <path d="M80,290 Q200,260 390,170 Q500,115 545,98" fill="none" stroke="#30363d" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="555" y="105" class="diagram-text diagram-tiny" style="fill:#484f58;">F1=0.6</text>
+      <path d="M80,290 Q150,230 235,170 Q350,105 390,98" fill="none" stroke="#30363d" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="400" y="105" class="diagram-text diagram-tiny" style="fill:#484f58;">F1=0.7</text>
+      <path d="M80,250 Q130,170 200,110 Q260,75 300,62" fill="none" stroke="#30363d" stroke-width="0.8" stroke-dasharray="3,3"/>
+      <text x="310" y="70" class="diagram-text diagram-tiny" style="fill:#484f58;">F1=0.8</text>
+      <!-- Dots -->
+      <!-- Presidio: rec=0.949, prec=0.600 → x=690, y=170 -->
+      <circle cx="690" cy="170" r="9" fill="#d29922" opacity="0.9"/>
+      <text x="690" y="152" text-anchor="middle" class="diagram-text diagram-small diagram-pres">Presidio</text>
+      <!-- Jev: rec=0.848, prec=0.609 → x=545, y=152 -->
+      <circle cx="545" cy="152" r="9" fill="#58a6ff" opacity="0.9"/>
+      <text x="545" y="138" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Jev</text>
+      <!-- GLiNER: rec=0.848, prec=0.578 → x=545, y=200 -->
+      <circle cx="545" cy="200" r="9" fill="#3fb950" opacity="0.9"/>
+      <text x="545" y="220" text-anchor="middle" class="diagram-text diagram-small diagram-glin">GLiNER</text>
+      <!-- Regex: rec=0.633, prec=0.556 → x=300, y=250 -->
+      <circle cx="300" cy="250" r="9" fill="#8b949e" opacity="0.9"/>
+      <text x="300" y="270" text-anchor="middle" class="diagram-text diagram-small diagram-grey">Regex</text>
+    </svg>
+
+    <p>On raw binary detection, Presidio technically wins at F1=0.735. But the number you actually care about in production is <strong>precision</strong>, and Jev leads at 0.609. When Jev says something is sensitive, you can trust it more. Presidio's F1 comes from brute force — it flags almost everything, including 57.5% of clean documents. That means your SOC team drowns.</p>
+
+    <p>Jev's false positive rate is still 49.4%, which isn't great. But it's the best of the four. The pattern sharpens when you break it down by category.</p>
+
+    <!-- Chart: Per-category F1 heatmap -->
+    <svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">Per-Category F1 — Who Catches What?</text>
+      <text x="380" y="40" text-anchor="middle" class="diagram-text diagram-tiny">Darker green = stronger. Red = blind spot.</text>
+      <!-- Column headers -->
+      <text x="185" y="68" text-anchor="middle" class="diagram-text diagram-small diagram-pres">Presidio</text>
+      <text x="335" y="68" text-anchor="middle" class="diagram-text diagram-small diagram-glin">GLiNER</text>
+      <text x="485" y="68" text-anchor="middle" class="diagram-text diagram-small diagram-grey">Regex</text>
+      <text x="635" y="68" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Jev</text>
+      <!-- Row: PII -->
+      <text x="55" y="106" text-anchor="end" class="diagram-text diagram-small">PII</text>
+      <rect x="65" y="90" width="150" height="26" rx="3" fill="#39d353" opacity="0.55"/>
+      <text x="140" y="108" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.659</text>
+      <rect x="225" y="90" width="150" height="26" rx="3" fill="#39d353" opacity="0.50"/>
+      <text x="300" y="108" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.603</text>
+      <rect x="385" y="90" width="150" height="26" rx="3" fill="#39d353" opacity="0.20"/>
+      <text x="460" y="108" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.321</text>
+      <rect x="545" y="84" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="107" text-anchor="middle" class="diagram-text diagram-label diagram-jev">0.607</text>
+      <!-- Row: Financial -->
+      <text x="55" y="154" text-anchor="end" class="diagram-text diagram-small">Financial</text>
+      <rect x="65" y="138" width="150" height="26" rx="3" fill="#39d353" opacity="0.35"/>
+      <text x="140" y="156" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.500</text>
+      <rect x="225" y="138" width="150" height="26" rx="3" fill="#39d353" opacity="0.50"/>
+      <text x="300" y="156" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.625</text>
+      <rect x="385" y="138" width="150" height="26" rx="3" fill="#39d353" opacity="0.20"/>
+      <text x="460" y="156" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.324</text>
+      <rect x="545" y="132" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="155" text-anchor="middle" class="diagram-text diagram-label diagram-jev">0.706</text>
+      <!-- Row: Credentials -->
+      <text x="55" y="202" text-anchor="end" class="diagram-text diagram-small">Credentials</text>
+      <rect x="65" y="186" width="150" height="26" rx="3" fill="#f85149" opacity="0.40"/>
+      <text x="140" y="204" text-anchor="middle" class="diagram-text diagram-label" style="fill:#f85149;font-size:12px;">✗ 0.000</text>
+      <rect x="225" y="186" width="150" height="26" rx="3" fill="#39d353" opacity="0.45"/>
+      <text x="300" y="204" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.600</text>
+      <rect x="385" y="186" width="150" height="26" rx="3" fill="#39d353" opacity="0.55"/>
+      <text x="460" y="204" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.667</text>
+      <rect x="545" y="180" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="203" text-anchor="middle" class="diagram-text diagram-label diagram-jev">0.800</text>
+      <!-- Row: PHI -->
+      <text x="55" y="250" text-anchor="end" class="diagram-text diagram-small">PHI</text>
+      <rect x="65" y="234" width="150" height="26" rx="3" fill="#f85149" opacity="0.40"/>
+      <text x="140" y="252" text-anchor="middle" class="diagram-text diagram-label" style="fill:#f85149;font-size:12px;">✗ 0.000</text>
+      <rect x="225" y="234" width="150" height="26" rx="3" fill="#39d353" opacity="0.12"/>
+      <text x="300" y="252" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.222</text>
+      <rect x="385" y="234" width="150" height="26" rx="3" fill="#39d353" opacity="0.18"/>
+      <text x="460" y="252" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.286</text>
+      <rect x="545" y="228" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="251" text-anchor="middle" class="diagram-text diagram-label diagram-jev">0.444</text>
+      <!-- Row: Legal -->
+      <text x="55" y="298" text-anchor="end" class="diagram-text diagram-small">Legal</text>
+      <rect x="65" y="282" width="150" height="26" rx="3" fill="#f85149" opacity="0.40"/>
+      <text x="140" y="300" text-anchor="middle" class="diagram-text diagram-label" style="fill:#f85149;font-size:12px;">✗ 0.000</text>
+      <rect x="225" y="282" width="150" height="26" rx="3" fill="#f85149" opacity="0.40"/>
+      <text x="300" y="300" text-anchor="middle" class="diagram-text diagram-label" style="fill:#f85149;font-size:12px;">✗ 0.000</text>
+      <rect x="385" y="282" width="150" height="26" rx="3" fill="#39d353" opacity="0.40"/>
+      <text x="460" y="300" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.571</text>
+      <rect x="545" y="276" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="299" text-anchor="middle" class="diagram-text diagram-label diagram-jev">1.000</text>
+      <!-- Row: Clean -->
+      <text x="55" y="346" text-anchor="end" class="diagram-text diagram-small">Clean</text>
+      <rect x="65" y="330" width="150" height="26" rx="3" fill="#39d353" opacity="0.42"/>
+      <text x="140" y="348" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.578</text>
+      <rect x="225" y="330" width="150" height="26" rx="3" fill="#39d353" opacity="0.38"/>
+      <text x="300" y="348" text-anchor="middle" class="diagram-text diagram-label" style="fill:#fff;font-size:12px;">0.555</text>
+      <rect x="385" y="330" width="150" height="26" rx="3" fill="#f85149" opacity="0.40"/>
+      <text x="460" y="348" text-anchor="middle" class="diagram-text diagram-label" style="fill:#f85149;font-size:12px;">✗ 0.000</text>
+      <rect x="545" y="324" width="130" height="36" rx="4" class="diagram-box-jev"/>
+      <text x="610" y="347" text-anchor="middle" class="diagram-text diagram-label diagram-jev">0.615</text>
+      <!-- Legend -->
+      <text x="380" y="385" text-anchor="middle" class="diagram-text diagram-tiny">Jev blue boxes = category leader. Presidio / GLiNER / Regex = equal-width bars for comparison.</text>
+    </svg>
+
+    <!-- Radar: Category coverage -->
+    <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">Category Coverage — Only Jev Fills the Chart</text>
+      <text x="380" y="40" text-anchor="middle" class="diagram-text diagram-tiny">Each axis = one category. Zero = model is blind to it.</text>
+      <!-- Pentagon outline -->
+      <polygon points="380,75 560,280 490,420 270,420 200,280" class="diagram-box-ghost"/>
+      <!-- Axis labels -->
+      <text x="380" y="65" text-anchor="middle" class="diagram-text diagram-small">PII</text>
+      <text x="575" y="285" text-anchor="start" class="diagram-text diagram-small">Financial</text>
+      <text x="505" y="438" text-anchor="middle" class="diagram-text diagram-small">Creds</text>
+      <text x="250" y="438" text-anchor="middle" class="diagram-text diagram-small">PHI</text>
+      <text x="115" y="285" text-anchor="end" class="diagram-text diagram-small">Legal</text>
+      <!-- Jev fill -->
+      <polygon points="380,191 452,278 437,368 323,368 313,278" fill="rgba(88,166,255,0.12)" stroke="#58a6ff" stroke-width="2.5"/>
+      <!-- GLiNER line -->
+      <polygon points="380,194 467,286 420,420 270,420 200,280" fill="none" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <!-- Presidio line (collapses to PII+financial) -->
+      <polygon points="380,187 460,300 200,280 200,280 200,280" fill="none" stroke="#d29922" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <!-- Regex line -->
+      <polygon points="380,230 470,310 410,360 310,380 230,350" fill="none" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Blind spot markers -->
+      <text x="180" y="310" text-anchor="end" class="diagram-text diagram-tiny diagram-warn">✗ Presidio blind</text>
+      <text x="280" y="440" text-anchor="end" class="diagram-text diagram-tiny diagram-warn">✗ GLiNER blind</text>
+      <!-- Legend -->
+      <rect x="20" y="60" width="14" height="14" rx="2" fill="rgba(88,166,255,0.25)" stroke="#58a6ff" stroke-width="1.5"/>
+      <text x="40" y="73" class="diagram-text diagram-tiny diagram-jev">Jev — covers all 5</text>
+      <line x1="20" y1="84" x2="34" y2="84" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="40" y="88" class="diagram-text diagram-tiny diagram-glin">GLiNER — 3 of 5</text>
+      <line x1="20" y1="99" x2="34" y2="99" stroke="#d29922" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="40" y="103" class="diagram-text diagram-tiny diagram-pres">Presidio — 2 of 5</text>
+      <line x1="20" y1="114" x2="34" y2="114" stroke="#8b949e" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="40" y="118" class="diagram-text diagram-tiny diagram-grey">Regex — 2 of 5</text>
+    </svg>
+
+    <p>The red zeros are the real story. Presidio literally cannot detect credentials, PHI, or legal documents. It's a PII specialist. GLiNER misses legal entirely. Regex can't spot a clean document to save its life.</p>
+
+    <p>Jev is the <strong>only detector with non-zero F1 in every category</strong>. It detected API keys in CI/CD configs, passwords in Kubernetes secrets, connection strings in environment files — stuff Presidio and GLiNER are architecturally blind to.</p>
+
+    <h2>The speed problem</h2>
+
+    <p>Jev is really slow.</p>
+
+    <!-- Chart: Speed at scale -->
+    <svg viewBox="0 0 760 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">Latency at Scale — 57× Gap</text>
+      <text x="380" y="40" text-anchor="middle" class="diagram-text diagram-tiny">Log scale — each tick is 10× longer</text>
+      <!-- Y-axis labels -->
+      <text x="55" y="68" text-anchor="end" class="diagram-text diagram-tiny">1ms</text>
+      <text x="55" y="98" text-anchor="end" class="diagram-text diagram-tiny">1s</text>
+      <text x="55" y="128" text-anchor="end" class="diagram-text diagram-tiny">1min</text>
+      <text x="55" y="158" text-anchor="end" class="diagram-text diagram-tiny">1hr</text>
+      <text x="55" y="188" text-anchor="end" class="diagram-text diagram-tiny">1day</text>
+      <text x="55" y="218" text-anchor="end" class="diagram-text diagram-tiny">10days</text>
+      <!-- Grid lines -->
+      <line x1="60" y1="65" x2="740" y2="65" class="diagram-box-ghost"/>
+      <line x1="60" y1="95" x2="740" y2="95" class="diagram-box-ghost"/>
+      <line x1="60" y1="125" x2="740" y2="125" class="diagram-box-ghost"/>
+      <line x1="60" y1="155" x2="740" y2="155" class="diagram-box-ghost"/>
+      <line x1="60" y1="185" x2="740" y2="185" class="diagram-box-ghost"/>
+      <line x1="60" y1="215" x2="740" y2="215" class="diagram-box-ghost"/>
+      <!-- Group: 1 doc -->
+      <text x="130" y="255" text-anchor="middle" class="diagram-text diagram-tiny">1 doc</text>
+      <rect x="80" y="226" width="14" height="8" rx="2" class="diagram-bar-grey"/>
+      <rect x="98" y="210" width="14" height="24" rx="2" class="diagram-bar-pres"/>
+      <rect x="116" y="195" width="14" height="39" rx="2" class="diagram-bar-glin"/>
+      <rect x="134" y="130" width="14" height="104" rx="2" class="diagram-bar-jev"/>
+      <rect x="152" y="226" width="14" height="8" rx="2" opacity="0.0"/>
+      <!-- Group: 1K docs -->
+      <text x="250" y="255" text-anchor="middle" class="diagram-text diagram-tiny">1K docs</text>
+      <rect x="200" y="224" width="14" height="10" rx="2" class="diagram-bar-grey"/>
+      <rect x="218" y="184" width="14" height="50" rx="2" class="diagram-bar-pres"/>
+      <rect x="236" y="155" width="14" height="79" rx="2" class="diagram-bar-glin"/>
+      <rect x="254" y="102" width="14" height="132" rx="2" class="diagram-bar-jev"/>
+      <rect x="272" y="226" width="14" height="8" rx="2" opacity="0.0"/>
+      <!-- Group: 10K docs -->
+      <text x="370" y="255" text-anchor="middle" class="diagram-text diagram-tiny">10K docs</text>
+      <rect x="320" y="222" width="14" height="12" rx="2" class="diagram-bar-grey"/>
+      <rect x="338" y="158" width="14" height="76" rx="2" class="diagram-bar-pres"/>
+      <rect x="356" y="124" width="14" height="110" rx="2" class="diagram-bar-glin"/>
+      <rect x="374" y="65" width="14" height="169" rx="2" class="diagram-bar-jev"/>
+      <rect x="392" y="226" width="14" height="8" rx="2" opacity="0.0"/>
+      <!-- Group: 1M docs -->
+      <text x="530" y="255" text-anchor="middle" class="diagram-text diagram-tiny">1M docs</text>
+      <rect x="480" y="210" width="14" height="24" rx="2" class="diagram-bar-grey"/>
+      <rect x="498" y="105" width="14" height="129" rx="2" class="diagram-bar-pres"/>
+      <rect x="516" y="65" width="14" height="169" rx="2" class="diagram-bar-glin"/>
+      <rect x="534" y="46" width="14" height="188" rx="2" class="diagram-bar-jev"/>
+      <rect x="552" y="226" width="14" height="8" rx="2" opacity="0.0"/>
+      <!-- Time labels on bars -->
+      <text x="87" y="224" text-anchor="middle" class="diagram-text diagram-tiny">0.2ms</text>
+      <text x="105" y="207" text-anchor="middle" class="diagram-text diagram-tiny">28ms</text>
+      <text x="123" y="192" text-anchor="middle" class="diagram-text diagram-tiny">138ms</text>
+      <text x="141" y="127" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#58a6ff;">1.6s</text>
+      <text x="207" y="221" text-anchor="middle" class="diagram-text diagram-tiny">0.2s</text>
+      <text x="225" y="181" text-anchor="middle" class="diagram-text diagram-tiny">28s</text>
+      <text x="243" y="152" text-anchor="middle" class="diagram-text diagram-tiny">2.3m</text>
+      <text x="261" y="99" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#58a6ff;">26m</text>
+      <text x="327" y="219" text-anchor="middle" class="diagram-text diagram-tiny">2s</text>
+      <text x="345" y="155" text-anchor="middle" class="diagram-text diagram-tiny">5m</text>
+      <text x="363" y="121" text-anchor="middle" class="diagram-text diagram-tiny">23m</text>
+      <text x="381" y="62" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#58a6ff;">4.4h</text>
+      <text x="487" y="207" text-anchor="middle" class="diagram-text diagram-tiny">3m</text>
+      <text x="505" y="102" text-anchor="middle" class="diagram-text diagram-tiny">8h</text>
+      <text x="523" y="62" text-anchor="middle" class="diagram-text diagram-tiny">38h</text>
+      <text x="541" y="43" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#58a6ff;">18d</text>
+      <!-- Legend -->
+      <rect x="580" y="242" width="12" height="12" rx="2" class="diagram-bar-grey"/>
+      <text x="598" y="253" text-anchor="start" class="diagram-text diagram-tiny">Regex</text>
+      <rect x="650" y="242" width="12" height="12" rx="2" class="diagram-bar-pres"/>
+      <text x="668" y="253" text-anchor="start" class="diagram-text diagram-tiny">Presidio</text>
+      <rect x="580" y="262" width="12" height="12" rx="2" class="diagram-bar-glin"/>
+      <text x="598" y="273" text-anchor="start" class="diagram-text diagram-tiny">GLiNER</text>
+      <rect x="650" y="262" width="12" height="12" rx="2" class="diagram-bar-jev"/>
+      <text x="668" y="273" text-anchor="start" class="diagram-text diagram-tiny diagram-jev">Jev</text>
+    </svg>
+
+    <p>57× slower than Presidio. 1M documents: Presidio finishes in a workday, Jev takes over two weeks. Each Jev classification is an HTTPS round-trip to OpenRouter. Presidio runs in-process locally. You can catch things nobody else sees, but you can't scan your entire corpus with it.</p>
+
+    <h2>The part I'm actually excited about</h2>
+
+    <p>Building a DLP classifier used to go like this: collect thousands of labeled examples, pick a model architecture, fine-tune, evaluate, deploy, discover your training data missed edge cases, collect more labels, retrain. Weeks to months, repeat forever.</p>
+
+    <p>With Jev, I wrote a prompt: "Does this text contain API keys or hardcoded credentials?" I ran it against my test set. I had a working detector. That's the whole thing.</p>
+
+    <!-- Diagram: Traditional vs Jev prototyping -->
+    <svg viewBox="0 0 760 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <defs>
+        <marker id="arrowGrey" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#555"/></marker>
+      </defs>
+      <text x="170" y="22" text-anchor="middle" class="diagram-text diagram-title">Traditional: Weeks to Months</text>
+      <rect x="10" y="35" width="110" height="28" rx="3" class="diagram-box"/>
+      <text x="65" y="54" text-anchor="middle" class="diagram-text diagram-small">Collect labels</text>
+      <line x1="120" y1="49" x2="145" y2="49" stroke="#555" stroke-width="1" marker-end="url(#arrowGrey)"/>
+      <rect x="145" y="35" width="90" height="28" rx="3" class="diagram-box"/>
+      <text x="190" y="54" text-anchor="middle" class="diagram-text diagram-small">Pick model</text>
+      <line x1="235" y1="49" x2="260" y2="49" stroke="#555" stroke-width="1" marker-end="url(#arrowGrey)"/>
+      <rect x="260" y="35" width="80" height="28" rx="3" class="diagram-box"/>
+      <text x="300" y="54" text-anchor="middle" class="diagram-text diagram-small">Fine-tune</text>
+      <line x1="340" y1="49" x2="365" y2="49" stroke="#555" stroke-width="1" marker-end="url(#arrowGrey)"/>
+      <rect x="365" y="35" width="70" height="28" rx="3" class="diagram-box"/>
+      <text x="400" y="54" text-anchor="middle" class="diagram-text diagram-small">Eval</text>
+      <line x1="435" y1="49" x2="460" y2="49" stroke="#555" stroke-width="1" marker-end="url(#arrowGrey)"/>
+      <rect x="460" y="35" width="80" height="28" rx="3" class="diagram-box"/>
+      <text x="500" y="54" text-anchor="middle" class="diagram-text diagram-small">Deploy</text>
+      <text x="170" y="92" text-anchor="middle" class="diagram-text diagram-small diagram-warn">→ Edge cases found → collect more labels → retrain → ∞</text>
+      <text x="570" y="22" text-anchor="middle" class="diagram-text diagram-title diagram-jev">Jev: Minutes</text>
+      <rect x="455" y="110" width="130" height="28" rx="3" class="diagram-box-jev"/>
+      <text x="520" y="129" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Write a prompt</text>
+      <line x1="585" y1="124" x2="610" y2="124" stroke="#58a6ff" stroke-width="1"/>
+      <rect x="610" y="110" width="50" height="28" rx="3" class="diagram-bg-jev diagram-box-jev"/>
+      <text x="635" y="129" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Done</text>
+    </svg>
+
+    <p>Eventually a fine-tuned model will be faster and cheaper. But you don't know if the problem is solvable when you start. You don't have labels. You don't know if your definition of "sensitive" matches reality. Jev answers those questions on a Friday afternoon.</p>
+
+    <blockquote>
+      <p>The most expensive way to build a DLP detector is to collect training data first. The cheapest way is to start with Jev, find out which categories actually matter, and only then build specialized models for the high-volume ones.</p>
+    </blockquote>
+
+    <p>This pattern — general-purpose reasoning as a prototyping layer, specialized models for production — is going to eat a lot of ML pipelines. Jev works especially well here because its output is structured: probabilities and typed choices you can measure against. Free-form LLM text needs parsing. Jev doesn't.</p>
+
+    <h2>What a real pipeline looks like</h2>
+
+    <p>You don't pick one. You cascade:</p>
+
+    <!-- Cascade diagram -->
+    <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <defs>
+        <marker id="arrowGr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#555"/></marker>
+      </defs>
+      <text x="380" y="20" text-anchor="middle" class="diagram-text diagram-title">Cascade Architecture</text>
+      <rect x="10" y="35" width="120" height="35" rx="4" class="diagram-bg-grey diagram-box"/>
+      <text x="70" y="58" text-anchor="middle" class="diagram-text diagram-small diagram-grey">Regex</text>
+      <line x1="130" y1="52" x2="155" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGr)"/>
+      <rect x="160" y="35" width="120" height="35" rx="4" class="diagram-bg-pres diagram-box"/>
+      <text x="220" y="58" text-anchor="middle" class="diagram-text diagram-small diagram-pres">Presidio</text>
+      <line x1="280" y1="52" x2="305" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGr)"/>
+      <rect x="310" y="35" width="120" height="35" rx="4" class="diagram-bg-glin diagram-box"/>
+      <text x="370" y="58" text-anchor="middle" class="diagram-text diagram-small diagram-glin">GLiNER</text>
+      <line x1="430" y1="52" x2="455" y2="52" stroke="#555" stroke-width="1.5" marker-end="url(#arrowGr)"/>
+      <rect x="460" y="35" width="140" height="35" rx="4" class="diagram-bg-jev diagram-box-jev"/>
+      <text x="530" y="58" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Jev (final check)</text>
+      <text x="70" y="90" text-anchor="middle" class="diagram-text diagram-tiny">0.2ms</text>
+      <text x="220" y="90" text-anchor="middle" class="diagram-text diagram-tiny">28ms</text>
+      <text x="370" y="90" text-anchor="middle" class="diagram-text diagram-tiny">138ms</text>
+      <text x="530" y="90" text-anchor="middle" class="diagram-text diagram-tiny">1,570ms</text>
+      <text x="70" y="115" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">47% recall</text>
+      <text x="220" y="115" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">95% recall</text>
+      <text x="370" y="115" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">85% recall</text>
+      <text x="530" y="115" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">100% categories</text>
+      <text x="380" y="145" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#888;">→ Each layer reduces volume, increases precision →</text>
+    </svg>
+
+    <p>Most documents resolve in the first two layers at microsecond speed. Only the genuinely ambiguous cases reach Jev — "is this Slack message a credential or a config example?" Speed where it's cheap, depth where it matters.</p>
+
+    <h2>The false positive problem</h2>
+
+    <p>Every detector flagged clean data as sensitive at rates between 46% and 57.5%. Synthetic emails have fake names. Product IDs look like credit card numbers. Git hashes look like tokens. Network docs have IP addresses. That's the task.</p>
+
+    <!-- Chart: FPR vs FNR -->
+    <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;display:block;margin:30px auto;">
+      <text x="380" y="22" text-anchor="middle" class="diagram-text diagram-title">False Positive vs False Negative Rate</text>
+      <text x="380" y="40" text-anchor="middle" class="diagram-text diagram-tiny">On 87 clean + 79 sensitive samples. Lower = better.</text>
+      <!-- FPR bars (left cluster) -->
+      <text x="240" y="62" text-anchor="middle" class="diagram-text diagram-small">False Positive Rate (clean flagged)</text>
+      <rect x="80" y="75" width="70" height="82" rx="3" class="diagram-bar-pres"/>
+      <text x="115" y="70" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">57.5%</text>
+      <text x="115" y="170" text-anchor="middle" class="diagram-text diagram-small diagram-pres">Presidio</text>
+      <rect x="160" y="84" width="70" height="73" rx="3" class="diagram-bar-grey"/>
+      <text x="195" y="79" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">46.0%</text>
+      <text x="195" y="170" text-anchor="middle" class="diagram-text diagram-small diagram-grey">Regex</text>
+      <rect x="240" y="80" width="70" height="77" rx="3" class="diagram-bar-glin"/>
+      <text x="275" y="75" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">56.3%</text>
+      <text x="275" y="170" text-anchor="middle" class="diagram-text diagram-small diagram-glin">GLiNER</text>
+      <rect x="320" y="88" width="70" height="69" rx="3" class="diagram-bar-jev"/>
+      <text x="355" y="83" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">49.4%</text>
+      <text x="355" y="170" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Jev</text>
+      <!-- FNR bars (right cluster) -->
+      <text x="590" y="62" text-anchor="middle" class="diagram-text diagram-small">False Negative Rate (sensitive missed)</text>
+      <rect x="430" y="137" width="70" height="20" rx="3" class="diagram-bar-pres"/>
+      <text x="465" y="132" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">5.1%</text>
+      <rect x="510" y="107" width="70" height="50" rx="3" class="diagram-bar-glin"/>
+      <text x="545" y="102" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">15.2%</text>
+      <rect x="590" y="107" width="70" height="50" rx="3" class="diagram-bar-jev"/>
+      <text x="625" y="102" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">15.2%</text>
+      <rect x="670" y="95" width="70" height="62" rx="3" class="diagram-bar-grey"/>
+      <text x="705" y="90" text-anchor="middle" class="diagram-text diagram-tiny" style="fill:#fff;">36.7%</text>
+      <!-- Annotation -->
+      <text x="355" y="195" text-anchor="middle" class="diagram-text diagram-tiny diagram-jev">Best FPR — fewest false alarms</text>
+      <text x="465" y="195" text-anchor="middle" class="diagram-text diagram-tiny diagram-ok">Best FNR — misses almost nothing</text>
+      <!-- Divider -->
+      <line x1="400" y1="65" x2="400" y2="180" class="diagram-divider"/>
+      <!-- Legacy detector labels below right cluster -->
+      <text x="465" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-pres">Presidio</text>
+      <text x="545" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-glin">GLiNER</text>
+      <text x="625" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-jev">Jev</text>
+      <text x="705" y="230" text-anchor="middle" class="diagram-text diagram-small diagram-grey">Regex</text>
+    </svg>
+
+    <p>The difference between a good DLP detector and a useless one isn't whether it has false positives. It's whether the false positives make sense. When Jev flags a document as containing credentials, you can ask <em>why</em> and get an answer: "This contains a JWT signing secret in what appears to be a config file." Regex matches a pattern. Presidio returns an entity type. Jev gives you a decision you can interrogate.</p>
+
+    <p>That matters for tuning. You can't tune a regex black box except by writing more regex. You tune Jev by refining the question: "Does this contain <em>production</em> credentials, or example/test credentials?" One word changes the false positive rate. Thirty seconds to implement.</p>
+
+    <h2>Where this goes</h2>
+
+    <p>This is a Bitter Lesson situation. Rich Sutton's point was that general methods that leverage computation eventually beat specialized, hand-crafted approaches. Every time. Jev isn't doing anything Presidio or GLiNER can't do in theory. It's just not specialized. It asks questions. The model figures out the rest at inference time. No training loop, no entity taxonomy, no regex library that needs updating every time a new API key format ships.</p>
+
+    <p>The specialized models will win on speed and on narrow metrics for specific categories, probably forever. Presidio on PII is a solved problem. But the moment you need to detect something new — a new credential format, a new compliance domain, a new type of sensitive data that nobody has labeled yet — the specialized model is dead in the water until someone collects data and retrains. Jev just... asks a different question.</p>
+
+    <p>That's the bitter lesson playing out at the product level. Not "general beats specialized on the same benchmark" but "general ships today, specialized ships in six months." The time-to-deploy gap is the real metric, and it's hard to overstate how big it is. I had a working credential detector running against my test set in the time it took to type a sentence. The regex engine took me an afternoon of pattern-writing and still missed 37% of sensitive data. The fine-tuned model would have taken weeks.</p>
+
+    <p>Jev is the first of a wave. The model is a single-purpose decision engine today, but the insight — that structured, calibrated outputs beat free-form generation for classification — will spread to general models. When Claude or GPT can return typed probability distributions instead of paragraphs, the prototyping advantage compounds.</p>
+
+    <p>The pattern I keep coming back to: define the problem with Jev (hours, not months), measure the baseline, label the 200 examples where Jev is uncertain, fine-tune a micro model on that data, deploy the cascade. The old way assumes you know the problem upfront. Jev lets you discover it.</p>
+
+    <p>I ran the same benchmark against a local reproduction — EdgeJev running kev-0.5b, a 0.5 billion parameter ONNX model on Apple Silicon CoreML. Zero API cost, fully local. Here's what happened.</p>
+
+    <p>It was <strong>slower</strong> than the API. 3,144ms per sample vs Jev's 1,570ms. The 0.5B model doing 5 ONNX forward passes on CPU takes twice as long as a round-trip to OpenRouter. Local doesn't automatically mean fast.</p>
+
+    <p>But it did catch credentials at Jev-level accuracy — 0.800 F1 on credentials and 0.727 on financial, matching or beating the big model on those categories. The catch: its false positive rate was 89.7%. It flagged almost every document. The smaller model has the right instincts but none of the restraint. The Bitter Lesson plays out at the model level too: bigger models discriminate better.</p>
+
+    <p>I'm running more local reproductions next — the laya backend (322MB, INT8, CPU-optimized) should be much faster. EdgeJev supports it, I just need to install one more dependency. If a 322MB model can match Jev's coverage at local inference speeds, the fully local cascade becomes practical today.</p>
+
+    <hr/>
+
+    <p><em>The benchmark code, test cases, and interactive dashboard are open source. All 515 labeled samples, 4 detectors, 8 interactive charts.</em></p>
+
+    <div class="footnotes" id="footnotes">
+      <h4>References</h4>
+      <ol>
+        <li id="fn1">TypeSafe Jev is available via OpenRouter at <code>typesafe/jev-1.13</code>. It's a "System One" structured-decision model that returns typed answers (probabilities, choices, scores) rather than generated text. The <code>jev-cli</code> tool is on PyPI: <code>uv tool install jev-cli</code>. <a href="https://openrouter.ai/typesafe/jev-1.13" target="_blank" rel="noopener">OpenRouter</a></li>
+        <li id="fn2">The benchmark draws from 7 HuggingFace datasets: UM-DLP Public Benchmarking Dataset (alibustami), ai4privacy/pii-masking-300k, Robost-AI/PII_FInal, gretelai/synthetic_pii_finance_multilingual, argilla/FinePersonas-Synthetic-Email-Conversations, kiddothe2b/contract-nli, plus 87 hand-crafted synthetic samples including adversarial obfuscation and false-keyword cases.</li>
+      </ol>
+    </div>
+
+    </div><!-- /#article-content -->
+  </div><!-- /.job-helper -->
+
+  <script src="/js/theme.js"></script>
+  <script src="/js/ghost-search.js"></script>
+  <script src="/js/ghost-context.js"></script>
+  <script src="/js/ghost-chat.js" type="module"></script>
+</body>
+</html>

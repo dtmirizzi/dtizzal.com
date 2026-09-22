@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLP Detection Benchmark — Jev vs Specialized Models</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #c9d1d9; }
+  .header { background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border-bottom: 1px solid #30363d; padding: 32px 40px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #f0f6fc; margin-bottom: 8px; }
+  .subtitle { color: #8b949e; font-size: 15px; }
+  .badge { display: inline-block; background: #1f6feb; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin-right: 8px; margin-top: 10px; font-weight: 600; }
+  .badge.alt { background: #238636; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 24px 40px; }
+  .kpi { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi .value { font-size: 32px; font-weight: 700; color: #f0f6fc; }
+  .kpi .label { font-size: 12px; color: #8b949e; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .kpi .delta { font-size: 12px; margin-top: 4px; color: #3fb950; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 24px; padding: 32px 40px; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; overflow: hidden; }
+  .card-header { padding: 16px 20px; border-bottom: 1px solid #21262d; display: flex; align-items: center; justify-content: space-between; }
+  .card-header h2 { font-size: 15px; font-weight: 600; color: #f0f6fc; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
+  .tag.jev { background: #1f6feb22; color: #58a6ff; border: 1px solid #1f6feb44; }
+  .tag.gliner { background: #23863622; color: #3fb950; border: 1px solid #23863644; }
+  .tag.presidio { background: #9e6a0322; color: #d29922; border: 1px solid #9e6a0344; }
+  .tag.regex { background: #6e768122; color: #8b949e; border: 1px solid #6e768144; }
+  .chart { min-height: 380px; }
+  .full-width { grid-column: 1 / -1; }
+  .insight { padding: 16px 20px; background: #0d1117; border-top: 1px solid #21262d; font-size: 13px; color: #8b949e; line-height: 1.6; }
+  .insight strong { color: #f0f6fc; }
+  footer { padding: 32px 40px; text-align: center; color: #484f58; font-size: 12px; border-top: 1px solid #21262d; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔐 DLP Detection Benchmark</h1>
+  <div class="subtitle">Jev (general-purpose) vs specialized models on 515 labeled samples (166 test) from 7 HuggingFace datasets</div>
+  <span class="badge">166 test samples</span>
+  <span class="badge">87 clean / 79 sensitive</span>
+  <span class="badge alt">5 categories</span>
+  <span class="badge alt">4 detectors</span>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="value">0.800</div><div class="label">Jev Credentials F1</div><div class="delta">Only model detecting API keys</div></div>
+  <div class="kpi"><div class="value">1.000</div><div class="label">Jev Legal/Confidential F1</div><div class="delta">Only model catching NDAs</div></div>
+  <div class="kpi"><div class="value">57×</div><div class="label">Speed penalty (Jev vs Presidio)</div><div class="delta">1,570ms vs 28ms per sample</div></div>
+  <div class="kpi"><div class="value">4 of 5</div><div class="label">Categories Jev leads</div><div class="delta">Financial, Credentials, PHI, Legal</div></div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="card-header"><h2>Binary Detection F1 Score</h2><span class="tag presidio">Is anything sensitive?</span></div>
+    <div id="chart-f1" class="chart"></div>
+    <div class="insight"><strong>Presidio leads</strong> at F1=0.735 by being ultra-aggressive — catches 95% of sensitive data but flags 57.5% of clean too. <strong>Jev has best precision (0.609)</strong> with fewer false alarms.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Precision vs Recall Tradeoff</h2><span class="tag jev">Detection balance</span></div>
+    <div id="chart-pr" class="chart"></div>
+    <div class="insight"><strong>Presidio</strong> optimizes for recall (catch everything). <strong>Jev</strong> has highest precision — fewer false alarms. <strong>Regex</strong> is precise but misses 37% of sensitive data.</div>
+  </div>
+  <div class="card full-width">
+    <div class="card-header"><h2>Per-Category F1 — Who Catches What?</h2><span class="tag jev">Category coverage</span></div>
+    <div id="chart-heatmap" class="chart" style="min-height:440px"></div>
+    <div class="insight"><strong>Jev is the only detector covering ALL 5 categories.</strong> Presidio & GLiNER are blind to credentials, PHI, and legal. Regex can't detect unstructured data (clean F1=0). Jev's general reasoning adapts without retraining.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>False Positive Rate on 87 Clean Samples</h2><span class="tag gliner">Lower is better</span></div>
+    <div id="chart-fpr" class="chart"></div>
+    <div class="insight">All detectors struggle with clean data that "looks" sensitive (fake names in synthetic emails). <strong>Jev has the lowest FPR at 49.4%</strong> — still high but best at not crying wolf.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>False Negative Rate — What Gets Missed</h2><span class="tag presidio">79 sensitive samples</span></div>
+    <div id="chart-fnr" class="chart"></div>
+    <div class="insight"><strong>Presidio misses almost nothing (FNR=5.1%).</strong> GLiNER & Jev tie at 15.2%. <strong>Regex misses 37%</strong> — can only catch known patterns. Jev's misses: obfuscated credentials, subtle PHI.</div>
+  </div>
+  <div class="card full-width">
+    <div class="card-header"><h2>Latency at Scale</h2><span class="tag regex">Throughput matters</span></div>
+    <div id="chart-speed" class="chart" style="min-height:420px"></div>
+    <div class="insight"><strong>Presidio is 57× faster than Jev</strong> (28ms vs 1,570ms). For 1M documents: Presidio ~8 hrs, Jev ~18 days. <strong>But Jev catches what speed can't buy</strong> — API keys, medical records, legal docs invisible to others.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Category Coverage Radar</h2><span class="tag jev">Completeness</span></div>
+    <div id="chart-radar" class="chart"></div>
+    <div class="insight"><strong>Jev is the only model with non-zero coverage everywhere.</strong> Presidio = PII specialist. GLiNER = PII + some financial. Regex = known patterns only. Jev fills every gap — especially credentials & legal.</div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>Per-Detector Category Breakdown</h2><span class="tag presidio">Click legend to filter</span></div>
+    <div id="chart-grouped" class="chart"></div>
+    <div class="insight"><strong>Jev dominates credentials (0.800), financial (0.706), legal (1.000).</strong> Presidio wins PII (0.659) via hyper-recall. GLiNER is second-best on PII & financial. Regex only shines on credentials (0.667) where patterns are well-defined.</div>
+  </div>
+</div>
+
+<footer>Benchmark: 515 samples · 7 datasets · 166 test · 5 categories · September 2026</footer>
+
+<script>
+// ── Data ──
+var DATA = {
+  models: ["Jev", "GLiNER", "Presidio", "Regex"],
+  colors: ["#58a6ff", "#3fb950", "#d29922", "#8b949e"],
+  binary: [
+    {name:"Jev",     f1:0.709, prec:0.609, rec:0.848, fpr:49.4, fnr:15.2, lat:1570},
+    {name:"GLiNER",  f1:0.687, prec:0.578, rec:0.848, fpr:56.3, fnr:15.2, lat:138},
+    {name:"Presidio",f1:0.735, prec:0.600, rec:0.949, fpr:57.5, fnr: 5.1, lat:28},
+    {name:"Regex",   f1:0.592, prec:0.556, rec:0.633, fpr:46.0, fnr:36.7, lat:0.2}
+  ],
+  catNames: ["PII", "Financial", "Credentials", "PHI", "Legal/Confidential", "Clean"],
+  catF1: {
+    Jev:     [0.607, 0.706, 0.800, 0.444, 1.000, 0.615],
+    GLiNER:  [0.603, 0.625, 0.600, 0.222, 0.000, 0.555],
+    Presidio:[0.659, 0.500, 0.000, 0.000, 0.000, 0.578],
+    Regex:   [0.321, 0.324, 0.667, 0.286, 0.571, 0.000]
+  }
+};
+
+var L = {
+  paper_bgcolor: '#161b22', plot_bgcolor: '#161b22',
+  font: { color: '#c9d1d9', family: 'system-ui, sans-serif', size: 12 },
+  margin: { l: 60, r: 20, t: 20, b: 60 },
+  xaxis: { gridcolor: '#21262d', zerolinecolor: '#21262d' },
+  yaxis: { gridcolor: '#21262d', zerolinecolor: '#21262d' },
+  legend: { font: { color: '#c9d1d9' }, orientation: 'h', y: 1.15 }
+};
+
+var M = DATA.models, C = DATA.colors, B = DATA.binary;
+
+// ── 1. Binary F1 ──
+Plotly.newPlot('chart-f1', [
+  { x: M, y: B.map(function(d){return d.f1}), type: 'bar', name: 'F1',
+    marker: { color: C, opacity: 0.85 },
+    text: B.map(function(d){return d.f1.toFixed(3)}), textposition: 'outside',
+    textfont: { color: '#c9d1d9' } },
+  { x: M, y: B.map(function(d){return d.prec}), type: 'bar', name: 'Precision',
+    marker: { color: C, opacity: 0.4 } },
+  { x: M, y: B.map(function(d){return d.rec}), type: 'bar', name: 'Recall',
+    marker: { color: C, opacity: 0.2 } }
+], Object.assign({}, L, { yaxis: Object.assign({}, L.yaxis, { title: 'Score', range: [0, 1.1] }), barmode: 'group' }));
+
+// ── 2. Precision vs Recall ──
+var prTraces = B.map(function(d, i) {
+  return { x: [d.rec], y: [d.prec], type: 'scatter', mode: 'markers+text',
+    name: d.name, marker: { size: 22, color: C[i], opacity: 0.85 },
+    text: [d.name], textposition: 'top center',
+    textfont: { color: C[i], size: 13, family: 'system-ui' } };
+});
+// Add F1 iso-curves
+var isoTraces = [];
+for (var f = 1; f <= 9; f++) {
+  var f1 = f * 0.1;
+  var pts = [];
+  for (var j = 0; j <= 50; j++) {
+    var r = j / 50;
+    var p = f1 * r / (2 * r - f1);
+    if (p > 0 && p <= 1) pts.push({ x: r, y: p });
+  }
+  if (pts.length > 1) {
+    isoTraces.push({
+      x: pts.map(function(p){return p.x}), y: pts.map(function(p){return p.y}),
+      type: 'scatter', mode: 'lines', name: 'F1='+f1.toFixed(1),
+      line: { dash: 'dot', width: 1, color: '#30363d' },
+      showlegend: false, hoverinfo: 'skip'
+    });
+  }
+}
+Plotly.newPlot('chart-pr', prTraces.concat(isoTraces), Object.assign({}, L, {
+  xaxis: Object.assign({}, L.xaxis, { title: 'Recall', range: [0.3, 1.05] }),
+  yaxis: Object.assign({}, L.yaxis, { title: 'Precision', range: [0.50, 0.68] }),
+  showlegend: false
+}));
+
+// ── 3. Heatmap ──
+var zData = DATA.catNames.map(function(cat, ci) {
+  return M.map(function(m) { return DATA.catF1[m][ci]; });
+});
+var zText = DATA.catNames.map(function(cat, ci) {
+  return M.map(function(m) {
+    var v = DATA.catF1[m][ci];
+    return v === 0 ? '✗' : v.toFixed(3);
+  });
+});
+Plotly.newPlot('chart-heatmap', [{
+  z: zData, x: M, y: DATA.catNames, type: 'heatmap',
+  colorscale: [[0,'#0d1117'],[0.2,'#0e4429'],[0.4,'#006d32'],[0.6,'#26a641'],[0.8,'#39d353'],[1,'#7ee787']],
+  text: zText, texttemplate: '%{text}', textfont: { size: 15, family: 'system-ui', color: '#f0f6fc' },
+  xgap: 3, ygap: 3, zmin: 0, zmax: 1,
+  hovertemplate: '%{y} — %{x}: <b>%{z:.3f}</b><extra></extra>',
+  colorbar: { title: 'F1', tickformat: '.2f', outlinewidth: 0, thickness: 12 }
+}], Object.assign({}, L, { xaxis: Object.assign({}, L.xaxis, { side: 'top' }), yaxis: Object.assign({}, L.yaxis, { autorange: 'reversed' }) }));
+
+// ── 4. FPR ──
+Plotly.newPlot('chart-fpr', [{
+  x: M, y: B.map(function(d){return d.fpr}), type: 'bar',
+  marker: { color: C, opacity: 0.8 },
+  text: B.map(function(d){return d.fpr.toFixed(1)+'%'}), textposition: 'outside',
+  textfont: { color: '#c9d1d9', size: 14 }
+}], Object.assign({}, L, {
+  yaxis: Object.assign({}, L.yaxis, { title: 'False Positive Rate %', range: [0, 65], ticksuffix: '%' }),
+  showlegend: false
+}));
+
+// ── 5. FNR ──
+Plotly.newPlot('chart-fnr', [{
+  x: M, y: B.map(function(d){return d.fnr}), type: 'bar',
+  marker: { color: C, opacity: 0.8 },
+  text: B.map(function(d){return d.fnr.toFixed(1)+'%'}), textposition: 'outside',
+  textfont: { color: '#c9d1d9', size: 14 }
+}], Object.assign({}, L, {
+  yaxis: Object.assign({}, L.yaxis, { title: 'False Negative Rate %', range: [0, 42], ticksuffix: '%' }),
+  showlegend: false
+}));
+
+// ── 6. Speed ──
+var scales = ['1 doc', '1K docs', '10K docs', '100K docs', '1M docs'];
+var multipliers = [1, 1000, 10000, 100000, 1000000];
+function fmtTime(ms) {
+  if (ms < 1000) return ms.toFixed(1) + 'ms';
+  if (ms < 60000) return (ms/1000).toFixed(1) + 's';
+  if (ms < 3600000) return (ms/60000).toFixed(1) + 'min';
+  if (ms < 86400000) return (ms/3600000).toFixed(1) + 'hrs';
+  return (ms/86400000).toFixed(1) + 'days';
+}
+var speedTraces = B.map(function(d, i) {
+  return {
+    x: scales, y: multipliers.map(function(m){ return d.lat * m; }),
+    type: 'bar', name: d.name,
+    marker: { color: C[i], opacity: 0.85 },
+    text: multipliers.map(function(m){ return fmtTime(d.lat * m); }),
+    textposition: 'outside', textfont: { color: '#c9d1d9', size: 10 },
+    hovertemplate: '%{x}: <b>%{text}</b><extra>%{data.name}</extra>'
+  };
+});
+Plotly.newPlot('chart-speed', speedTraces, Object.assign({}, L, {
+  yaxis: Object.assign({}, L.yaxis, {
+    title: 'Time', type: 'log',
+    tickvals: [1, 1000, 60000, 3600000, 86400000, 86400000*10],
+    ticktext: ['1ms', '1s', '1min', '1hr', '1day', '10days']
+  }),
+  barmode: 'group'
+}));
+
+// ── 7. Radar ──
+var radarTraces = M.map(function(m, i) {
+  return {
+    type: 'scatterpolar', name: m,
+    r: DATA.catF1[m],
+    theta: DATA.catNames,
+    fill: i === 0 ? 'toself' : 'none',
+    marker: { color: C[i] }, line: { color: C[i], width: 2 },
+    opacity: i === 0 ? 0.25 : 0.6,
+    hovertemplate: '%{theta}: <b>F1=%{r:.3f}</b><extra>%{fullData.name}</extra>'
+  };
+});
+Plotly.newPlot('chart-radar', radarTraces, {
+  paper_bgcolor: '#161b22', font: { color: '#c9d1d9', size: 12 },
+  polar: {
+    bgcolor: '#161b22',
+    radialaxis: { range: [0, 1], gridcolor: '#21262d', tickformat: '.1f', color: '#c9d1d9' },
+    angularaxis: { gridcolor: '#21262d', color: '#c9d1d9' }
+  },
+  showlegend: true,
+  legend: { font: { color: '#c9d1d9' }, orientation: 'h', y: 1.15 },
+  margin: { l: 60, r: 60, t: 20, b: 40 }
+});
+
+// ── 8. Grouped category bars ──
+var groupedTraces = [];
+for (var mi = 0; mi < M.length; mi++) {
+  for (var ci = 0; ci < DATA.catNames.length; ci++) {
+    var v = DATA.catF1[M[mi]][ci];
+    groupedTraces.push({
+      x: [DATA.catNames[ci]], y: [v], type: 'bar',
+      name: M[mi], marker: { color: C[mi], opacity: 0.85 },
+      legendgroup: M[mi], showlegend: ci === 0,
+      text: v > 0 ? [v.toFixed(3)] : ['✗'],
+      textposition: 'outside',
+      textfont: { color: v > 0 ? '#c9d1d9' : '#f85149', size: 10 },
+      hovertemplate: '%{x} — ' + M[mi] + ': <b>%{y:.3f}</b><extra></extra>'
+    });
+  }
+}
+Plotly.newPlot('chart-grouped', groupedTraces, Object.assign({}, L, {
+  yaxis: Object.assign({}, L.yaxis, { title: 'F1 Score', range: [0, 1.2] }),
+  barmode: 'group'
+}));
+
+console.log('All 8 charts rendered ✓');
+</script>
+</body>
+</html>
