@@ -3,9 +3,8 @@
 // Blog content is dynamically injected via ghost-search.js RAG pipeline.
 // Blog post index is dynamically loaded from blog-index.json at runtime.
 
-// `/no_think` is a Qwen3 directive that disables chain-of-thought, freeing
-// the entire token budget for the actual answer. Other models in the catalog
-// don't emit reasoning anyway, so the directive is a no-op for them.
+// Qwen reasoning is disabled per request in ghost-chat.js (enable_thinking: false).
+// `/no_think` is kept as a belt-and-braces soft switch; other models ignore it.
 const GHOST_PROMPT_CORE = `You are DT's ghost — a helpful AI on dtizzal.com. DT is a Principal Software Engineer at Palo Alto Networks. Answer directly and concisely. /no_think
 
 RULES:

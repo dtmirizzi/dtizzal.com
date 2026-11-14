@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-    const WEBLLM_VERSION = '0.2.83'; // pinned version — includes Qwen3 support
+    const WEBLLM_VERSION = '0.2.88'; // pinned version — includes Qwen3.5 + Gemma 4 support
 
     // Debug logging — set to false to silence. Filter the devtools console
     // by "[ghost]" to see only this widget's traces.
@@ -19,18 +19,22 @@
 
     // ─── Model Catalog ───────────────────────────────────────────
 
-    // Note: WebLLM 0.2.82 only supports tool calling for Hermes models.
+    // Note: WebLLM 0.2.88 only supports native tool calling for Hermes models.
     // All models here use the auto-search fallback path (search before every query).
+    // `thinking: true` marks hybrid-reasoning models (Qwen); we disable their
+    // chain-of-thought per request via extra_body.enable_thinking = false.
+    // VRAM figures come from WebLLM's prebuiltAppConfig; download sizes are approximate.
     const MODELS = [
-        { id: 'SmolLM2-360M-Instruct-q4f16_1-MLC',   label: 'SmolLM2 360M',  brand: 'HuggingFace', vram: '~376MB',  size: '~200MB', mobile: true,  toolCalling: false },
-        { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',    label: 'Llama 3.2 1B',  brand: 'Meta',        vram: '~879MB',  size: '~500MB', mobile: true,  toolCalling: false },
-        { id: 'Qwen3-0.6B-q4f16_1-MLC',               label: 'Qwen3 0.6B',    brand: 'Alibaba',     vram: '~1.4GB',  size: '~300MB', mobile: true,  toolCalling: false },
-        { id: 'gemma-2-2b-it-q4f16_1-MLC',            label: 'Gemma 2 2B',    brand: 'Google',      vram: '~1.9GB',  size: '~1.2GB', mobile: false, toolCalling: false },
-        { id: 'Qwen3-1.7B-q4f16_1-MLC',               label: 'Qwen3 1.7B',    brand: 'Alibaba',     vram: '~2.0GB',  size: '~900MB', mobile: false, toolCalling: false },
+        { id: 'SmolLM2-360M-Instruct-q4f16_1-MLC', label: 'SmolLM2 360M', brand: 'HuggingFace', vram: '~376MB', size: '~200MB', mobile: true,  toolCalling: false, thinking: false },
+        { id: 'gemma3-1b-it-q4f16_1-MLC',          label: 'Gemma 3 1B',   brand: 'Google',      vram: '~711MB', size: '~700MB', mobile: true,  toolCalling: false, thinking: false },
+        { id: 'Qwen3.5-0.8B-q4f16_1-MLC',          label: 'Qwen3.5 0.8B', brand: 'Alibaba',     vram: '~1.6GB', size: '~500MB', mobile: true,  toolCalling: false, thinking: true  },
+        { id: 'Qwen3.5-2B-q4f16_1-MLC',            label: 'Qwen3.5 2B',   brand: 'Alibaba',     vram: '~2.2GB', size: '~1.2GB', mobile: false, toolCalling: false, thinking: true  },
+        { id: 'gemma-4-E2B-it-q4f16_1-MLC',        label: 'Gemma 4 E2B',  brand: 'Google',      vram: '~3.4GB', size: '~3GB',   mobile: false, toolCalling: false, thinking: false },
     ];
 
-    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3-1.7B-q4f16_1-MLC';
-    const DEFAULT_MODEL_ID_MOBILE  = 'SmolLM2-360M-Instruct-q4f16_1-MLC';
+    // Smallest current-generation model that answers well — used everywhere by default.
+    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3.5-0.8B-q4f16_1-MLC';
+    const DEFAULT_MODEL_ID_MOBILE  = 'Qwen3.5-0.8B-q4f16_1-MLC';
     const MAX_HISTORY = 10;
 
     // Tool definition for search_blog (OpenAI-compatible format)
@@ -73,6 +77,12 @@
     function getAvailableModels() {
         if (isMobileDevice()) return MODELS.filter(m => m.mobile);
         return MODELS;
+    }
+
+    // Extra request fields for the current model (disables Qwen reasoning).
+    function genExtras() {
+        const model = getModel(currentModelId);
+        return model && model.thinking ? { extra_body: { enable_thinking: false } } : {};
     }
 
     function currentModelSupportsTools() {
@@ -283,7 +293,7 @@
     // ─── Link Rendering ─────────────────────────────────────────
 
     // ─── Response Rendering ────────────────────────────────────
-    // We send /no_think to Qwen3, but the model still occasionally emits
+    // Qwen reasoning is disabled per request, but small models occasionally emit
     // think tags. Strip them defensively in both render and history paths
     // so users never see them and the next turn isn't fed CoT.
 
@@ -341,7 +351,7 @@
             available.forEach(function (m, i) {
                 const active = m.id === currentModelId ? ' \u25C0 active' : '';
                 const tools = m.toolCalling ? ' [tool calling]' : '';
-                printLine('  ' + (i + 1) + ') ' + m.label + ' (' + m.brand + ') \u2014 ' + m.vram + ' VRAM, ~' + m.size + ' download' + tools + active, 'ghost-system');
+                printLine('  ' + (i + 1) + ') ' + m.label + ' (' + m.brand + ') \u2014 ' + m.vram + ' VRAM, ' + m.size + ' download' + tools + active, 'ghost-system');
             });
             printLine('', 'ghost-system');
             printLine('Usage: /model <number>  e.g. /model 3', 'ghost-loading');
@@ -667,6 +677,7 @@
                     messages: messages,
                     temperature: 0.7,
                     max_tokens: mobile ? 128 : 512,
+                    ...genExtras(),
                     tools: [SEARCH_BLOG_TOOL],
                     tool_choice: 'auto',
                     stream: false,
@@ -686,6 +697,7 @@
                         messages: toolResult.messages,
                         temperature: 0.7,
                         max_tokens: mobile ? 128 : 512,
+                        ...genExtras(),
                         stream: true,
                     });
 
@@ -744,6 +756,7 @@
                     messages: messages,
                     temperature: 0.7,
                     max_tokens: mobile ? 128 : 512,
+                    ...genExtras(),
                     stream: true,
                 });
 
