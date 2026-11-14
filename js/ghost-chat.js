@@ -1,11 +1,13 @@
-// ghost-chat.js — Terminal-styled AI chat widget powered by WebLLM
-// Runs entirely client-side using a browser-based LLM via WebGPU
+// ghost-chat.js — Terminal-styled AI chat widget powered by Transformers.js
+// Runs entirely client-side: WebGPU when available, WASM (CPU) otherwise
 // Includes client-side RAG via MiniSearch for blog content retrieval
 
 (function () {
     'use strict';
 
-    const WEBLLM_VERSION = '0.2.88'; // pinned version — includes Qwen3.5 + Gemma 4 support
+    const TRANSFORMERS_VERSION = '4.3.2'; // pinned @huggingface/transformers release
+    const TRANSFORMERS_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@'
+        + TRANSFORMERS_VERSION + '/dist/transformers.min.js';
 
     // Debug logging — set to false to silence. Filter the devtools console
     // by "[ghost]" to see only this widget's traces.
@@ -18,47 +20,28 @@
     }
 
     // ─── Model Catalog ───────────────────────────────────────────
-
-    // Note: WebLLM 0.2.88 only supports native tool calling for Hermes models.
-    // All models here use the auto-search fallback path (search before every query).
-    // `thinking: true` marks hybrid-reasoning models (Qwen); we disable their
-    // chain-of-thought per request via extra_body.enable_thinking = false.
-    // VRAM figures come from WebLLM's prebuiltAppConfig; download sizes are approximate.
+    // ONNX builds on Hugging Face, loaded with Transformers.js. `dtype` is the
+    // WebGPU build; `wasmDtype` is the CPU fallback (the q4 builds quantize the
+    // embedding with an op the WASM backend lacks). Sizes are real download sizes. `gen` holds each vendor's recommended sampling
+    // settings. `thinking: true` marks hybrid-reasoning models (Qwen); we pass
+    // enable_thinking: false to the chat template so they answer directly.
+    const LFM_GEN  = { do_sample: true, temperature: 0.1, top_k: 50, top_p: 0.1, repetition_penalty: 1.05 };
+    const QWEN_GEN = { do_sample: true, temperature: 0.7, top_k: 20, top_p: 0.8, repetition_penalty: 1.05 };
     const MODELS = [
-        { id: 'SmolLM2-360M-Instruct-q4f16_1-MLC', label: 'SmolLM2 360M', brand: 'HuggingFace', vram: '~376MB', size: '~200MB', mobile: true,  toolCalling: false, thinking: false },
-        { id: 'gemma3-1b-it-q4f16_1-MLC',          label: 'Gemma 3 1B',   brand: 'Google',      vram: '~711MB', size: '~700MB', mobile: true,  toolCalling: false, thinking: false },
-        { id: 'Qwen3.5-0.8B-q4f16_1-MLC',          label: 'Qwen3.5 0.8B', brand: 'Alibaba',     vram: '~1.6GB', size: '~500MB', mobile: true,  toolCalling: false, thinking: true  },
-        { id: 'Qwen3.5-2B-q4f16_1-MLC',            label: 'Qwen3.5 2B',   brand: 'Alibaba',     vram: '~2.2GB', size: '~1.2GB', mobile: false, toolCalling: false, thinking: true  },
-        { id: 'gemma-4-E2B-it-q4f16_1-MLC',        label: 'Gemma 4 E2B',  brand: 'Google',      vram: '~3.4GB', size: '~3GB',   mobile: false, toolCalling: false, thinking: false },
+        { id: 'LiquidAI/LFM2.5-230M-ONNX',             label: 'LFM2.5 230M',     brand: 'Liquid AI', dtype: 'q4', size: '211MB', wasmDtype: 'q4f32',     wasmSize: '403MB', mobile: true,  thinking: false, gen: LFM_GEN },
+        { id: 'LiquidAI/LFM2.5-350M-ONNX',             label: 'LFM2.5 350M',     brand: 'Liquid AI', dtype: 'q4', size: '294MB', wasmDtype: 'q4f32',     wasmSize: '481MB', mobile: true,  thinking: false, gen: LFM_GEN },
+        { id: 'onnx-community/Qwen3.5-0.8B-Text-ONNX', label: 'Qwen3.5 0.8B',    brand: 'Alibaba',   dtype: 'q4', size: '551MB', wasmDtype: 'quantized', wasmSize: '939MB', mobile: false, thinking: true,  gen: QWEN_GEN },
+        { id: 'LiquidAI/LFM2.5-1.2B-Instruct-ONNX',    label: 'LFM2.5 1.2B',     brand: 'Liquid AI', dtype: 'q4', size: '850MB', wasmDtype: 'quantized', wasmSize: '1.5GB', mobile: false, thinking: false, gen: LFM_GEN },
     ];
 
-    // Smallest current-generation model that answers well — used everywhere by default.
-    const DEFAULT_MODEL_ID_DESKTOP = 'Qwen3.5-0.8B-q4f16_1-MLC';
-    const DEFAULT_MODEL_ID_MOBILE  = 'Qwen3.5-0.8B-q4f16_1-MLC';
+    // Smallest model = fastest first download. Used everywhere by default.
+    const DEFAULT_MODEL_ID_DESKTOP = 'LiquidAI/LFM2.5-230M-ONNX';
+    const DEFAULT_MODEL_ID_MOBILE  = 'LiquidAI/LFM2.5-230M-ONNX';
     const MAX_HISTORY = 10;
-
-    // Tool definition for search_blog (OpenAI-compatible format)
-    const SEARCH_BLOG_TOOL = {
-        type: 'function',
-        function: {
-            name: 'search_blog',
-            description: 'Search DT\'s blog posts for relevant content. Use this when the user asks about topics DT has written about.',
-            parameters: {
-                type: 'object',
-                properties: {
-                    query: {
-                        type: 'string',
-                        description: 'The search query to find relevant blog content'
-                    }
-                },
-                required: ['query']
-            }
-        }
-    };
 
     let currentModelId = isMobileDevice() ? DEFAULT_MODEL_ID_MOBILE : DEFAULT_MODEL_ID_DESKTOP;
     let engine = null;
-    let webllmModule = null;
+    let tjs = null; // lazily imported Transformers.js module
     let isLoading = false;
     let isGenerating = false;
     let chatHistory = [];
@@ -77,17 +60,6 @@
     function getAvailableModels() {
         if (isMobileDevice()) return MODELS.filter(m => m.mobile);
         return MODELS;
-    }
-
-    // Extra request fields for the current model (disables Qwen reasoning).
-    function genExtras() {
-        const model = getModel(currentModelId);
-        return model && model.thinking ? { extra_body: { enable_thinking: false } } : {};
-    }
-
-    function currentModelSupportsTools() {
-        const model = getModel(currentModelId);
-        return model ? model.toolCalling : false;
     }
 
     // ─── DOM Creation ───────────────────────────────────────────
@@ -293,7 +265,7 @@
     // ─── Link Rendering ─────────────────────────────────────────
 
     // ─── Response Rendering ────────────────────────────────────
-    // Qwen reasoning is disabled per request, but small models occasionally emit
+    // Qwen reasoning is disabled via the chat template, but small models occasionally emit
     // think tags. Strip them defensively in both render and history paths
     // so users never see them and the next turn isn't fed CoT.
 
@@ -324,7 +296,8 @@
         printLine("\u2502  Ask me about DT's blog, ideas,      \u2502", 'ghost-system');
         printLine("\u2502  career, or technical opinions.       \u2502", 'ghost-system');
         printLine("\u2502                                       \u2502", 'ghost-system');
-        printLine("\u2502  Powered by in-browser AI (WebLLM)   \u2502", 'ghost-system');
+        printLine("\u2502  Powered by in-browser AI            \u2502", 'ghost-system');
+        printLine("\u2502  (Transformers.js + LFM2.5)          \u2502", 'ghost-system');
         printLine("\u2502  Everything runs locally. No servers. \u2502", 'ghost-system');
         printLine("\u2502  Blog search powered by MiniSearch.   \u2502", 'ghost-system');
         printLine("\u2502  Type /model to switch models.        \u2502", 'ghost-system');
@@ -350,8 +323,7 @@
             printLine('', 'ghost-system');
             available.forEach(function (m, i) {
                 const active = m.id === currentModelId ? ' \u25C0 active' : '';
-                const tools = m.toolCalling ? ' [tool calling]' : '';
-                printLine('  ' + (i + 1) + ') ' + m.label + ' (' + m.brand + ') \u2014 ' + m.vram + ' VRAM, ' + m.size + ' download' + tools + active, 'ghost-system');
+                printLine('  ' + (i + 1) + ') ' + m.label + ' (' + m.brand + ') \u2014 ' + m.size + ' download' + active, 'ghost-system');
             });
             printLine('', 'ghost-system');
             printLine('Usage: /model <number>  e.g. /model 3', 'ghost-loading');
@@ -375,8 +347,7 @@
         // Unload current engine
         if (engine) {
             printLine('Unloading ' + (getModel(currentModelId)?.label || currentModelId) + '...', 'ghost-loading');
-            try { engine.unload?.(); } catch (_) { /* ignore */ }
-            engine = null;
+            disposeEngine();
         }
 
         currentModelId = selected.id;
@@ -386,10 +357,74 @@
         printLine('', 'ghost-system');
     }
 
-    // ─── WebLLM Engine ──────────────────────────────────────────
+    // ─── Transformers.js Engine ─────────────────────────────────
+    // A thin adapter exposing the same surface the chat loop uses
+    // (engine.chat.completions.create → async iterable of delta chunks),
+    // backed by AutoModelForCausalLM.generate + TextStreamer.
 
-    function checkWebGPU() {
-        return !!navigator.gpu;
+    async function pickDevice() {
+        if (!navigator.gpu) return 'wasm';
+        try {
+            const adapter = await navigator.gpu.requestAdapter();
+            return adapter ? 'webgpu' : 'wasm';
+        } catch (_) {
+            return 'wasm';
+        }
+    }
+
+    function makeEngine(tokenizer, lm, model, device) {
+        const stopper = new tjs.InterruptableStoppingCriteria();
+
+        async function* stream(messages, maxTokens) {
+            const inputs = tokenizer.apply_chat_template(messages, Object.assign(
+                { add_generation_prompt: true, return_dict: true },
+                model.thinking ? { enable_thinking: false } : {}
+            ));
+            const queue = [];
+            let done = false, error = null, wake = null;
+            const notify = function () { if (wake) { const w = wake; wake = null; w(); } };
+            const streamer = new tjs.TextStreamer(tokenizer, {
+                skip_prompt: true,
+                skip_special_tokens: true,
+                callback_function: function (text) { queue.push(text); notify(); },
+            });
+            stopper.reset();
+            const run = lm.generate(Object.assign({}, inputs, model.gen, {
+                max_new_tokens: maxTokens,
+                streamer: streamer,
+                stopping_criteria: stopper,
+            })).catch(function (e) { error = e; })
+              .finally(function () { done = true; notify(); });
+            try {
+                while (true) {
+                    if (queue.length) {
+                        yield { choices: [{ delta: { content: queue.shift() } }] };
+                        continue;
+                    }
+                    if (done) break;
+                    await new Promise(function (r) { wake = r; });
+                }
+                if (error) throw error;
+            } finally {
+                stopper.interrupt(); // no-op if finished; stops generation if the consumer bailed
+                await run;
+            }
+        }
+
+        return {
+            device: device,
+            chat: { completions: { create: async function (req) { return stream(req.messages, req.max_tokens); } } },
+            dispose: function () {
+                stopper.interrupt();
+                try { lm.dispose(); } catch (_) { /* ignore */ }
+            },
+        };
+    }
+
+    function disposeEngine() {
+        if (!engine) return;
+        try { engine.dispose(); } catch (_) { /* ignore */ }
+        engine = null;
     }
 
     function isEngineReady() {
@@ -398,17 +433,17 @@
 
     async function initEngine() {
         if (engine || isLoading) return;
-        if (!checkWebGPU()) {
-            printLine('ERROR: WebGPU not available in this browser.', 'ghost-error');
-            printLine('Try Chrome 113+ or Edge 113+ with WebGPU enabled.', 'ghost-error');
-            return false;
-        }
 
         isLoading = true;
         const model = getModel(currentModelId);
-        const label = model ? model.label : currentModelId;
-        const dlSize = model ? model.size : '?';
-        const statusLine = printLine('Loading ' + label + '... (first time downloads ' + dlSize + ')', 'ghost-loading');
+        const label = model.label;
+        const device = await pickDevice();
+        const dtype = device === 'webgpu' ? model.dtype : model.wasmDtype;
+        const dlSize = device === 'webgpu' ? model.size : model.wasmSize;
+        if (device === 'wasm') {
+            printLine('WebGPU unavailable \u2014 running on CPU (slower).', 'ghost-loading');
+        }
+        const statusLine = printLine('Loading ' + label + '... (first time downloads ~' + dlSize + ')', 'ghost-loading');
 
         // Preload search index while model downloads
         if (window.ghostSearch) {
@@ -416,24 +451,39 @@
         }
 
         const t0 = performance.now();
-        log('initEngine: starting', { model: currentModelId, webllmVersion: WEBLLM_VERSION });
+        log('initEngine: starting', { model: currentModelId, device: device, dtype: dtype, transformersVersion: TRANSFORMERS_VERSION });
         try {
-            if (!webllmModule) {
-                webllmModule = await import(`https://esm.run/@mlc-ai/web-llm@${WEBLLM_VERSION}`);
-                log('initEngine: webllm module loaded');
+            if (!tjs) {
+                tjs = await import(TRANSFORMERS_URL);
+                log('initEngine: transformers.js loaded');
             }
 
-            engine = await webllmModule.CreateMLCEngine(currentModelId, {
-                initProgressCallback: (progress) => {
-                    if (progress.text) {
-                        statusLine.textContent = progress.text;
-                    }
+            // Aggregate per-file download progress into one status line.
+            const files = {};
+            const progress_callback = function (p) {
+                if (p.status === 'progress' && p.total) {
+                    files[p.file] = [p.loaded, p.total];
+                    let loaded = 0, total = 0;
+                    Object.keys(files).forEach(function (f) { loaded += files[f][0]; total += files[f][1]; });
+                    statusLine.textContent = 'Downloading ' + label + '... '
+                        + Math.round(loaded / total * 100) + '% ('
+                        + Math.round(loaded / 1e6) + ' / ' + Math.round(total / 1e6) + ' MB)';
                     scrollOutput();
+                } else if (p.status === 'done' || p.status === 'ready') {
+                    statusLine.textContent = 'Initializing ' + label + ' on ' + device + '...';
                 }
-            });
+            };
 
-            log('initEngine: ready', { model: currentModelId, ms: Math.round(performance.now() - t0) });
-            statusLine.textContent = label + ' loaded. Ready.';
+            const tokenizer = await tjs.AutoTokenizer.from_pretrained(model.id, { progress_callback: progress_callback });
+            const lm = await tjs.AutoModelForCausalLM.from_pretrained(model.id, {
+                dtype: dtype,
+                device: device,
+                progress_callback: progress_callback,
+            });
+            engine = makeEngine(tokenizer, lm, model, device);
+
+            log('initEngine: ready', { model: currentModelId, device: device, ms: Math.round(performance.now() - t0) });
+            statusLine.textContent = label + ' loaded (' + device + '). Ready.';
             statusLine.className = 'ghost-line ghost-system';
             printLine('', 'ghost-system');
             isLoading = false;
@@ -443,13 +493,9 @@
             log('initEngine: FAILED', err);
             statusLine.textContent = 'Failed to load ' + label + '.';
             statusLine.className = 'ghost-line ghost-error';
-            printLine('Error: ' + err.message, 'ghost-error');
+            printLine('Error: ' + (err && err.message ? err.message : String(err)), 'ghost-error');
+            printLine('Try /model 1 for the smallest model, or reload the page.', 'ghost-loading');
             printLine('', 'ghost-system');
-
-            if (err.message && err.message.includes('WebGPU')) {
-                printLine('WebGPU may not be fully supported. Try:', 'ghost-error');
-                printLine('  chrome://flags \u2192 #enable-unsafe-webgpu', 'ghost-error');
-            }
             return false;
         }
     }
@@ -464,49 +510,6 @@
             console.warn('[ghost-chat] Search failed:', err);
             return [];
         }
-    }
-
-    // ─── Tool Call Handling (for tool-calling models) ────────────
-
-    async function handleToolCallResponse(completion, messages, onToolCall) {
-        // Non-streaming completion — check for tool calls
-        var choice = completion.choices[0];
-        if (!choice || !choice.message || !choice.message.tool_calls || choice.message.tool_calls.length === 0) {
-            return null; // No tool calls — caller should use the content directly
-        }
-
-        var toolCalls = choice.message.tool_calls;
-        messages.push(choice.message);
-
-        var allResults = [];
-        var toolBlock = null;
-
-        for (var i = 0; i < toolCalls.length; i++) {
-            var tc = toolCalls[i];
-            if (tc.function.name === 'search_blog') {
-                var args;
-                try { args = JSON.parse(tc.function.arguments); }
-                catch (e) { args = { query: tc.function.arguments }; }
-
-                var searchQuery = args.query || '';
-                var mobile = isMobileDevice();
-                var topK = mobile ? 2 : 3;
-                var results = await performSearch(searchQuery, topK);
-                allResults = allResults.concat(results);
-
-                if (onToolCall) onToolCall();
-                toolBlock = printToolCall('search_blog', searchQuery, results);
-
-                var contextStr = window.ghostSearch ? window.ghostSearch.format(results) : '';
-                messages.push({
-                    role: 'tool',
-                    tool_call_id: tc.id,
-                    content: contextStr || 'No relevant blog content found.'
-                });
-            }
-        }
-
-        return { messages: messages, results: allResults, toolBlock: toolBlock };
     }
 
     // ─── Spinner Controller ────────────────────────────────────
@@ -652,7 +655,6 @@
         let fullResponse = '';
 
         try {
-            const useToolCalling = currentModelSupportsTools();
             const topK = mobile ? 2 : 3;
             let systemPrompt;
 
@@ -661,111 +663,59 @@
                 throw new Error('Engine was disposed before generation could start');
             }
 
-            if (useToolCalling) {
-                // Path A: Tool calling — let the model decide when to search
-                systemPrompt = window.buildGhostSystemPrompt
-                    ? window.buildGhostSystemPrompt(null)
-                    : (window.GHOST_SYSTEM_PROMPT || 'You are a helpful assistant.');
+            // Search the blog before every query and inject the hits as context
+            const tSearch = performance.now();
+            var searchResults = await performSearch(query, topK);
+            log('search: done', {
+                query: query,
+                results: searchResults.length,
+                titles: searchResults.map(function (r) { return r.postTitle; }),
+                ms: Math.round(performance.now() - tSearch),
+            });
+            var toolBlock = null;
 
-                const messages = [
-                    { role: 'system', content: systemPrompt },
-                    ...chatHistory
-                ];
-
-                // First call: non-streaming to detect tool calls
-                const firstCompletion = await engine.chat.completions.create({
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: mobile ? 128 : 512,
-                    ...genExtras(),
-                    tools: [SEARCH_BLOG_TOOL],
-                    tool_choice: 'auto',
-                    stream: false,
-                });
-
-                var toolResult = await handleToolCallResponse(
-                    firstCompletion,
-                    messages,
-                    function () { spinner.hide(); }
-                );
-
-                if (toolResult) {
-                    dismissToolBlock(toolResult.toolBlock);
-                    spinner.show('thinking...');
-
-                    const streamCompletion = await engine.chat.completions.create({
-                        messages: toolResult.messages,
-                        temperature: 0.7,
-                        max_tokens: mobile ? 128 : 512,
-                        ...genExtras(),
-                        stream: true,
-                    });
-
-                    fullResponse = await streamResponse(streamCompletion, responseLine, spinner);
-                } else {
-                    spinner.hide();
-                    responseLine.style.display = '';
-                    fullResponse = firstCompletion.choices[0]?.message?.content || '';
-                    responseLine.innerHTML = renderResponse(fullResponse);
-                    scrollOutput();
-                }
-            } else {
-                // Path B: Auto-search fallback — search before every query
-                const tSearch = performance.now();
-                var searchResults = await performSearch(query, topK);
-                log('search: done', {
-                    query: query,
-                    results: searchResults.length,
-                    titles: searchResults.map(function (r) { return r.postTitle; }),
-                    ms: Math.round(performance.now() - tSearch),
-                });
-                var toolBlock = null;
-
-                if (searchResults.length > 0) {
-                    spinner.hide();
-                    toolBlock = printToolCall('search_blog', query, searchResults);
-                }
-
-                var searchContext = window.ghostSearch
-                    ? window.ghostSearch.format(searchResults)
-                    : '';
-                systemPrompt = window.buildGhostSystemPrompt
-                    ? window.buildGhostSystemPrompt(searchContext)
-                    : (window.GHOST_SYSTEM_PROMPT || 'You are a helpful assistant.');
-
-                const messages = [
-                    { role: 'system', content: systemPrompt },
-                    ...chatHistory
-                ];
-
-                dismissToolBlock(toolBlock);
-                spinner.show('thinking...');
-
-                log('engine.create: calling', {
-                    msgCount: messages.length,
-                    roles: messages.map(function (m) { return m.role; }),
-                    systemPromptLen: systemPrompt.length,
-                    systemPromptHasBlogList: systemPrompt.indexOf("DT's blog posts:") !== -1,
-                    historyMessages: chatHistory.map(function (m) {
-                        return { role: m.role, contentLen: (m.content || '').length };
-                    }),
-                });
-
-                const tGen = performance.now();
-                const asyncChunkGenerator = await engine.chat.completions.create({
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: mobile ? 128 : 512,
-                    ...genExtras(),
-                    stream: true,
-                });
-
-                fullResponse = await streamResponse(asyncChunkGenerator, responseLine, spinner);
-                log('engine.create: streamed', {
-                    fullResponseLen: fullResponse.length,
-                    ms: Math.round(performance.now() - tGen),
-                });
+            if (searchResults.length > 0) {
+                spinner.hide();
+                toolBlock = printToolCall('search_blog', query, searchResults);
             }
+
+            var searchContext = window.ghostSearch
+                ? window.ghostSearch.format(searchResults)
+                : '';
+            systemPrompt = window.buildGhostSystemPrompt
+                ? window.buildGhostSystemPrompt(searchContext)
+                : (window.GHOST_SYSTEM_PROMPT || 'You are a helpful assistant.');
+
+            const messages = [
+                { role: 'system', content: systemPrompt },
+                ...chatHistory
+            ];
+
+            dismissToolBlock(toolBlock);
+            spinner.show('thinking...');
+
+            log('engine.create: calling', {
+                msgCount: messages.length,
+                roles: messages.map(function (m) { return m.role; }),
+                systemPromptLen: systemPrompt.length,
+                systemPromptHasBlogList: systemPrompt.indexOf("DT's blog posts:") !== -1,
+                historyMessages: chatHistory.map(function (m) {
+                    return { role: m.role, contentLen: (m.content || '').length };
+                }),
+            });
+
+            const tGen = performance.now();
+            const asyncChunkGenerator = await engine.chat.completions.create({
+                messages: messages,
+                max_tokens: mobile ? 128 : 512,
+                stream: true,
+            });
+
+            fullResponse = await streamResponse(asyncChunkGenerator, responseLine, spinner);
+            log('engine.create: streamed', {
+                fullResponseLen: fullResponse.length,
+                ms: Math.round(performance.now() - tGen),
+            });
 
             // Final render pass
             responseLine.innerHTML = renderResponse(fullResponse);
@@ -803,10 +753,7 @@
             // every transient hiccup on phones.
             if (/memory|oom|abort|lost|destroy|disposed|gpu/i.test(msg)) {
                 chatHistory = [];
-                if (engine) {
-                    try { engine.unload?.(); } catch (_) { /* ignore */ }
-                    engine = null;
-                }
+                disposeEngine();
                 printLine('Memory pressure detected \u2014 context cleared.', 'ghost-error');
                 printLine('You can try again with a shorter question.', 'ghost-loading');
             }
