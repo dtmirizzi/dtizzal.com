@@ -21,17 +21,22 @@
 
     // ─── Model Catalog ───────────────────────────────────────────
     // ONNX builds on Hugging Face, loaded with Transformers.js. `dtype` is the
-    // WebGPU build; `wasmDtype` is the CPU fallback (the q4 builds quantize the
-    // embedding with an op the WASM backend lacks). Sizes are real download sizes. `gen` holds each vendor's recommended sampling
+    // WebGPU build; `wasm` is the CPU fallback, because the q4 builds quantize the
+    // embedding with an op (GatherBlockQuantized) the WASM backend lacks. LFM's
+    // CPU build is model_q4f32.onnx, which Transformers.js has no dtype name for,
+    // so we load it by file name. Sizes are real download sizes. `gen` holds each vendor's recommended sampling
     // settings. `thinking: true` marks hybrid-reasoning models (Qwen); we pass
     // enable_thinking: false to the chat template so they answer directly.
     const LFM_GEN  = { do_sample: true, temperature: 0.1, top_k: 50, top_p: 0.1, repetition_penalty: 1.05 };
     const QWEN_GEN = { do_sample: true, temperature: 0.7, top_k: 20, top_p: 0.8, repetition_penalty: 1.05 };
+    // `historyTurns` caps how many earlier Q&A pairs the model sees. LFM2.5 230M
+    // gets confused by prior turns (it answered "blue" to "12 x 12" after a sky
+    // question), so it answers each question standalone; others get full history.
     const MODELS = [
-        { id: 'LiquidAI/LFM2.5-230M-ONNX',             label: 'LFM2.5 230M',     brand: 'Liquid AI', dtype: 'q4', size: '211MB', wasmDtype: 'q4f32',     wasmSize: '403MB', mobile: true,  thinking: false, gen: LFM_GEN },
-        { id: 'LiquidAI/LFM2.5-350M-ONNX',             label: 'LFM2.5 350M',     brand: 'Liquid AI', dtype: 'q4', size: '294MB', wasmDtype: 'q4f32',     wasmSize: '481MB', mobile: true,  thinking: false, gen: LFM_GEN },
-        { id: 'onnx-community/Qwen3.5-0.8B-Text-ONNX', label: 'Qwen3.5 0.8B',    brand: 'Alibaba',   dtype: 'q4', size: '551MB', wasmDtype: 'quantized', wasmSize: '939MB', mobile: false, thinking: true,  gen: QWEN_GEN },
-        { id: 'LiquidAI/LFM2.5-1.2B-Instruct-ONNX',    label: 'LFM2.5 1.2B',     brand: 'Liquid AI', dtype: 'q4', size: '850MB', wasmDtype: 'quantized', wasmSize: '1.5GB', mobile: false, thinking: false, gen: LFM_GEN },
+        { id: 'LiquidAI/LFM2.5-230M-ONNX',             label: 'LFM2.5 230M',     brand: 'Liquid AI', dtype: 'q4', size: '211MB', wasm: { dtype: 'fp32', file: 'model_q4f32' }, wasmSize: '403MB', mobile: true,  thinking: false, gen: LFM_GEN, historyTurns: 0 },
+        { id: 'LiquidAI/LFM2.5-350M-ONNX',             label: 'LFM2.5 350M',     brand: 'Liquid AI', dtype: 'q4', size: '294MB', wasm: { dtype: 'fp32', file: 'model_q4f32' }, wasmSize: '481MB', mobile: true,  thinking: false, gen: LFM_GEN },
+        { id: 'onnx-community/Qwen3.5-0.8B-Text-ONNX', label: 'Qwen3.5 0.8B',    brand: 'Alibaba',   dtype: 'q4', size: '551MB', wasm: { dtype: 'q8' },                       wasmSize: '939MB', mobile: false, thinking: true,  gen: QWEN_GEN },
+        { id: 'LiquidAI/LFM2.5-1.2B-Instruct-ONNX',    label: 'LFM2.5 1.2B',     brand: 'Liquid AI', dtype: 'q4', size: '850MB', wasm: { dtype: 'q8' },                       wasmSize: '1.5GB', mobile: false, thinking: false, gen: LFM_GEN },
     ];
 
     // Smallest model = fastest first download. Used everywhere by default.
@@ -438,7 +443,8 @@
         const model = getModel(currentModelId);
         const label = model.label;
         const device = await pickDevice();
-        const dtype = device === 'webgpu' ? model.dtype : model.wasmDtype;
+        const dtype = device === 'webgpu' ? model.dtype : model.wasm.dtype;
+        const fileName = device === 'webgpu' ? undefined : model.wasm.file;
         const dlSize = device === 'webgpu' ? model.size : model.wasmSize;
         if (device === 'wasm') {
             printLine('WebGPU unavailable \u2014 running on CPU (slower).', 'ghost-loading');
@@ -478,6 +484,7 @@
             const lm = await tjs.AutoModelForCausalLM.from_pretrained(model.id, {
                 dtype: dtype,
                 device: device,
+                model_file_name: fileName,
                 progress_callback: progress_callback,
             });
             engine = makeEngine(tokenizer, lm, model, device);
@@ -686,9 +693,11 @@
                 ? window.buildGhostSystemPrompt(searchContext)
                 : (window.GHOST_SYSTEM_PROMPT || 'You are a helpful assistant.');
 
+            const turns = getModel(currentModelId).historyTurns;
+            const context = turns === undefined ? chatHistory : chatHistory.slice(-(turns * 2 + 1));
             const messages = [
                 { role: 'system', content: systemPrompt },
-                ...chatHistory
+                ...context
             ];
 
             dismissToolBlock(toolBlock);
